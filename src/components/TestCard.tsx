@@ -1,10 +1,9 @@
-import React from 'react';
+import React from "react";
 //@ts-ignore
-export default function TestCard({contents}) {
+export default function TestCard({ contents }) {
   return (
-    <div className='w-96 p-4 mb-4 cursor-pointer text-center border-2 border-gray-300 rounded'>
+    <div className="w-80 py-9 px-4 mb-5 cursor-pointer text-center rounded-2xl bg-white">
       <p>{contents}</p>
     </div>
   );
 }
-
