@@ -10,10 +10,10 @@ pl-3 pr-3
 `;
 const Header = tw.div`
 flex flex-row justify-between
-mt-4 mb-4 
+mt-4 mb-7 
 `;
 const Title = tw.div`
-text-4xl font-bold text-white
+text-5xl font-bold text-white
 `;
 const Main = tw.div`
 flex flex-wrap justify-center gap-3

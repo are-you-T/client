@@ -4,10 +4,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brand: '#329dfa',
+        brand: "#329dfa",
       },
     },
   },
   plugins: [require("daisyui")],
-}
-
+};
