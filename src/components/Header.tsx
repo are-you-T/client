@@ -4,25 +4,20 @@ import { BsList } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Button from "./Button";
 // import companyLogo from "../assets/logo.svg";
-
+import Logo from "./Logo";
 import { ReactComponent as LogoSvg } from '../assets/logo.svg';
 
 export default function Head() {
   return (
     <Header>
+      
+      <Logo></Logo>
       <Drawer>
         <DrawerToggle id="my-drawer" type="checkbox"></DrawerToggle>
         <DrawerContent>
-
-            <Logo>
-              <LogoSvg></LogoSvg>
-              @T?
-            </Logo>
-            <span>
-              <DrawerButton htmlFor="my-drawer">
-                <BsList></BsList>
-              </DrawerButton>
-            </span>
+          <DrawerButton htmlFor="my-drawer">
+            <BsList></BsList>
+          </DrawerButton>
         </DrawerContent>
         <div className="drawer-side">
           <DrawerOverlay htmlFor="my-drawer"></DrawerOverlay>
@@ -45,33 +40,20 @@ const Header = tw.header`
   flex
   flex-wrap
   content-center
-  justify-center
   w-full
   h-auto
   shrink-0
 `;
 
 
-// width: 24.375rem;
-// height: 4.875rem;
-
-const Logo = tw.span`
-  flex
-  w-36
-  h-12
-  justify-center
-  content-start
-  gap-1.5
-  shrink-0
-`;
-
 const Hamburger = tw.span`
 `;
 
-const Drawer = tw.div`
-  drawer;
-  flex;
-  flex-wrap;
+const Drawer = tw.span`
+  flex
+  w-auto
+  h-auto
+  ml-auto
 `;
 
 const DrawerButton = tw.label`
