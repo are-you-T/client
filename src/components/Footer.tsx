@@ -8,7 +8,9 @@ import companyLogo from "../assets/logo.svg";
 export default function Foot() {
   return (
     <Footer>
-      <FooterWrap>
+      푸터입니당
+      {/* <FooterWrap>
+        
         <svg
           width="36"
           height="36"
@@ -61,27 +63,45 @@ export default function Foot() {
             </svg>
           </a>
         </FooterLinkIcon>
-      </FooterWrap>
+      </FooterWrap> */}
     </Footer>
   );
 }
 
+
+
 const Footer = tw.footer`
-    footer 
-    items-center 
-    p-4 
-    bg-neutral 
-    text-neutral-content
+  bg-yellow-500
 `;
 
 const FooterWrap = tw.div`
+    flex 
     items-center 
-    grid-flow-col
+    justify-center
+    gap-4
 `;
 
 const FooterLinkIcon = tw.div`
-    grid-flow-col 
     gap-4 
-    md:place-self-center 
-    md:justify-self-end
 `;
+
+// const Footer = tw.footer`
+//     w-full 
+//     items-center 
+//     bg-neutral 
+//     text-neutral-content
+//     translate-y-full
+//     bottom-0 
+// `;
+
+// const FooterWrap = tw.div`
+//     items-center 
+//     grid-flow-col
+// `;
+
+// const FooterLinkIcon = tw.div`
+//     grid-flow-col 
+//     gap-4 
+//     md:place-self-center 
+//     md:justify-self-end
+// `;

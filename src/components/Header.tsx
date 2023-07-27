@@ -3,46 +3,38 @@ import tw from "tailwind-styled-components";
 import { BsList } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Button from "./Button";
-import companyLogo from "../assets/logo.svg";
+// import companyLogo from "../assets/logo.svg";
 
-// export default function Header() {
-//   return (
-//     <header style="width: 24.375rem; height: 4.875rem; flex-shrink: 0;">
-//         <Link to='/' className='text-brand text-3xl font-bold'>MBTI</Link>
-//         <nav>
-//           <Button text="버튼1"/>
-//           <Button text="버튼2"/>
-//           <Button text="버튼3"/>
-//         </nav>
-//     </header>
-//   );
-// }
+import { ReactComponent as LogoSvg } from '../assets/logo.svg';
+
 export default function Head() {
   return (
-    <Drawer>
-      <DrawerToggle id="my-drawer" type="checkbox"></DrawerToggle>
-      <DrawerContent>
-        <Header>
-          <Logo>
-            <img src={companyLogo} />
-            @T?
-          </Logo>
-          <span>
-            <DrawerButton htmlFor="my-drawer">
-              <BsList></BsList>
-            </DrawerButton>
-          </span>
-        </Header>
-      </DrawerContent>
-      <div className="drawer-side">
-        <DrawerOverlay htmlFor="my-drawer"></DrawerOverlay>
-        <SideBarContent>
-          {"Sidebar content here"}
-          <SiderBarItem>Sidebar Item 1</SiderBarItem>
-          <SiderBarItem>Sidebar Item 2</SiderBarItem>
-        </SideBarContent>
-      </div>
-    </Drawer>
+    <Header>
+      <Drawer>
+        <DrawerToggle id="my-drawer" type="checkbox"></DrawerToggle>
+        <DrawerContent>
+
+            <Logo>
+              <LogoSvg></LogoSvg>
+              @T?
+            </Logo>
+            <span>
+              <DrawerButton htmlFor="my-drawer">
+                <BsList></BsList>
+              </DrawerButton>
+            </span>
+        </DrawerContent>
+        <div className="drawer-side">
+          <DrawerOverlay htmlFor="my-drawer"></DrawerOverlay>
+          <SideBarContent>
+            {"Sidebar content here"}
+            <SiderBarItem>Sidebar Item 1</SiderBarItem>
+            <SiderBarItem>Sidebar Item 2</SiderBarItem>
+          </SideBarContent>
+        </div>
+      </Drawer>
+    </Header>
+
   );
 }
 
@@ -50,14 +42,15 @@ export default function Head() {
 // <Hamburger></Hamburger>
 // <header className='w-full flex items-center justify-between p-4 text-2xl border-b border-zinc-600 mb-4'>
 const Header = tw.header`
-  flex;
-  flex-wrap;
-  content-center;
-  justify-center;
-  w-80;
-  h-20;
-  shrink-0;
+  flex
+  flex-wrap
+  content-center
+  justify-center
+  w-full
+  h-auto
+  shrink-0
 `;
+
 
 // width: 24.375rem;
 // height: 4.875rem;
