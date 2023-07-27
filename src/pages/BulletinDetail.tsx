@@ -54,6 +54,7 @@ export default function BulletinDetail() {
         </svg>
       </Header>
       <Main>
+        {/* <BulletinCard />
         <BulletinCard />
         <BulletinCard />
         <BulletinCard />
@@ -61,8 +62,7 @@ export default function BulletinDetail() {
         <BulletinCard />
         <BulletinCard />
         <BulletinCard />
-        <BulletinCard />
-        <BulletinCard />
+        <BulletinCard /> */}
       </Main>
 
       <Footer>

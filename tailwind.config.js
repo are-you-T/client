@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       colors: {
         brand: "#329dfa",
+        "black-semi-transparent": "rgba(0,0,0,0.7)",
       },
     },
   },

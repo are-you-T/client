@@ -58,9 +58,9 @@ const LikeCount = tw.div`
   ml-0.5
 `;
 //@ts-ignore
-export default function BulletinCard() {
+export default function BulletinCard({ showModal }) {
   return (
-    <Card>
+    <Card onClick={showModal}>
       <Header>
         <Title>제목</Title>
         <OptionIcon>

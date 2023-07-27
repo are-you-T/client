@@ -1,35 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
 import tw from "tailwind-styled-components";
 
 import BulletinCard from "../components/BulletinCard";
+import BulletinCardModal from "../components/BulletinCardModal";
 
 const Board = tw.div`
-flex flex-col
-h-screen bg-black
-pl-3 pr-3
+  flex flex-col
+  h-screen bg-black
+  pl-3 pr-3
 `;
 const Header = tw.div`
-flex flex-row justify-between
-mt-4 mb-7 
+  flex flex-row justify-between
+  mt-4 mb-7 
 `;
 const Title = tw.div`
-text-5xl font-bold text-white
+  text-5xl font-bold text-white
 `;
 const Main = tw.div`
-flex flex-wrap justify-center gap-3
-w-full overflow-auto
+  flex flex-wrap justify-center gap-3
+  w-full overflow-auto
 
 `;
 const Footer = tw.div`
-flex justify-center
-w-full bg-black
-self-end
-pt-3 pb-3
+  flex justify-center
+  w-full bg-black
+  self-end
+  pt-3 pb-3
 `;
 
+//@ts-ignore
 export default function BulletinBoard() {
+  const [openModal, setOpenModal] = useState(false);
+  const showModal = () => {
+    setOpenModal(true);
+  };
+  const closeModal = () => {
+    setOpenModal(false);
+  };
   return (
     <Board>
+      {openModal && <BulletinCardModal closeModal={closeModal} />}
       <Header>
         <Title>MBTI 담벼락</Title>
         {/* change icon */}
@@ -53,15 +63,14 @@ export default function BulletinBoard() {
         </svg>
       </Header>
       <Main>
-        <BulletinCard />
-        <BulletinCard />
-        <BulletinCard />
-        <BulletinCard />
-        <BulletinCard />
-        <BulletinCard />
-        <BulletinCard />
-        <BulletinCard />
-        <BulletinCard />
+        <BulletinCard showModal={showModal} />
+        <BulletinCard showModal={showModal} />
+        <BulletinCard showModal={showModal} />
+        <BulletinCard showModal={showModal} />
+        <BulletinCard showModal={showModal} />
+        <BulletinCard showModal={showModal} />
+        <BulletinCard showModal={showModal} />
+        <BulletinCard showModal={showModal} />
       </Main>
 
       <Footer>
