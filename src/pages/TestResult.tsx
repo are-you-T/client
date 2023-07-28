@@ -1,5 +1,5 @@
 import React from 'react';
-import HashTag from '../components/test-result/HashTag';
+import HashTag from '../components/HashTag';
 import styles from './TestResult.module.css';
 
 export default function TestResult() {
