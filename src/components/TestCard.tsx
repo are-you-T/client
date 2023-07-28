@@ -1,6 +1,5 @@
 import React from "react";
-import styled from "tailwind-styled-components";
-
+import tw from "tailwind-styled-components";
 //@ts-ignore
 export default function TestCard({ answer }) {
   return (
@@ -10,7 +9,7 @@ export default function TestCard({ answer }) {
   );
 }
 
-const Testcard = styled.div`
+const Testcard = tw.button`
 w-80
 py-9
 px-4
@@ -28,6 +27,6 @@ hover:-translate-y-1
 active:translate-y-0
 `;
 
-const TestcardText = styled.p`
+const TestcardText = tw.p`
 ml-2
 `;

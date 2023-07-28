@@ -1,7 +1,7 @@
 import React from "react";
-import styled from "tailwind-styled-components";
+import tw from "tailwind-styled-components";
 //@ts-ignore
-export default function Question({ idx, subject }) {
+export default function TestQuestion({ idx, subject }) {
   return (
     <QuestionDiv>
       <QuestionNum>{idx}</QuestionNum>
@@ -10,11 +10,11 @@ export default function Question({ idx, subject }) {
   );
 }
 
-const QuestionDiv = styled.div`
+const QuestionDiv = tw.div`
 mb-9
 `;
 
-const QuestionNum = styled.h2`
+const QuestionNum = tw.h2`
 text-center
 text-3xl
 font-black
@@ -23,7 +23,7 @@ mb-3
 mt-10
 `;
 
-const QuestionText = styled.h3`
+const QuestionText = tw.h3`
 text-center 
 w-80 
 text-xl 

@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "tailwind-styled-components";
+import tw from "tailwind-styled-components";
 //@ts-ignore
 export default function ProgressBar() {
   return (
@@ -12,18 +12,18 @@ export default function ProgressBar() {
   );
 }
 
-const Container = styled.div`
+const Container = tw.div`
 mt-20
 `;
 
-const ProgressNum = styled.p`
+const ProgressNum = tw.p`
 text-lg
 text-violet-400
 text-right
 font-medium
 `;
 
-const Progress = styled.div`
+const Progress = tw.div`
 progress
 w-[320px]
 h-3
@@ -32,7 +32,7 @@ mb-5
 bg-white
 `;
 
-const Status = styled.div`
+const Status = tw.div`
 progress
 w-[32px]
 h-full
