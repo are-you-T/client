@@ -4,10 +4,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brand: '#329dfa',
+        brand: "#329dfa",
+        "regal-yellow": "#FFDF3F",
+        "regal-purple": "#B2ACF9",
       },
     },
   },
   plugins: [require("daisyui")],
-}
-
+};

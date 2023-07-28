@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -9,13 +20,13 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  width: 100vw;
-  height: 100vh;
-  @apply flex flex-col items-center;
+  width: 100%;
+  height: 100%;
+  @apply flex flex-col items-center h-full;
 }
 
 #root{
-  @apply w-full max-w-screen-xl;
+  @apply w-full max-w-screen-xl h-full;
 }
 
 code {
