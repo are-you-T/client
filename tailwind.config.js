@@ -14,6 +14,7 @@ module.exports = {
         "black-semi-transparent": "rgba(0,0,0,0.7)",
         "regal-yellow": "#FFDF3F",
         "regal-purple": "#B2ACF9",
+        test: "url('../src/assets/test.svg')",
       },
     },
   },
