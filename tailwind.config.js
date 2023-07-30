@@ -15,6 +15,7 @@ module.exports = {
 
         "regal-yellow": "#FFDF3F",
         "regal-purple": "#B2ACF9",
+        test: "url('../src/assets/test.svg')",
       },
     },
   },
