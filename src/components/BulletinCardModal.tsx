@@ -3,8 +3,8 @@ import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
 const CardModalContainer = tw.div`
-  h-screen
-  absolute z-50 inset-0
+  h-full
+  fixed z-50 inset-0
   bg-black-semi-transparent
   flex justify-center items-center
   `;
@@ -24,15 +24,15 @@ const Category = tw.div`
   my-3.5
   `;
 const CloseBtn = tw.button`
-    absolute top-3.5 right-3.5
+  absolute top-3.5 right-3.5
   `;
 const Main = tw.div`
   flex flex-col
   px-6
 `;
 const Title = tw.div`
-text-xl font-medium
-mb-3.5
+  text-xl font-medium
+  mb-3.5
 `;
 const Content = tw.div`
   text-base
@@ -40,25 +40,26 @@ const Content = tw.div`
   overflow-auto
 `;
 const Footer = tw.div`
-flex flex-row justify-between items-center
-self-end
-w-full
-px-6 pt-2 mt-auto mb-4
-border-t
+  flex flex-row justify-between items-center
+  self-end
+  w-full
+  px-6 pt-2 mt-auto mb-4
+  border-t
 `;
 
 const Date = tw.div`
   font-extralight
   mb-0.5
-
 `;
 
-const Heart = tw.button`
+const Heart = tw.div`
   flex flex-row items-center
+`;
+const HeartBtn = tw.button`
 `;
 const HeartCount = tw.div`
   font-extralight
-  ml-0.5
+  ml-1
 `;
 //@ts-ignore
 export default function BulletinCardModal({ closeModal }) {
@@ -97,7 +98,7 @@ export default function BulletinCardModal({ closeModal }) {
 
         <Footer>
           <Heart>
-            <button>
+            <HeartBtn>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -112,7 +113,7 @@ export default function BulletinCardModal({ closeModal }) {
                   d="M4.5 1C2.567 1 1 2.491 1 4.33c0 1.486.613 5.01 6.642 8.573a.71.71 0 0 0 .716 0C14.388 9.34 15 5.816 15 4.331 15 2.49 13.433 1 11.5 1S8 3.019 8 3.019 6.433 1 4.5 1Z"
                 />
               </svg>
-            </button>
+            </HeartBtn>
             <HeartCount>23</HeartCount>
           </Heart>
           <Date>2023.07.20</Date>

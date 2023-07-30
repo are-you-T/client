@@ -54,6 +54,7 @@ font-bold
 text-6xl
 text-center
 mb-[60px]
+text-[#000]
 `;
 
 const Button = tw.button`
