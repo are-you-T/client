@@ -11,7 +11,7 @@ export default function TypePercentageBar({title,type1,type2,percent1,percent2,b
         <Top>
           <span className={textColor}>{percent1}%</span>
           <BarBackground>
-            <div className={`${barColor} ${bar} h-2`}></div>
+            <div className={`${barColor} ${bar} h-3`}></div>
           </BarBackground>
           <span>{percent2}%</span>
         </Top>
@@ -32,7 +32,7 @@ p-2
 `
 const Title = tw.div`
 font-bold
-text-lg
+text-xl
 `
 const Main = tw.div`
 w-full
@@ -50,6 +50,8 @@ justify-between
 `
 const BarBackground = tw.div`
 bg-gray-100
-h-2
+h-3
 w-full
+rounded-3xl
+overflow-hidden
 `

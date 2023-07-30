@@ -9,12 +9,12 @@ export default function HashTag({text}) {
 }
 
 const Tag = tw.li`
-rounded-2xl
+rounded-3xl
 bg-white
 text-black
-text-sm
+text-base
 w-32
 mt-5
-p-1
+p-2
 opacity-40
 `

@@ -12,7 +12,7 @@ export default function TestResult() {
       <Main>
           <Character></Character>
           <ContentWrapper>
-            <CharTitle>당신의 유형은 계획적인 INTJ입니다</CharTitle>
+            <CharTitle>당신의 유형은 독립적인 사상가 INTJ입니다</CharTitle>
             <CharContent>INTJ 유형이란? INTJ 성격 유형을 가진 사람들은 행동에 있어 자신감 있고 분석적이며 야심찬 경향이 있습니다. 그들은 지식 추구를 좋아하고 매우 논리적인 경향이 있습니다. 그들은 세상의 문제를 해결하는 데 초점을 맞춘 독립적인 사상가입니다.</CharContent>
             <HashTags>
               <HashTag text="쉿 분석중"></HashTag>
@@ -49,21 +49,22 @@ flex
 justify-between
 items-center
 p-4
+pb-6
 `
 const Type = tw.h3`
 font-bold
-text-3xl
+text-5xl
 text-white
 `
 const Button = tw.button`
 bg-black
 text-white
-text-xs
+text-xl
 font-bold
-h-8
 cursor-pointer
 rounded-3xl
-px-2
+py-2
+px-4
 `
 const Main = tw.section`
 w-full
@@ -85,18 +86,17 @@ pb-20
 text-black
 text-center
 relative
-bottom-10
+bottom-5
 `;
 const CharTitle = tw.h5`
 text-white
-text-xl
+text-2xl
 font-bold
-mb-4
+mb-6
 `
 const CharContent = tw.div`
 text-white
-text-base
-font-bold
+text-xl
 mb-6
 `
 const HashTags = tw.ul`
@@ -108,19 +108,22 @@ place-items-center
 const  OtherMain= tw.section`
 w-full
 relative
-bottom-10
+bottom-5
 bg-white
+py-10
+px-2
 `
 const OtherTitle = tw.div`
 font-bold
-text-2xl
+text-3xl
 text-black
 text-center
-py-4
+pb-6
 `
 const Buttons = tw.div`
 flex
 flex-col
+pt-5
 pb-10
 `
 
@@ -133,4 +136,6 @@ font-bold
 my-2
 mx-10
 py-2
+text-xl
+cursor-pointer
 `
