@@ -5,13 +5,12 @@ import { Link } from "react-router-dom";
 import Button from "./Button";
 // import companyLogo from "../assets/logo.svg";
 
-import { ReactComponent as LogoSvg } from '../assets/logo.svg';
+import { ReactComponent as MainLogoSvg } from '../assets/mainlogo.svg';
 
 export default function Logo() {
   return (
     <LogoContainer>
-        <LogoSvg className="flex-start"></LogoSvg>
-        <LogoText>@T?</LogoText>
+        <MainLogoSvg className="flex-start"></MainLogoSvg>
     </LogoContainer>
 
   );

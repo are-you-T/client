@@ -32,11 +32,9 @@ export default function Foot() {
 }
 
 const Footer = tw.footer`
-  flex
   bg-yellow-500
   w-full
   h-22
-  flex-shrink-0
   p-4
 `;
 
@@ -44,6 +42,7 @@ const FooterWrap = tw.div`
     flex 
     items-center
     justify-between 
+    gap-2.5
 `;
 
 const FooterTextArea = tw.div`
@@ -53,7 +52,7 @@ h-12
 flex-col
 justify-center
 flex-shrink-0
-grow-[0.8]
+grow-[0.5]
 `;
 // flex-grow 0.8
 
@@ -61,8 +60,11 @@ const FooterLinkIcon = tw.div`
 flex
 w-8
 flex-row
+grow-[0.5]
+gap-[0.7]
 `;
 
+// gap 0.7rem
 const FooterLink = tw.a`
 w-auto
 mr-3
@@ -70,5 +72,5 @@ mr-3
 // mrgin right
 
 const FooterText = tw.div`
-  text-xs
+  text-vxs
 `;
