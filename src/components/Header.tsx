@@ -7,6 +7,10 @@ import Button from "./Button";
 import Logo from "./Logo";
 import { ReactComponent as LogoSvg } from "../assets/logo.svg";
 
+const ScaledBsList = tw(BsList)`
+text-4xl
+`
+
 export default function Head() {
   return (
     <Header>
@@ -15,7 +19,7 @@ export default function Head() {
         <DrawerToggle id="my-drawer" type="checkbox"></DrawerToggle>
         <DrawerContent>
           <DrawerButton htmlFor="my-drawer">
-            <BsList></BsList>
+            <ScaledBsList></ScaledBsList>
           </DrawerButton>
         </DrawerContent>
         <DrawerSide>
@@ -32,8 +36,12 @@ export default function Head() {
               담벼락 보러가기
             </SiderBarItem>
             <SideBarFooter>
-              <SideBarFooterContent></SideBarFooterContent>
-              <SideBarFooterContent></SideBarFooterContent>
+              <SideBarFooterContent>AYT Company</SideBarFooterContent>
+              <SideBarFooterContent className="pointer-events-auto">
+                <a href="https://github.com/are-you-T" target="_blank" rel="are-you-T">
+                  https://github.com/are-you-T
+                </a>
+              </SideBarFooterContent>
             </SideBarFooter>
           </SideBarContent>
         </DrawerSide>
@@ -45,22 +53,31 @@ export default function Head() {
 const Header = tw.header`
   flex
   flex-wrap
-  content-center
   w-full
   h-auto
   shrink-0
+  bg-regal-purple
+  px-2.5
+  py-5
+  items-center
+  justify-between
 `;
 
 const Drawer = tw.span`
   flex
   w-auto
   h-auto
-  ml-auto
+  h-9
 `;
 
 const DrawerButton = tw.label`
   btn
   drawer-button
+  border-none
+bg-transparent
+p-0
+min-h-0
+h-full
 `;
 
 const DrawerToggle = tw.input`
@@ -73,6 +90,7 @@ const DrawerOverlay = tw.label`
 
 const DrawerContent = tw.div`
   drawer-content
+  h-9
 `;
 
 const DrawerSide = tw.div`
@@ -90,20 +108,26 @@ const SideBarContent = tw.ul`
 `;
 
 const SiderBarItem = tw.li`
-  mt-10
+  mt-9
   btn
   btn-wide
-  w-100
-  h-10
+  w-full
+  h-14
   flex-shrink-0
-  rounded-tr-3xl
+  rounded-full
   shadow-lg
+  border-none
 `;
 
-const SideBarFooter = tw.div`
+const SideBarFooter = tw.li`
+  flex
+  mt-auto
+  pointer-events-none
 `;
 
 const SideBarFooterContent = tw.div`
+  flex-end
+  self-center
 `;
 // border-radius: 100px;
 // border: 1px solid rgba(0, 0, 0, 0.00);
