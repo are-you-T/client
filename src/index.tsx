@@ -11,6 +11,9 @@ import TestResult from "./pages/TestResult";
 import BulletinDetail from "./pages/BulletinDetail";
 import Stats from "./pages/Stats";
 import BulletinBoard from "./pages/BulletinBoard";
+import BoardPost from "./components/BoardPost";
+import StatsMbti from './pages/StatsMbti';
+
 
 const router = createBrowserRouter([
   {
@@ -24,7 +27,13 @@ const router = createBrowserRouter([
       { path: "/board", element: <BulletinBoard /> },
       { path: "/board/:mbti", element: <BulletinDetail /> },
       { path: "/stats", element: <Stats /> },
+      { path: '/stats/:mbti', element: <StatsMbti />}
     ],
+  },
+  {
+    // 게시글 작성 확인용 -> 추후에 BulletinBoard page 안에서 컴포넌트로만 사용할 예정
+    path: "/post",
+    element: <BoardPost />,
   },
 ]);
 
