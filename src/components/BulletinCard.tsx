@@ -3,36 +3,33 @@ import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
 const Card = tw.div`
-  flex flex-col 
+  flex flex-col
   bg-white rounded-md
-  
-  w-44 h-44
-  p-3
-  
+  w-[170px] min-h-[165px] px-[14px] py-[10px]
+  cursor-pointer
 `;
 const Header = tw.div`
   flex flex-row justify-between items-center
   mb-2
 `;
 const Title = tw.div`
-  text-lg font-medium
-  
+  text-[18px] font-medium
+  min-h-fit
 `;
 const OptionIcon = tw.button`
 `;
 const Main = tw.div`
-  
 `;
+
 const Content = tw.div`
-  h-14
-  mb-4
-  text-sm
-  
   overflow-hidden
   overflow-ellipsis
+  text-[15px]
+  h-[68px]
 `;
+
 const Date = tw.div`
-  text-xs font-extralight
+  text-[10px] font-extralight
   flex justify-end
   mb-0.5
 
@@ -43,17 +40,19 @@ const Divider = tw.div`
   h-px
 `;
 const Footer = tw.div`
-  flex flex-row justify-between
-  mt-1
-  text-sm
+  flex flex-row justify-between items-end
+  text-[15px]
 `;
 const Category = tw.div`
   font-medium
 `;
-const Heart = tw.button`
+const Heart = tw.div`
   flex flex-row items-center
 `;
-const LikeCount = tw.div`
+const HeartBtn = tw.button`
+  
+`;
+const HeartCount = tw.div`
   font-light
   ml-0.5
 `;
@@ -88,11 +87,10 @@ export default function BulletinCard({ showModal }) {
       </Main>
 
       <Divider />
-
       <Footer>
         <Category>INTJ</Category>
         <Heart>
-          <button>
+          <HeartBtn>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -107,8 +105,8 @@ export default function BulletinCard({ showModal }) {
                 d="M4.5 1C2.567 1 1 2.491 1 4.33c0 1.486.613 5.01 6.642 8.573a.71.71 0 0 0 .716 0C14.388 9.34 15 5.816 15 4.331 15 2.49 13.433 1 11.5 1S8 3.019 8 3.019 6.433 1 4.5 1Z"
               />
             </svg>
-          </button>
-          <LikeCount>23</LikeCount>
+          </HeartBtn>
+          <HeartCount>23</HeartCount>
         </Heart>
       </Footer>
     </Card>
