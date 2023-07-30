@@ -8,10 +8,11 @@ module.exports = {
     extend: {
       colors: {
         brand: "#329dfa",
+        "black-semi-transparent": "rgba(0,0,0,0.7)",
       },
       backgroundImage: {
         main: "url('../src/assets/main.svg')",
-        "black-semi-transparent": "rgba(0,0,0,0.7)",
+
         "regal-yellow": "#FFDF3F",
         "regal-purple": "#B2ACF9",
       },
