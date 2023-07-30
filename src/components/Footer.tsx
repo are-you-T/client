@@ -32,7 +32,7 @@ export default function Foot() {
 }
 
 const Footer = tw.footer`
-  bg-yellow-500
+  bg-regal-purple
   w-full
   h-22
   p-4

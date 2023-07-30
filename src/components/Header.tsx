@@ -36,8 +36,12 @@ export default function Head() {
               담벼락 보러가기
             </SiderBarItem>
             <SideBarFooter>
-              <SideBarFooterContent></SideBarFooterContent>
-              <SideBarFooterContent></SideBarFooterContent>
+              <SideBarFooterContent>AYT Company</SideBarFooterContent>
+              <SideBarFooterContent className="pointer-events-auto">
+                <a href="https://github.com/are-you-T" target="_blank" rel="are-you-T">
+                  https://github.com/are-you-T
+                </a>
+              </SideBarFooterContent>
             </SideBarFooter>
           </SideBarContent>
         </DrawerSide>
@@ -115,10 +119,15 @@ const SiderBarItem = tw.li`
   border-none
 `;
 
-const SideBarFooter = tw.div`
+const SideBarFooter = tw.li`
+  flex
+  mt-auto
+  pointer-events-none
 `;
 
 const SideBarFooterContent = tw.div`
+  flex-end
+  self-center
 `;
 // border-radius: 100px;
 // border: 1px solid rgba(0, 0, 0, 0.00);
