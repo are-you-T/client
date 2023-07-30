@@ -12,6 +12,7 @@ import BulletinDetail from "./pages/BulletinDetail";
 import Stats from "./pages/Stats";
 import BulletinBoard from "./pages/BulletinBoard";
 import BoardPost from "./components/BoardPost";
+import StatsMbti from './pages/StatsMbti';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
       { path: "/bulletin", element: <BulletinBoard /> },
       { path: "/bulletin/:mbti", element: <BulletinDetail /> },
       { path: "/stats", element: <Stats /> },
+      { path: '/stats/:mbti', element: <StatsMbti />}
     ],
   },
   {
