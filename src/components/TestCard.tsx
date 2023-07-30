@@ -1,9 +1,9 @@
 import React from "react";
 import tw from "tailwind-styled-components";
 //@ts-ignore
-export default function TestCard({ answer }) {
+export default function TestCard({ answer, onClick }) {
   return (
-    <Testcard>
+    <Testcard onClick={onClick}>
       <TestcardText>{answer}</TestcardText>
     </Testcard>
   );
