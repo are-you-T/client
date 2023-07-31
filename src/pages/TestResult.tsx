@@ -2,6 +2,9 @@ import React from 'react';
 import tw from "tailwind-styled-components";
 import HashTag from '../components/HashTag';
 import TypePercentageBar from '../components/TypePercentageBar';
+import RelationType from '../components/RelationType';
+import {Link} from 'react-router-dom';
+
 export default function TestResult() {
   return (
     <Container>
@@ -23,14 +26,16 @@ export default function TestResult() {
           </ContentWrapper>
           <OtherMain>
             <OtherTitle>내 검사 결과</OtherTitle>
-            <TypePercentageBar title="에너지" type1="직관형" type2="현실주의형" percent1={80} percent2={20} bar="w-4/5" textColor="text-orange-500" barColor="bg-orange-500"/>
-            <TypePercentageBar title="본성" type1="사고형" type2="감정형" percent1={60} percent2={40} bar="w-3/5" textColor="text-green-500" barColor="bg-green-500"/>
-            <TypePercentageBar title="전술" type1="계획형" type2="탐색형" percent1={100} percent2={0} bar="w-5/5" textColor="text-purple-500" barColor="bg-purple-500"/>
+            <TypePercentageBar title="에너지" type1="내향형(I)" type2="외향형(E)" percent1={60} percent2={40} bar="w-3/5" textColor="text-red-500" barColor="bg-red-500"/>
+            <TypePercentageBar title="인식" type1="직관형(N)" type2="감각형(S)" percent1={80} percent2={20} bar="w-4/5" textColor="text-orange-500" barColor="bg-orange-500"/>
+            <TypePercentageBar title="본성" type1="사고형(T)" type2="감정형(F)" percent1={60} percent2={40} bar="w-3/5" textColor="text-green-500" barColor="bg-green-500"/>
+            <TypePercentageBar title="전술" type1="계획형(J)" type2="탐색형(P)" percent1={100} percent2={0} bar="w-5/5" textColor="text-purple-500" barColor="bg-purple-500"/>
+            <RelationType/>
           </OtherMain>
           <Buttons>
-              <ButtonItem>다시하기</ButtonItem>
-              <ButtonItem>통계 보러가기</ButtonItem>
-              <ButtonItem>담벼락 보러가기</ButtonItem>
+              <HyperText to='/test'>다시하기</HyperText>
+              <HyperText to='/stats'>통계 보러가기</HyperText>
+              <HyperText to='/bulletin'>담벼락 보러가기</HyperText>
           </Buttons>
       </Main>
     </Container>
@@ -118,7 +123,7 @@ font-bold
 text-3xl
 text-black
 text-center
-pb-6
+py-6
 `
 const Buttons = tw.div`
 flex
@@ -126,8 +131,8 @@ flex-col
 pt-5
 pb-10
 `
-
-const ButtonItem = tw.div`
+const HyperText = tw(Link)`
+block
 text-center
 bg-black
 rounded-3xl
@@ -138,4 +143,4 @@ mx-10
 py-2
 text-xl
 cursor-pointer
-`
+`;
