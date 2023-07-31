@@ -4,8 +4,7 @@ import ApexCharts from "react-apexcharts";
 import tw from "tailwind-styled-components";
 // import { IoCloseSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import {MbtiTypesModal} from "../components/BoardPost";
-
+import { MbtiTypesModal } from "@/components/board/BoardPost";
 
 // 차트 데이터를 위한 인터페이스
 interface ChartData {
@@ -139,8 +138,8 @@ class ApexChart extends React.Component<{}, ApexChartState> {
     data?.forEach((x) => {
       x.setAttribute("rx", "70");
       x.setAttribute("ry", "70");
-      x.setAttribute("stroke", "#000")
-      x.setAttribute("stroke-width", "8")
+      x.setAttribute("stroke", "#000");
+      x.setAttribute("stroke-width", "8");
     });
   }
   render() {
@@ -185,7 +184,6 @@ export default function Stats() {
     []
   );
 
-
   return (
     <Secton>
       <h3 className="text-2xl font-bold mb-2 text-white">MBTI 통계</h3>
@@ -194,7 +192,7 @@ export default function Stats() {
         <ApexChart />
       </StyledApexChart>
 
-      <Button onClick={()=>setShowModal("MbtiTypesModal")}>
+      <Button onClick={() => setShowModal("MbtiTypesModal")}>
         MBTI별 통계
       </Button>
 
@@ -205,19 +203,14 @@ export default function Stats() {
       {showModal !== "" && (
         <>
           {showModal === "MbtiTypesModal" && (
-            <MbtiTypesModal 
-            selectMbti={mbtiType} 
-            onThisMbti={handleThisMbti}
-            isButton={true}
+            <MbtiTypesModal
+              selectMbti={mbtiType}
+              onThisMbti={handleThisMbti}
+              isButton={true}
             />
           )}
         </>
       )}
-      
-      
-
-
-      
     </Secton>
   );
 }

@@ -1,8 +1,8 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import tw from 'tailwind-styled-components';
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import tw from "tailwind-styled-components";
 
 function App() {
   return (
@@ -16,6 +16,5 @@ function App() {
 
 const Container = tw.div`
   h-full
-`
+`;
 export default App;
-

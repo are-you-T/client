@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import TestCard from "../components/TestCard";
-import TestQuestion from "../components/TestQuestion";
-import ProgressBar from "../components/ProgressBar";
-import Loading from "../components/Loading";
+import TestCard from "@/components/test/TestCard";
+import TestQuestion from "@/components/test/TestQuestion";
+import ProgressBar from "@/components/test/ProgressBar";
+import Loading from "@/components/test/Loading";
 import tw from "tailwind-styled-components";
 // import { BsChevronRight } from "react-icons/bs";
 // import { Link } from "react-router-dom";

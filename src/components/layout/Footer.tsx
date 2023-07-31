@@ -2,10 +2,10 @@ import React from "react";
 import tw from "tailwind-styled-components";
 import { BsList } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import Button from "./Button";
-import { ReactComponent as LogoSvg } from "../assets/logo.svg";
-import { ReactComponent as GitHubSvg } from "../assets/github.svg";
-import { ReactComponent as ShareSvg } from "../assets/share.svg";
+// import Button from "./Button";
+import { ReactComponent as LogoSvg } from "@/assets/img/logo.svg";
+import { ReactComponent as GitHubSvg } from "@/assets/img/github.svg";
+import { ReactComponent as ShareSvg } from "@/assets/img/share.svg";
 
 export default function Foot() {
   return (

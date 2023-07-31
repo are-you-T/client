@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import tw from "tailwind-styled-components";
 
-import BulletinCard from "../components/BulletinCard";
-import BulletinCardModal from "../components/BulletinCardModal";
+import BulletinCard from "@/components/board/BulletinCard";
+import BulletinCardModal from "@/components/board/BulletinCardModal";
 
 const Board = tw.div`
   flex flex-col
@@ -10,14 +10,20 @@ const Board = tw.div`
   px-[17px] mx-auto
 `;
 const Header = tw.div`
-  flex flex-row justify-between items-center
-  mt-4 mb-7 
+flex flex-row justify-between items-center
+mt-4 mb-7 
+`;
+const Mbti = tw.div`
+ flex flex-row items-center gap-3
 `;
 const Title = tw.div`
-  text-[43px] leading-[51px]  font-bold text-white
+text-[43px] leading-[51px] font-bold text-white
 `;
 const ChangeMbtiBtn = tw.button`
   
+`;
+const MbtiColor = tw.div`
+ flex flex-row gap-2
 `;
 const Main = tw.div`
   w-full overflow-auto
@@ -48,7 +54,41 @@ export default function BulletinBoard() {
     <Board>
       {openModal && <BulletinCardModal closeModal={closeModal} />}
       <Header>
-        <Title>MBTI 담벼락</Title>
+        <Mbti>
+          <Title>INTJ</Title>
+          {/* mbti icon */}
+          <MbtiColor>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="37"
+              height="36"
+              fill="none"
+            >
+              <ellipse
+                cx="18.088"
+                cy="17.833"
+                fill="#00B26E"
+                rx="18.088"
+                ry="17.833"
+              />
+            </svg>
+            {/* mbti icon */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="37"
+              height="36"
+              fill="none"
+            >
+              <ellipse
+                cx="18.088"
+                cy="17.833"
+                fill="#FFA8DF"
+                rx="18.088"
+                ry="17.833"
+              />
+            </svg>
+          </MbtiColor>
+        </Mbti>
         {/* change icon */}
         <ChangeMbtiBtn>
           <svg

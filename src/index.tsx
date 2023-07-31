@@ -1,19 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
+import "@/index.css";
+import App from "@/App";
 import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./pages/Home";
-import NotFound from "./pages/NotFound";
-import Test from "./pages/Test";
-import TestResult from "./pages/TestResult";
-import BulletinDetail from "./pages/BulletinDetail";
-import Stats from "./pages/Stats";
-import BulletinBoard from "./pages/BulletinBoard";
-import {BoardPost} from "./components/BoardPost";
-import StatsMbti from './pages/StatsMbti';
-
+import Home from "@/pages/Home";
+import NotFound from "@/pages/NotFound";
+import Test from "@/pages/test/Test"
+import TestResult from "@/pages/test/TestResult";
+import BulletinBoard from "@/pages/board/BulletinBoard";
+import BulletinDetail from "@/pages/board/BulletinDetail";
+import Stats from "@/pages/stats/Stats";
+import StatsMbti from "@/pages/stats/StatsMbti";
+import { BoardPost } from "@/components/board/BoardPost";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +26,7 @@ const router = createBrowserRouter([
       { path: "/board", element: <BulletinBoard /> },
       { path: "/board/:mbti", element: <BulletinDetail /> },
       { path: "/stats", element: <Stats /> },
-      { path: '/stats/:mbti', element: <StatsMbti />}
+      { path: "/stats/:mbti", element: <StatsMbti /> },
     ],
   },
   {

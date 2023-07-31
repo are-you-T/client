@@ -13,12 +13,12 @@ module.exports = {
         "regal-purple": "#B2ACF9",
       },
       backgroundImage: {
-        main: "url('../src/assets/main.svg')",
-        test: "url('../src/assets/test.svg')",
+        main: "url('@/assets/img/main.svg')",
+        test: "url('@/assets/img/test.svg')",
       },
       fontSize: {
-        vxs: '0.6rem',
-      }
+        vxs: "0.6rem",
+      },
     },
   },
   plugins: [require("daisyui")],

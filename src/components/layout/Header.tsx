@@ -2,14 +2,13 @@ import React from "react";
 import tw from "tailwind-styled-components";
 import { BsList } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import Button from "./Button";
+// import Button from "./Button";
 // import companyLogo from "../assets/logo.svg";
-import Logo from "./Logo";
-import { ReactComponent as LogoSvg } from "../assets/logo.svg";
+import Logo from "@/components/layout/Logo";
 
 const ScaledBsList = tw(BsList)`
 text-4xl
-`
+`;
 
 export default function Head() {
   return (
@@ -38,7 +37,11 @@ export default function Head() {
             <SideBarFooter>
               <SideBarFooterContent>AYT Company</SideBarFooterContent>
               <SideBarFooterContent className="pointer-events-auto">
-                <a href="https://github.com/are-you-T" target="_blank" rel="are-you-T">
+                <a
+                  href="https://github.com/are-you-T"
+                  target="_blank"
+                  rel="are-you-T noreferrer"
+                >
                   https://github.com/are-you-T
                 </a>
               </SideBarFooterContent>

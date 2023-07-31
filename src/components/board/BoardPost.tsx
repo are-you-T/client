@@ -214,8 +214,7 @@ function MbtiTypesModal({
           </div>
         </MbtiList>
       </ul>
-      {isButton &&
-      <MbtiButton>확인</MbtiButton>}
+      {isButton && <MbtiButton>확인</MbtiButton>}
     </ModalWrap>
   );
 }
@@ -308,7 +307,11 @@ function BoardPost() {
         <>
           <ModalBg onClick={() => setShowModal("")} />
           {showModal === "MbtiTypesModal" && (
-            <MbtiTypesModal selectMbti={mbtiType} onThisMbti={handleThisMbti} isButton={false}/>
+            <MbtiTypesModal
+              selectMbti={mbtiType}
+              onThisMbti={handleThisMbti}
+              isButton={false}
+            />
           )}
           {showModal === "BgColorsModal" && (
             <BgColorsModal
@@ -324,7 +327,7 @@ function BoardPost() {
   );
 }
 
-export {BoardPost, MbtiTypesModal};
+export { BoardPost, MbtiTypesModal };
 
 const Container = tw.main`
 bg-[#000000]
@@ -427,4 +430,4 @@ w-80
   mt-5
   font-bold
   text-black
-`
+`;
