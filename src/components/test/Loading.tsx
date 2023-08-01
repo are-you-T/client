@@ -1,11 +1,12 @@
 import React from "react";
 import tw from "tailwind-styled-components";
+import { ReactComponent as LoadingImg} from "@/assets/img/loading_img.svg";
 //@ts-ignore
 export default function Loading({ visible }) {
   return visible ? (
     <LoadingSection>
       <TextTop>너 T야?</TextTop>
-      <img src="/loading_img.svg" alt="loading-img" />
+      <LoadingImg />
       <TextBottom>분석중...</TextBottom>
     </LoadingSection>
   ) : (

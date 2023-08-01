@@ -11,6 +11,7 @@ export default function TestCard({ answer, onClick }) {
 
 const Testcard = tw.button`
 w-80
+h-[120px]
 py-9
 px-4
 mb-5

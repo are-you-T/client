@@ -12,6 +12,7 @@ export default function TestQuestion({ idx, subject }) {
 
 const QuestionDiv = tw.div`
 mb-9
+h-[190px]
 `;
 
 const QuestionNum = tw.h2`
