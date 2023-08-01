@@ -1,8 +1,4 @@
-import React from "react";
 import tw from "tailwind-styled-components";
-import { BsList } from "react-icons/bs";
-import { Link } from "react-router-dom";
-// import Button from "./Button";
 import { ReactComponent as LogoSvg } from "@/assets/img/logo.svg";
 import { ReactComponent as GitHubSvg } from "@/assets/img/github.svg";
 import { ReactComponent as ShareSvg } from "@/assets/img/share.svg";
@@ -33,7 +29,8 @@ export default function Foot() {
 
 const Footer = tw.footer`
   bg-regal-purple
-  w-full
+  w-[390px]
+  m-auto
   h-22
   p-4
 `;
