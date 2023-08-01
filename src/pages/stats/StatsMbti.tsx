@@ -1,8 +1,9 @@
 import React from 'react';
-import tw from 'tailwind-styled-components';
-import Chart from 'react-apexcharts';
-import { ApexOptions } from 'apexcharts';
 import { Link } from 'react-router-dom';
+import tw from 'tailwind-styled-components';
+import { ApexOptions } from 'apexcharts';
+import Chart from 'react-apexcharts';
+import { styled } from 'styled-components';
 
 // 차트 컴포넌트
 interface ResultType {
@@ -35,12 +36,11 @@ function ChartItem({ data, order }: ChartItemProps) {
             type: 'bar',
             height: "100px",
             stacked: true,
-            stackType: '100%'
+            stackType: '100%',
+            toolbar: { show: false }
         },
         plotOptions: {
-            bar: {
-                horizontal: true,
-            },
+            bar: { horizontal: true },
         },
         stroke: {
             width: 1,
@@ -57,7 +57,7 @@ function ChartItem({ data, order }: ChartItemProps) {
                 },
                 title: {
                     // @ts-ignore
-                    formatter: function (val, { series, seriesIndex, dataPointIndex, w }) {
+                    formatter: function (_, { dataPointIndex, w }) {
                         // 해당인덱스의 제목에 접근
                         const title = w.globals.seriesX[0][dataPointIndex];
                         
@@ -66,16 +66,19 @@ function ChartItem({ data, order }: ChartItemProps) {
                 }
             }
         },
-        fill: {
-            opacity: 1
+        xaxis: {
+            labels: { show: false },
+            axisBorder: { show: false },
+            axisTicks: { show: false }
         },
-        grid: {
-            xaxis: { lines: { show: false } },
-            yaxis: { lines: { show: false } }
+        yaxis: {
+            labels: { show: false },
+            axisBorder: { show: false },
+            axisTicks: { show: false }
         },
-        legend: {
-            show: false
-        }
+        fill: { opacity: 1 },
+        grid: { show: false },
+        legend: { show: false }
     };
 
     // name: data: {x, y}
@@ -125,6 +128,12 @@ const FooterBtn = tw(Link)`
     text-center
 `;
 
+const ChartList = styled.ol`
+    & div[type="bar"] {
+        color: black;
+    }
+`;
+
 function StatsMbti() {
     return (
         <Container>
@@ -153,11 +162,11 @@ function StatsMbti() {
                 </button>
             </div>
             <section>
-                <ol className='mt-[40px]'>
+                <ChartList className='mt-[40px]'>
                     {
                         testResults.map((result, i) => <ChartItem key={i} order={i+1} data={result} />)
                     }
-                </ol>
+                </ChartList>
             </section>
             <div className="btns flex flex-col text-3xl text-black font-bold w-full m-auto">
                 <FooterBtn to="/stats">MBTI 통계</FooterBtn>
