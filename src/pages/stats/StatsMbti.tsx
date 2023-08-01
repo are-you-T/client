@@ -55,7 +55,7 @@ function ChartItem({ data, order }: ChartItemProps) {
                     return `${val}%`;
                 },
                 title: {
-                    // @ts-ignore, 타입 지정이 잘 못 되어있는듯;
+                    // @ts-ignore
                     formatter: function (val, { series, seriesIndex, dataPointIndex, w }) {
                         // 해당인덱스의 제목에 접근
                         const title = w.globals.seriesX[0][dataPointIndex];
@@ -139,7 +139,7 @@ function StatsMbti() {
                     }
                 </ol>
             </section>
-            <div className="btns flex flex-col text-3xl text-black font-bold w-1/2 m-auto">
+            <div className="btns flex flex-col text-3xl text-black font-bold w-full m-auto">
                 <FooterBtn>검사 다시하기</FooterBtn>
                 <FooterBtn>MBTI 통계</FooterBtn>
             </div>
