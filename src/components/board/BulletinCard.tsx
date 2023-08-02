@@ -2,22 +2,25 @@ import React from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
+import HeartBtn from "@/components/board/HeartBtn";
+import OptionBtn from "@/components/board/OptionBtn";
+
 const Card = tw.div`
   flex flex-col
   bg-white rounded-md
-  w-[170px] min-h-[165px] px-[14px] py-[10px]
+  w-[170px] min-h-[165px]
   cursor-pointer
 `;
 const Header = tw.div`
   flex flex-row justify-between items-center
-  mb-2
+  mb-2 mx-[14px] mt-[10px]
+  h-[27px]
 `;
 const Title = tw.div`
   text-[18px] font-medium
   min-h-fit
 `;
-const OptionIcon = tw.button`
-`;
+
 const Main = tw.div`
 `;
 
@@ -26,22 +29,25 @@ const Content = tw.div`
   overflow-ellipsis
   text-[15px]
   h-[68px]
+  mx-[14px]
 `;
 
 const Date = tw.div`
-  text-[10px] font-extralight
+  text-[10px] font-light
   flex justify-end
-  mb-0.5
+  mb-0.5 mx-[14px]
 
 `;
-const Divider = tw.div`
-  divider
-  mt-0 mb-0
-  h-px
+const Divider = styled.div`
+  height: 1px;
+  width: 90%;
+  margin: 0 auto;
+  background-color: #e1e1e1;
 `;
 const Footer = tw.div`
   flex flex-row justify-between items-end
   text-[15px]
+  mx-[14px] mb-[10px] mt-0.5 
 `;
 const Category = tw.div`
   font-medium
@@ -49,64 +55,44 @@ const Category = tw.div`
 const Heart = tw.div`
   flex flex-row items-center
 `;
-const HeartBtn = tw.button`
-  
-`;
+
 const HeartCount = tw.div`
   font-light
-  ml-0.5
+  ml-[4px]
 `;
 //@ts-ignore
-export default function BulletinCard({ showModal }) {
+export default function BulletinCard({
+  //@ts-ignore
+  showModal,
+  //@ts-ignore
+  title,
+  //@ts-ignore
+  content,
+  //@ts-ignore
+  category,
+  //@ts-ignore
+  like,
+  //@ts-ignore
+  createdAt,
+}) {
   return (
     <Card onClick={showModal}>
       <Header>
-        <Title>제목</Title>
-        <OptionIcon>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="4"
-            height="18"
-            fill="none"
-          >
-            <circle cx="2" cy="2" r="2" fill="#898989" />
-            <circle cx="2" cy="9" r="2" fill="#898989" />
-            <circle cx="2" cy="16" r="2" fill="#898989" />
-          </svg>
-        </OptionIcon>
+        <Title>{title}</Title>
+        <OptionBtn />
       </Header>
 
       <Main>
-        <Content>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Soluta
-          sapiente reiciendis perferendis tempora, optio cumque ipsum animi
-          asperiores quae ex laboriosam perspiciatis eveniet exercitationem aut
-          a sit! Harum, eligendi quod!
-        </Content>
-        <Date>3일 전</Date>
+        <Content>{content}</Content>
+        <Date>{createdAt}일 전</Date>
       </Main>
 
       <Divider />
       <Footer>
-        <Category>INTJ</Category>
+        <Category>{category}</Category>
         <Heart>
-          <HeartBtn>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="14"
-              fill="none"
-            >
-              <path
-                stroke="#898989"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.2"
-                d="M4.5 1C2.567 1 1 2.491 1 4.33c0 1.486.613 5.01 6.642 8.573a.71.71 0 0 0 .716 0C14.388 9.34 15 5.816 15 4.331 15 2.49 13.433 1 11.5 1S8 3.019 8 3.019 6.433 1 4.5 1Z"
-              />
-            </svg>
-          </HeartBtn>
-          <HeartCount>23</HeartCount>
+          <HeartBtn />
+          <HeartCount>{like}</HeartCount>
         </Heart>
       </Footer>
     </Card>

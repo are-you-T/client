@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 
 import BulletinCard from "@/components/board/BulletinCard";
@@ -8,6 +8,7 @@ const Board = tw.div`
   flex flex-col
   h-screen w-[390px] bg-black
   px-[17px] mx-auto
+  relative
 `;
 const Header = tw.div`
   flex flex-row justify-between items-center
@@ -24,7 +25,7 @@ const Main = tw.div`
 `;
 const BulletinCardWrap = tw.div`
   flex flex-wrap justify-start gap-[15px]
-  w-fit mx-auto
+  mx-auto
 `;
 const PostBtn = tw.button`
 `;
@@ -33,10 +34,12 @@ const Footer = tw.div`
   w-full bg-black
   self-end
   pt-3 pb-3
+  absolute bottom-0 left-0 right-0
 `;
 
 //@ts-ignore
 export default function BulletinBoard() {
+  // 모달창 제어 기능
   const [openModal, setOpenModal] = useState(false);
   const showModal = () => {
     setOpenModal(true);
@@ -44,6 +47,46 @@ export default function BulletinBoard() {
   const closeModal = () => {
     setOpenModal(false);
   };
+
+  //게시글 타입
+  type Posting = {
+    title: string;
+    content: string;
+    category: string;
+    like: number;
+    createdAt: string;
+  };
+  const [postings, setPostings] = useState<Posting[]>([]);
+  //게시글 작성 날짜 -> *일 전으로 변경
+  //@ts-ignore
+  const calculateDaysDiff = (dateString) => {
+    const pastDate = new Date(dateString);
+    const currentDate = new Date();
+
+    pastDate.setHours(0, 0, 0, 0);
+    currentDate.setHours(0, 0, 0, 0);
+    //@ts-ignore
+    const diffInMilliseconds = currentDate - pastDate;
+    const days = diffInMilliseconds / (1000 * 60 * 60 * 24);
+
+    return days === 1 ? "1" : `${days}`;
+  };
+
+  //게시글 불러오기
+  useEffect(() => {
+    getBoard();
+  }, []);
+  async function getBoard() {
+    try {
+      const response = await fetch("http://localhost:3001/api/v1/board");
+      const jsonData = await response.json();
+      console.log("jsonData", jsonData);
+      setPostings(jsonData.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <Board>
       {openModal && <BulletinCardModal closeModal={closeModal} />}
@@ -73,15 +116,18 @@ export default function BulletinBoard() {
       </Header>
       <Main>
         <BulletinCardWrap>
-          <BulletinCard showModal={showModal} />
-          <BulletinCard showModal={showModal} />
-          <BulletinCard showModal={showModal} />
-          <BulletinCard showModal={showModal} />
-          <BulletinCard showModal={showModal} />
-          <BulletinCard showModal={showModal} />
-          <BulletinCard showModal={showModal} />
-          <BulletinCard showModal={showModal} />
-          <BulletinCard showModal={showModal} />
+          {postings.map((posting) => {
+            return (
+              <BulletinCard
+                showModal={showModal}
+                title={posting.title}
+                content={posting.content}
+                category={posting.category}
+                like={posting.like}
+                createdAt={calculateDaysDiff(posting.createdAt)}
+              />
+            );
+          })}
         </BulletinCardWrap>
       </Main>
 

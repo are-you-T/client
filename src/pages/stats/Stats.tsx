@@ -1,10 +1,9 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, useRef} from "react";
 import ApexCharts from "react-apexcharts";
-// import styled from "styled-components";
 import tw from "tailwind-styled-components";
 // import { IoCloseSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import { MbtiTypesModal } from "@/components/board/BoardPost";
+import MbtiTypesModal from "@/components/common/MbtiTypesModal";
 
 // 차트 데이터를 위한 인터페이스
 interface ChartData {
@@ -158,24 +157,6 @@ class ApexChart extends React.Component<{}, ApexChartState> {
 }
 
 export default function Stats() {
-  // const [moodalOpen, setModalOpen] = useState(false);
-  // const [selectedOption, setSelectedOption] = useState(["I", "N", "F", "P"]);
-
-  // const openModal = () => {
-  //   setModalOpen(true);
-  // };
-
-  // const closeModal = () => {
-  //   setModalOpen(false);
-  // };
-
-  // const toggleOption = (index: number, option: string) => {
-  //   setSelectedOption((prevOptions) => {
-  //     const newOptions = [...prevOptions];
-  //     newOptions[index] = option;
-  //     return newOptions;
-  //   });
-  // };
   const [showModal, setShowModal] = useState("");
   const [mbtiType, setMbtiType] = useState(["I", "N", "T", "J"]);
 
@@ -183,6 +164,24 @@ export default function Stats() {
     (value: string[]) => setMbtiType(value),
     []
   );
+
+  const modalRef = useRef(null);
+  const handleOutsideClick = useCallback(
+    (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      if (modalRef.current && modalRef.current === evt.target) {
+        setShowModal("");
+      }
+    },
+    [setShowModal]
+  );
+
+  useEffect(() => {
+    if (showModal !== "") {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [showModal]);
 
   return (
     <Secton>
@@ -201,15 +200,15 @@ export default function Stats() {
       </Button>
 
       {showModal !== "" && (
-        <>
+        <ModalWrap onClick={handleOutsideClick} ref={modalRef} >
           {showModal === "MbtiTypesModal" && (
-            <MbtiTypesModal
-              selectMbti={mbtiType}
-              onThisMbti={handleThisMbti}
-              isButton={true}
-            />
+              <MbtiTypesModal
+                selectMbti={mbtiType}
+                onThisMbti={handleThisMbti}
+                isButton={true}
+              />
           )}
-        </>
+        </ModalWrap>
       )}
     </Secton>
   );
@@ -221,6 +220,8 @@ const Secton = tw.section`
   flex-col
   items-center
   bg-black
+  pt-10
+  pb-10
 `;
 
 const StyledApexChart = tw.div`
@@ -241,3 +242,18 @@ const Button = tw.button`
   font-bold
   text-black
 `;
+
+const ModalWrap = tw.div`
+fixed
+top-0
+left-0
+w-full
+h-full
+bg-black
+bg-black/[.3]
+backdrop-blur-sm
+z-50
+flex
+items-center
+justify-center
+`
