@@ -429,12 +429,5 @@ const Toggle = styled.div`
 `;
 
 const MbtiButton = tw.button`
-w-80
-  h-16
-  bg-yellow-400
-  rounded-full
-  text-lg
-  mt-8
-  font-bold
-  text-black
+block text-2xl font-black w-full bg-[#FEDF40] text-black py-3 rounded-full mt-5
 `;
