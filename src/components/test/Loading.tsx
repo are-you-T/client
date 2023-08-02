@@ -43,6 +43,7 @@ export default function Loading({ visible, userResponse }: LoadingProps) {
   };
 
   const scores = calculateScores();
+  console.log("🚀 ~ file: Loading.tsx:46 ~ Loading ~ calculateScores:", scores);
 
   return visible ? (
     <LoadingSection>
