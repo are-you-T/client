@@ -80,21 +80,28 @@ export default function BulletinCard({
   createdAt,
 }) {
   return (
-    <Card id={id} onClick={() => showModal(id)}>
-      <Header>
-        <Title>{title}</Title>
-        <OptionBtn />
-      </Header>
+    <Card id={id}>
+      <div onClick={() => showModal(id)}>
+        <Header>
+          <Title>{title}</Title>
+          <OptionBtn />
+        </Header>
 
-      <Main>
-        <Content>{content}</Content>
-        <Date>{createdAt}일 전</Date>
-      </Main>
+        <Main>
+          <Content>{content}</Content>
+          <Date>{createdAt}일 전</Date>
+        </Main>
+      </div>
 
       <Divider />
+
       <Footer>
         <Category>{category}</Category>
-        <Heart>
+        <Heart
+          onClick={() => {
+            console.log("클릭됨");
+          }}
+        >
           <HeartBtn />
           <HeartCount>{like}</HeartCount>
         </Heart>
