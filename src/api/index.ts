@@ -1,11 +1,11 @@
 import axios from "axios"
 
 const allowMethod:string[] = ['get', 'post', 'put', 'patch', 'delete'];
-
+const API_END_POINT:string = process.env.API_END_POINT ?? "http://localhost:3001/api/v1";
 // 정의된 함수 시그니처에 맞게 인터페이스 생성
 interface AxiosRequest {
     requestAxios: <T>(method: string, url: string, data?: {}) => Promise<T>;
-  }
+}
 
 const axiosRequest: AxiosRequest = {
     /**
@@ -21,11 +21,10 @@ const axiosRequest: AxiosRequest = {
     requestAxios: async <T>(method: string, url: string, data = {}) => {
         // 이상한 method 넣으면 실행 못하게 미리 에러 처리 한다.
         if (!allowMethod.includes(method.toLowerCase())) throw new Error("허용되지 않은 호출 method입니다.");
-
         try {
             const response = await axios({
                 method,
-                url,
+                url: `${API_END_POINT}${url}`,
                 data,
             });
 

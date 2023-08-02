@@ -30,7 +30,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response:resQuestion = await axiosRequest.requestAxios("get", "http://localhost:3001/api/v1/question/basic", {});
+        const response:resQuestion = await axiosRequest.requestAxios("get", "/question/basic", {});
         setData(response.data); // 데이터를 상태에 저장
       } catch (error) {
         console.error(error);
