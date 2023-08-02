@@ -4,7 +4,8 @@ import TestQuestion from "@/components/test/TestQuestion";
 import ProgressBar from "@/components/test/ProgressBar";
 import Loading from "@/components/test/Loading";
 import tw from "tailwind-styled-components";
-import axios from "axios";
+import axiosRequest from "@/api/index";
+import { resQuestion } from "@/interfaces/index";
 
 // 타입 정의
 type CurrentChoiceList = {
@@ -24,16 +25,33 @@ export default function Test() {
 
   // 테스트 문항 api 호출
   useEffect(() => {
-    const getQuestionList = async () => {
+    async function fetchData() {
       try {
-        const response = await axios.get(URL);
-        setQuestionList(response.data.data);
+        const response: resQuestion = await axiosRequest.requestAxios(
+          "get",
+          "/question/basic",
+          {}
+        );
+        setQuestionList(response.data); // 데이터를 상태에 저장
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error(error);
       }
-    };
-    getQuestionList();
+    }
+
+    fetchData();
   }, []);
+
+  // useEffect(() => {
+  //   const getQuestionList = async () => {
+  //     try {
+  //       const response = await axios.get(URL);
+  //       setQuestionList(response.data.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  //   getQuestionList();
+  // }, []);
 
   // 문항 선택지 클릭 시 발생 이벤트
   const handleClickCard = useCallback(
@@ -123,13 +141,11 @@ export default function Test() {
       />
       <TestCard
         onClick={handleClickCard}
-        //@ts-ignore
         index={0}
         answer={currentChoiceList[0].text}
       />
       <TestCard
         onClick={handleClickCard}
-        //@ts-ignore
         index={1}
         answer={currentChoiceList[1].text}
       />
