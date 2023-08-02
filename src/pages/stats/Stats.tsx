@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, useRef} from "react";
 import ApexCharts from "react-apexcharts";
 // import styled from "styled-components";
 import tw from "tailwind-styled-components";
@@ -184,6 +184,24 @@ export default function Stats() {
     []
   );
 
+  const modalRef = useRef(null);
+  const handleOutsideClick = useCallback(
+    (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      if (modalRef.current && modalRef.current === evt.target) {
+        setShowModal("");
+      }
+    },
+    [setShowModal]
+  );
+
+  useEffect(() => {
+    if (showModal !== "") {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [showModal]);
+
   return (
     <Secton>
       <h3 className="text-2xl font-bold mb-2 text-white">MBTI 통계</h3>
@@ -201,15 +219,17 @@ export default function Stats() {
       </Button>
 
       {showModal !== "" && (
-        <>
+        <ModalWrap onClick={handleOutsideClick} ref={modalRef} >
           {showModal === "MbtiTypesModal" && (
-            <MbtiTypesModal
-              selectMbti={mbtiType}
-              onThisMbti={handleThisMbti}
-              isButton={true}
-            />
+            // <StyledMbtiTypesModal >
+              <MbtiTypesModal
+                selectMbti={mbtiType}
+                onThisMbti={handleThisMbti}
+                isButton={true}
+              />
+            // </StyledMbtiTypesModal>
           )}
-        </>
+        </ModalWrap>
       )}
     </Secton>
   );
@@ -221,6 +241,8 @@ const Secton = tw.section`
   flex-col
   items-center
   bg-black
+  pt-10
+  pb-10
 `;
 
 const StyledApexChart = tw.div`
@@ -241,3 +263,18 @@ const Button = tw.button`
   font-bold
   text-black
 `;
+
+const ModalWrap = tw.div`
+fixed
+top-0
+left-0
+w-full
+h-full
+bg-black
+bg-black/[.3]
+backdrop-blur-sm
+z-50
+flex
+items-center
+justify-center
+`
