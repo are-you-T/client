@@ -6,13 +6,13 @@ import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/NotFound";
-import Test from "@/pages/test/Test"
+import Test from "@/pages/test/Test";
 import TestResult from "@/pages/test/TestResult";
 import BulletinBoard from "@/pages/board/BulletinBoard";
 import BulletinDetail from "@/pages/board/BulletinDetail";
 import Stats from "@/pages/stats/Stats";
 import StatsMbti from "@/pages/stats/StatsMbti";
-import { BoardPost } from "@/components/board/BoardPost";
+import BoardPost from "@/components/board/BoardPost";
 
 const router = createBrowserRouter([
   {
