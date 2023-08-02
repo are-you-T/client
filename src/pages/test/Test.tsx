@@ -5,8 +5,6 @@ import ProgressBar from "@/components/test/ProgressBar";
 import Loading from "@/components/test/Loading";
 import tw from "tailwind-styled-components";
 import axios from "axios";
-// import { BsChevronRight } from "react-icons/bs";
-// import { Link } from "react-router-dom";
 
 // 타입 정의
 type CurrentChoiceList = {
@@ -29,7 +27,6 @@ export default function Test() {
     const getQuestionList = async () => {
       try {
         const response = await axios.get(URL);
-        // console.log("Response:", response.data);
         setQuestionList(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -38,11 +35,13 @@ export default function Test() {
     getQuestionList();
   }, []);
 
+  // 문항 선택지 클릭 시 발생 이벤트
   const handleClickCard = useCallback(
     (choiceIndex: number) => () => {
       if (currentChoiceList.length > 0 && questionList.length > 0) {
         setCurrentIndex((curr) => {
           const currentAnswer = questionList[curr];
+          delete currentAnswer.parent;
           setUserResponse((prevResponse) => [
             ...prevResponse,
             {
@@ -60,12 +59,10 @@ export default function Test() {
     },
     [currentChoiceList, questionList]
   );
-  console.log(userResponse);
 
   // 각 문항에 대한 선택지 표시
   useEffect(() => {
     if (questionList.length) {
-      // console.log(questionList[currentIndex].answer);
       if (currentIndex <= 3) {
         setCurrentChoiceList([
           {
@@ -114,13 +111,10 @@ export default function Test() {
     }
   }, [currentIndex, questionList]);
 
-  // 마지막 문항 선택 완료 시 로딩 컴포넌트 불러오기
-
   // 테스트 페이지 UI
   if (questionList.length === 0 || currentChoiceList.length === 0) {
     return null;
   }
-  // console.log(currentChoiceList);
   return (
     <TestPage>
       <TestQuestion
@@ -140,8 +134,10 @@ export default function Test() {
         answer={currentChoiceList[1].text}
       />
       <ProgressBar progressNum={currentIndex + 1} />
-      <Loading visible={viewLoading} userData={userResponse} />
-      <Loading visible={viewLoading} userData={userResponse} />
+      <Loading
+        visible={viewLoading}
+        userResponse={{ parent: "basic", mbtiData: userResponse }}
+      />
     </TestPage>
   );
 }

@@ -1,8 +1,8 @@
-import React from "react";
+import { useEffect } from "react";
 import tw from "tailwind-styled-components";
 import { ReactComponent as LoadingImg } from "@/assets/img/loading_img.svg";
 //@ts-ignore
-export default function Loading({ visible, userData }) {
+export default function Loading({ visible, userResponse }) {
   return visible ? (
     <LoadingSection>
       <TextTop>너 T야?</TextTop>
