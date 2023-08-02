@@ -7,9 +7,9 @@ import { ReactComponent as CloseIcon } from "@/assets/img/close_icon.svg";
 import { ReactComponent as CheckIcon } from "@/assets/img/check_icon.svg";
 import MbtiTypesModal from "@/components/common/MbtiTypesModal";
 
-// 모달들 배경부분(공통 스타일컴포넌트로 만들기) 클릭하면 모달창이 꺼지고 선택된 state값들을 부모에게 보내줌
+// 모달 배경부분(ModalBg) 클릭하면 모달창이 꺼지고 모달컴포넌트 안에서 선택된 state값들을 부모(BoardPost)에게 보내줌
 
-// 배경 색상
+// 배경 색상 종류
 const colors = [
   { name: "화이트", color: "white" },
   { name: "퍼플", color: "#B2ACF9" },
@@ -19,6 +19,7 @@ const colors = [
   { name: "블루", color: "#78D9EE" },
   { name: "오렌지", color: "#FF9D42" },
 ];
+
 // 배경 색상 선택 모달
 function BgColorsModal({
   colors,
@@ -74,7 +75,6 @@ function BgColorsModal({
 }
 
 // 유효성 결과 모달
-// title, contents props 설정해줘야 함
 function AlertModal() {
   return (
     <ModalWrapCenter>
@@ -87,7 +87,7 @@ function AlertModal() {
 }
 
 // 게시글 작성
-function BoardPost() {
+function BoardPost({ onThisClose }: { onThisClose: () => void }) {
   const [bgColor, setBgColor] = useState("white");
   const [mbtiType, setMbtiType] = useState(["I", "N", "T", "J"]);
   const [showModal, setShowModal] = useState("");
@@ -117,7 +117,7 @@ function BoardPost() {
             <SwitchIcon className="m-auto" />
           </CircleButton>
           <MbtiType>{mbtiType}</MbtiType>
-          <CircleButton bg={mbtiColor_2}>
+          <CircleButton bg={mbtiColor_2} onClick={() => onThisClose()}>
             <CloseIcon className="m-auto" />
           </CircleButton>
         </PostTitle>

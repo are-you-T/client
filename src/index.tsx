@@ -32,7 +32,7 @@ const router = createBrowserRouter([
   {
     // 게시글 작성 확인용 -> 추후에 BulletinBoard page 안에서 컴포넌트로만 사용할 예정
     path: "/post",
-    element: <BoardPost />,
+    element: <BoardPost onThisClose={() => console.log("닫기")} />,
   },
 ]);
 
