@@ -7,12 +7,12 @@ function MbtiTypesModal({
   selectMbti,
   onThisMbti,
   isButton,
-  onThisConfirm,
+  onThisConfirm = () => {},
 }: {
   selectMbti: string[];
   onThisMbti: (value: string[]) => void;
   isButton: boolean;
-  onThisConfirm: () => void;
+  onThisConfirm?: () => void;
 }) {
   const [mbti_IE, setMbti_IE] = useState(selectMbti[0]);
   const [mbti_NS, setMbti_NS] = useState(selectMbti[1]);

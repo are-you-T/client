@@ -3,6 +3,8 @@ import tw from "tailwind-styled-components";
 
 import BulletinCard from "@/components/board/BulletinCard";
 import BulletinCardModal from "@/components/board/BulletinCardModal";
+import MbtiColorChip from "@/components/board/MbtiColorChip";
+import PostBtn from "@/components/board/PostBtn";
 
 const Board = tw.div`
   flex flex-col
@@ -22,9 +24,7 @@ text-[43px] leading-[51px] font-bold text-white
 const ChangeMbtiBtn = tw.button`
   
 `;
-const MbtiColor = tw.div`
- flex flex-row gap-2
-`;
+
 const Main = tw.div`
   w-full overflow-auto
 `;
@@ -32,8 +32,7 @@ const BulletinCardWrap = tw.div`
   flex flex-wrap justify-start gap-[15px]
   w-fit mx-auto
 `;
-const PostBtn = tw.button`
-`;
+
 const Footer = tw.div`
   flex justify-center
   w-full bg-black
@@ -56,38 +55,8 @@ export default function BulletinBoard() {
       <Header>
         <Mbti>
           <Title>INTJ</Title>
-          {/* mbti icon */}
-          <MbtiColor>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="37"
-              height="36"
-              fill="none"
-            >
-              <ellipse
-                cx="18.088"
-                cy="17.833"
-                fill="#00B26E"
-                rx="18.088"
-                ry="17.833"
-              />
-            </svg>
-            {/* mbti icon */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="37"
-              height="36"
-              fill="none"
-            >
-              <ellipse
-                cx="18.088"
-                cy="17.833"
-                fill="#FFA8DF"
-                rx="18.088"
-                ry="17.833"
-              />
-            </svg>
-          </MbtiColor>
+
+          <MbtiColorChip />
         </Mbti>
         {/* change icon */}
         <ChangeMbtiBtn>
@@ -112,35 +81,11 @@ export default function BulletinBoard() {
         </ChangeMbtiBtn>
       </Header>
       <Main>
-        <BulletinCardWrap>
-          <BulletinCard showModal={showModal} />
-          <BulletinCard showModal={showModal} />
-          <BulletinCard showModal={showModal} />
-          <BulletinCard showModal={showModal} />
-          <BulletinCard showModal={showModal} />
-          <BulletinCard showModal={showModal} />
-          <BulletinCard showModal={showModal} />
-          <BulletinCard showModal={showModal} />
-          <BulletinCard showModal={showModal} />
-        </BulletinCardWrap>
+        <BulletinCardWrap></BulletinCardWrap>
       </Main>
 
       <Footer>
-        {/* post button icon */}
-        <PostBtn>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="47"
-            height="47"
-            fill="none"
-          >
-            <circle cx="23.5" cy="23.5" r="23.5" fill="#fff" />
-            <path
-              fill="#000"
-              d="M21.913 35.217v-9.473H12.49V22.57h9.424v-9.424h3.174v9.424h9.473v3.174h-9.473v9.473h-3.174Z"
-            />
-          </svg>
-        </PostBtn>
+        <PostBtn />
       </Footer>
     </Board>
   );

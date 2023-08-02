@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import tw from "tailwind-styled-components";
-import loadingImg from "./../../assets/img/loading_img.svg";
+import { ReactComponent as LoadingImg } from "@/assets/img/loading_img.svg";
 
 interface LoadingProps {
   visible: boolean;
@@ -8,6 +8,10 @@ interface LoadingProps {
 }
 
 export default function Loading({ visible, userResponse }: LoadingProps) {
+  console.log(
+    "🚀 ~ file: Loading.tsx:13 ~ Loading ~ userResponse:",
+    userResponse
+  );
   const calculateScores = () => {
     // 유형별 점수 계산
     const energy: { [key: string]: number } = { E: 0, I: 0 };
@@ -43,7 +47,7 @@ export default function Loading({ visible, userResponse }: LoadingProps) {
   return visible ? (
     <LoadingSection>
       <TextTop>너 T야?</TextTop>
-      <img src={loadingImg} alt="로딩이미지" />
+      <LoadingImg />
       <TextBottom>분석중...</TextBottom>
     </LoadingSection>
   ) : (

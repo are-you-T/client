@@ -1,9 +1,10 @@
 import React from "react";
 import tw from "tailwind-styled-components";
 //@ts-ignore
-export default function TestCard({ answer, onClick }) {
+export default function TestCard({ answer, index, onClick }) {
+  const onClickCard = onClick(index);
   return (
-    <Testcard onClick={onClick}>
+    <Testcard onClick={onClickCard}>
       <TestcardText>{answer}</TestcardText>
     </Testcard>
   );
@@ -11,6 +12,7 @@ export default function TestCard({ answer, onClick }) {
 
 const Testcard = tw.button`
 w-80
+h-[120px]
 py-9
 px-4
 mb-5

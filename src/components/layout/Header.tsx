@@ -1,9 +1,7 @@
-import React from "react";
+import { useState } from "react";
 import tw from "tailwind-styled-components";
 import { BsList } from "react-icons/bs";
 import { Link } from "react-router-dom";
-// import Button from "./Button";
-// import companyLogo from "../assets/logo.svg";
 import Logo from "@/components/layout/Logo";
 
 const ScaledBsList = tw(BsList)`
@@ -11,43 +9,60 @@ text-4xl
 `;
 
 export default function Head() {
+
+ 
+  const [isChecked, setIsChecked] = useState(false);
+  // 이벤트 핸들러 함수 추가
+  const handleDrawerToggle = () => {
+    setIsChecked(!isChecked);
+  };
   return (
     <Header>
-      <Logo></Logo>
+      <Link to="/">
+        <Logo></Logo>
+      </Link>
       <Drawer>
-        <DrawerToggle id="my-drawer" type="checkbox"></DrawerToggle>
-        <DrawerContent>
+        <DrawerToggle id="my-drawer" type="checkbox" checked={isChecked}></DrawerToggle>
+        <DrawerContent onClick={handleDrawerToggle}>
           <DrawerButton htmlFor="my-drawer">
             <ScaledBsList></ScaledBsList>
           </DrawerButton>
         </DrawerContent>
-        <DrawerSide>
-          <DrawerOverlay htmlFor="my-drawer"></DrawerOverlay>
-          <SideBarContent>
-            <Logo></Logo>
-            <SiderBarItem className="bg-regal-yellow">
-              테스트 하러가기
-            </SiderBarItem>
-            <SiderBarItem className="bg-black text-white">
-              통계 보러가기
-            </SiderBarItem>
-            <SiderBarItem className="bg-black text-white">
-              담벼락 보러가기
-            </SiderBarItem>
-            <SideBarFooter>
-              <SideBarFooterContent>AYT Company</SideBarFooterContent>
-              <SideBarFooterContent className="pointer-events-auto">
-                <a
-                  href="https://github.com/are-you-T"
-                  target="_blank"
-                  rel="are-you-T noreferrer"
-                >
-                  https://github.com/are-you-T
-                </a>
-              </SideBarFooterContent>
-            </SideBarFooter>
-          </SideBarContent>
-        </DrawerSide>
+          <DrawerSide>
+            <DrawerOverlay htmlFor="my-drawer" onClick={handleDrawerToggle}></DrawerOverlay>
+            <SideBarContent>
+              <Link to="/" onClick={handleDrawerToggle}>
+                <Logo></Logo>
+              </Link>
+              <Link to="/test" onClick={handleDrawerToggle}>
+                <SiderBarItem className="bg-regal-yellow">
+                  테스트 하러가기
+                </SiderBarItem>
+              </Link>
+              <Link to="/stats" onClick={handleDrawerToggle}>
+                <SiderBarItem className="bg-black text-white">
+                  통계 보러가기
+                </SiderBarItem>
+              </Link>
+              <Link to="/board" onClick={handleDrawerToggle}>
+                <SiderBarItem className="bg-black text-white">
+                  담벼락 보러가기
+                </SiderBarItem>
+              </Link>
+              <SideBarFooter>
+                <SideBarFooterContent>AYT Company</SideBarFooterContent>
+                <SideBarFooterContent className="pointer-events-auto">
+                  <a
+                    href="https://github.com/are-you-T"
+                    target="_blank"
+                    rel="are-you-T noreferrer"
+                  >
+                    https://github.com/are-you-T
+                  </a>
+                </SideBarFooterContent>
+              </SideBarFooter>
+            </SideBarContent>
+          </DrawerSide>
       </Drawer>
     </Header>
   );
@@ -56,7 +71,8 @@ export default function Head() {
 const Header = tw.header`
   flex
   flex-wrap
-  w-full
+  w-[390px]
+  m-auto
   h-auto
   shrink-0
   bg-regal-purple
@@ -98,6 +114,7 @@ const DrawerContent = tw.div`
 
 const DrawerSide = tw.div`
   drawer-side
+  z-50
 `;
 
 const SideBarContent = tw.ul`
