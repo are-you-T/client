@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef} from "react";
 import ApexCharts from "react-apexcharts";
-// import styled from "styled-components";
 import tw from "tailwind-styled-components";
 // import { IoCloseSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
@@ -158,24 +157,6 @@ class ApexChart extends React.Component<{}, ApexChartState> {
 }
 
 export default function Stats() {
-  // const [moodalOpen, setModalOpen] = useState(false);
-  // const [selectedOption, setSelectedOption] = useState(["I", "N", "F", "P"]);
-
-  // const openModal = () => {
-  //   setModalOpen(true);
-  // };
-
-  // const closeModal = () => {
-  //   setModalOpen(false);
-  // };
-
-  // const toggleOption = (index: number, option: string) => {
-  //   setSelectedOption((prevOptions) => {
-  //     const newOptions = [...prevOptions];
-  //     newOptions[index] = option;
-  //     return newOptions;
-  //   });
-  // };
   const [showModal, setShowModal] = useState("");
   const [mbtiType, setMbtiType] = useState(["I", "N", "T", "J"]);
 
@@ -221,13 +202,11 @@ export default function Stats() {
       {showModal !== "" && (
         <ModalWrap onClick={handleOutsideClick} ref={modalRef} >
           {showModal === "MbtiTypesModal" && (
-            // <StyledMbtiTypesModal >
               <MbtiTypesModal
                 selectMbti={mbtiType}
                 onThisMbti={handleThisMbti}
                 isButton={true}
               />
-            // </StyledMbtiTypesModal>
           )}
         </ModalWrap>
       )}
