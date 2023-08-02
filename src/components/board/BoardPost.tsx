@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
+import { Link } from "react-router-dom";
 
 // 모달들 배경부분(공통 스타일컴포넌트로 만들기) 클릭하면 모달창이 꺼지고 선택된 state값들을 부모에게 보내줌
 
@@ -214,7 +215,7 @@ function MbtiTypesModal({
           </div>
         </MbtiList>
       </ul>
-      {isButton && <MbtiButton>확인</MbtiButton>}
+      {isButton && <MbtiButton><Link to ="/stats/:mbti">확인</Link></MbtiButton>}
     </ModalWrap>
   );
 }
@@ -427,7 +428,7 @@ w-80
   bg-yellow-400
   rounded-full
   text-lg
-  mt-5
+  mt-8
   font-bold
   text-black
 `;
