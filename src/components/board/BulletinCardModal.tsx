@@ -80,7 +80,7 @@ const HeartCount = tw.div`
 export default function BulletinCardModal({ closeModal, selectedId }) {
   const [posting, setPosting] = useState<Posting>({} as Posting);
 
-  //게시글 타입
+  //선택한 게시글 타입
   type Posting = {
     _id: string;
     title: string;
@@ -89,12 +89,12 @@ export default function BulletinCardModal({ closeModal, selectedId }) {
     like: number;
     createdAt: string;
   };
-  //게시글 불러오기
+  //선택한 게시글 불러오기
   useEffect(() => {
-    getPosting();
+    getSelectedPosting();
   }, []);
 
-  async function getPosting() {
+  async function getSelectedPosting() {
     try {
       const response = await axios.get(
         `http://localhost:3001/api/v1/board/post/${selectedId}`
@@ -106,6 +106,16 @@ export default function BulletinCardModal({ closeModal, selectedId }) {
       console.log(err);
     }
   }
+  //날짜 양식 맞추기
+  //@ts-ignore
+  const changeDateFormat = (dateString) => {
+    if (dateString) {
+      const date = dateString.substr(0, 10);
+      return date.replace(/-/g, ".");
+    }
+    return "";
+  };
+
   return (
     <CardModalContainer>
       <CardModal>
@@ -141,7 +151,7 @@ export default function BulletinCardModal({ closeModal, selectedId }) {
               <HeartCount>{posting.like}</HeartCount>
             </Heart>
 
-            <Date>{posting.createdAt}</Date>
+            <Date>{changeDateFormat(posting.createdAt)}</Date>
           </Footer>
         </FooterWrap>
       </CardModal>
