@@ -7,70 +7,142 @@ import tw from "tailwind-styled-components";
 import axios from "axios";
 // import { BsChevronRight } from "react-icons/bs";
 // import { Link } from "react-router-dom";
-//@ts-ignore
+
+// 타입 정의
+type CurrentChoiceList = {
+  mbtiType: string;
+  text: string;
+};
+
 export default function Test() {
   const [viewLoading, setViewLoading] = useState(false);
-  const [currentQ, setCurrentQ] = useState<any[] | any>();
-  const [questionNum, setQuestionNum] = useState(0);
-
+  const [questionList, setQuestionList] = useState<any[] | any>([]);
+  const [userResponse, setUserResponse] = useState<any[]>([]);
+  const [currentChoiceList, setCurrentChoiceList] = useState<
+    CurrentChoiceList[]
+  >([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const URL = "http://localhost:3001/api/v1/question/basic";
 
+  // 테스트 문항 api 호출
   useEffect(() => {
-    const getQuestion = async () => {
+    const getQuestionList = async () => {
       try {
         const response = await axios.get(URL);
-        // console.log('Response:', response.data);
-        setCurrentQ(response.data.data);
+        // console.log("Response:", response.data);
+        setQuestionList(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-    getQuestion();
+    getQuestionList();
   }, []);
 
-  const handleClickCard = () => {
-    // setViewLoading(true);
-    setQuestionNum((curr) => curr + 1);
-  };
+  const handleClickCard = useCallback(
+    (choiceIndex: number) => () => {
+      if (currentChoiceList.length > 0 && questionList.length > 0) {
+        setCurrentIndex((curr) => {
+          const currentAnswer = questionList[curr];
+          setUserResponse((prevResponse) => [
+            ...prevResponse,
+            {
+              ...currentAnswer,
+              selection: currentChoiceList[choiceIndex].mbtiType,
+            },
+          ]);
+          if (curr === questionList.length - 1) {
+            setViewLoading(true);
+            return curr;
+          }
+          return curr + 1;
+        });
+      }
+    },
+    [currentChoiceList, questionList]
+  );
+  console.log(userResponse);
 
-  // useEffect(()=>{console.log(currentQ)},[currentQ])
-  const createAnswerType = (idx: number): any[] => {
-    switch (true) {
-      case idx >= 0 && idx <= 3:
-        return [currentQ[idx].answer.E, currentQ[idx].answer.I];
-      case idx >= 4 && idx <= 7:
-        return [currentQ[idx].answer.N, currentQ[idx].answer.S];
-      case idx >= 8 && idx <= 11:
-        return [currentQ[idx].answer.T, currentQ[idx].answer.F];
-      case idx >= 12 && idx <= 15:
-        return [currentQ[idx].answer.J, currentQ[idx].answer.P];
-      default:
-        return [];
+  // 각 문항에 대한 선택지 표시
+  useEffect(() => {
+    if (questionList.length) {
+      // console.log(questionList[currentIndex].answer);
+      if (currentIndex <= 3) {
+        setCurrentChoiceList([
+          {
+            mbtiType: "E",
+            text: questionList[currentIndex].answer.E,
+          },
+          {
+            mbtiType: "I",
+            text: questionList[currentIndex].answer.I,
+          },
+        ]);
+      } else if (currentIndex <= 7) {
+        setCurrentChoiceList([
+          {
+            mbtiType: "N",
+            text: questionList[currentIndex].answer.N,
+          },
+          {
+            mbtiType: "S",
+            text: questionList[currentIndex].answer.S,
+          },
+        ]);
+      } else if (currentIndex <= 11) {
+        setCurrentChoiceList([
+          {
+            mbtiType: "T",
+            text: questionList[currentIndex].answer.T,
+          },
+          {
+            mbtiType: "F",
+            text: questionList[currentIndex].answer.F,
+          },
+        ]);
+      } else {
+        setCurrentChoiceList([
+          {
+            mbtiType: "J",
+            text: questionList[currentIndex].answer.J,
+          },
+          {
+            mbtiType: "P",
+            text: questionList[currentIndex].answer.P,
+          },
+        ]);
+      }
     }
-  };
+  }, [currentIndex, questionList]);
 
+  // 마지막 문항 선택 완료 시 로딩 컴포넌트 불러오기
+
+  // 테스트 페이지 UI
+  if (questionList.length === 0 || currentChoiceList.length === 0) {
+    return null;
+  }
+  // console.log(currentChoiceList);
   return (
-    currentQ && (
-      <TestPage>
-        <TestQuestion
-          idx={String(currentQ[questionNum].idx).padStart(2, "0")}
-          subject={currentQ[questionNum].subject}
-        />
-
-        <TestCard
-          onClick={handleClickCard}
-          //@ts-ignore
-          answer={createAnswerType(questionNum)[0]}
-        />
-        <TestCard
-          onClick={handleClickCard}
-          //@ts-ignore
-          answer={createAnswerType(questionNum)[1]}
-        />
-        <ProgressBar progressNum={currentQ[questionNum].idx} />
-        <Loading visible={viewLoading} />
-      </TestPage>
-    )
+    <TestPage>
+      <TestQuestion
+        idx={String(currentIndex + 1).padStart(2, "0")}
+        subject={questionList[currentIndex].subject}
+      />
+      <TestCard
+        onClick={handleClickCard}
+        //@ts-ignore
+        index={0}
+        answer={currentChoiceList[0].text}
+      />
+      <TestCard
+        onClick={handleClickCard}
+        //@ts-ignore
+        index={1}
+        answer={currentChoiceList[1].text}
+      />
+      <ProgressBar progressNum={currentIndex + 1} />
+      <Loading visible={viewLoading} userData={userResponse} />
+      <Loading visible={viewLoading} userData={userResponse} />
+    </TestPage>
   );
 }
 
