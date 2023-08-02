@@ -126,6 +126,7 @@ export default function BulletinBoard() {
           {postings.map((posting) => {
             return (
               <BulletinCard
+                key={posting._id}
                 id={posting._id}
                 showModal={showModal}
                 title={posting.title}
