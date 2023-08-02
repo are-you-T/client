@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
+import axios from "axios";
 
 import HeartBtn from "@/components/board/HeartBtn";
 import OptionBtn from "@/components/board/OptionBtn";
@@ -60,8 +61,11 @@ const HeartCount = tw.div`
   font-light
   ml-[4px]
 `;
+
 //@ts-ignore
 export default function BulletinCard({
+  //@ts-ignore
+  id,
   //@ts-ignore
   showModal,
   //@ts-ignore
@@ -76,7 +80,7 @@ export default function BulletinCard({
   createdAt,
 }) {
   return (
-    <Card onClick={showModal}>
+    <Card id={id} onClick={() => showModal(id)}>
       <Header>
         <Title>{title}</Title>
         <OptionBtn />

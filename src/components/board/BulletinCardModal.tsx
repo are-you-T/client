@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
+import axios from "axios";
 
 import HeartBtn from "@/components/board/HeartBtn";
 
@@ -76,12 +77,40 @@ const HeartCount = tw.div`
   ml-1
 `;
 //@ts-ignore
-export default function BulletinCardModal({ closeModal }) {
+export default function BulletinCardModal({ closeModal, selectedId }) {
+  const [posting, setPosting] = useState<Posting>({} as Posting);
+
+  //게시글 타입
+  type Posting = {
+    _id: string;
+    title: string;
+    content: string;
+    category: string;
+    like: number;
+    createdAt: string;
+  };
+  //게시글 불러오기
+  useEffect(() => {
+    getPosting();
+  }, []);
+
+  async function getPosting() {
+    try {
+      const response = await axios.get(
+        `http://localhost:3001/api/v1/board/post/${selectedId}`
+      );
+
+      console.log("getPosting", response.data.data);
+      setPosting(response.data.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   return (
     <CardModalContainer>
       <CardModal>
         <Header>
-          <Category>INTJ</Category>
+          <Category>{posting.category}</Category>
           {/* close icon */}
           <CloseBtn onClick={closeModal}>
             <svg
@@ -101,23 +130,18 @@ export default function BulletinCardModal({ closeModal }) {
         </Header>
 
         <Main>
-          <Title>제목</Title>
-          <Content>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi quasi
-            omnis rem exercitationem voluptatum, inventore tempore. Veritatis
-            placeat, voluptate fuga hic itaque officia libero ut similique at
-            nihil explicabo minus.
-          </Content>
+          <Title>{posting.title}</Title>
+          <Content>{posting.content}</Content>
         </Main>
         <FooterWrap>
           <Divider />
           <Footer>
             <Heart>
               <HeartBtn />
-              <HeartCount>23</HeartCount>
+              <HeartCount>{posting.like}</HeartCount>
             </Heart>
 
-            <Date>2023.07.20</Date>
+            <Date>{posting.createdAt}</Date>
           </Footer>
         </FooterWrap>
       </CardModal>
