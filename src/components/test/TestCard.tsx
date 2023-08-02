@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import tw from "tailwind-styled-components";
 //@ts-ignore
 export default function TestCard({ answer, index, onClick }) {
