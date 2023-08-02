@@ -67,7 +67,7 @@ export default function Test() {
           //@ts-ignore
           answer={createAnswerType(questionNum)[1]}
         />
-        <ProgressBar />
+        <ProgressBar progressNum={currentQ[questionNum].idx} />
         <Loading visible={viewLoading} />
       </TestPage>
     )
