@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
+import { ReactComponent as SwitchIcon } from "@/assets/img/typeSwitch_icon.svg";
+import { ReactComponent as AlertIcon } from "@/assets/img/alert_icon.svg";
+import { ReactComponent as CloseIcon } from "@/assets/img/close_icon.svg";
+import { ReactComponent as CheckIcon } from "@/assets/img/check_icon.svg";
 import { Link } from "react-router-dom";
 
 // 모달들 배경부분(공통 스타일컴포넌트로 만들기) 클릭하면 모달창이 꺼지고 선택된 state값들을 부모에게 보내줌
@@ -59,9 +63,7 @@ function BgColorsModal({
                 >
                   {color.name}
                 </span>
-                {thisColor === color.color && (
-                  <img src="/img/check_icon.svg" alt="" />
-                )}
+                {thisColor === color.color && <CheckIcon />}
               </label>
             </li>
           );
@@ -215,7 +217,11 @@ function MbtiTypesModal({
           </div>
         </MbtiList>
       </ul>
-      {isButton && <MbtiButton><Link to ="/stats/:mbti">확인</Link></MbtiButton>}
+      {isButton && (
+        <MbtiButton>
+          <Link to="/stats/:mbti">확인</Link>
+        </MbtiButton>
+      )}
     </ModalWrap>
   );
 }
@@ -226,7 +232,7 @@ function AlertModal() {
   return (
     <ModalWrapCenter>
       <h3 className="text-xl font-black text-center flex items-center justify-center">
-        <img src="/img/alert_icon.svg" className="w-4" alt="" />
+        <AlertIcon className="w-4" />
         <span>을 입력해주세요!</span>
       </h3>
     </ModalWrapCenter>
@@ -261,11 +267,11 @@ function BoardPost() {
             bg={mbtiColor_1}
             onClick={() => setShowModal("MbtiTypesModal")}
           >
-            <img src="/img/typeSwitch_icon.svg" className="m-auto" alt="" />
+            <SwitchIcon className="m-auto" />
           </CircleButton>
           <MbtiType>{mbtiType}</MbtiType>
           <CircleButton bg={mbtiColor_2}>
-            <img src="/img/close_icon.svg" className="m-auto" alt="" />
+            <CloseIcon className="m-auto" />
           </CircleButton>
         </PostTitle>
         <form className="flex-1 text-2xl">
