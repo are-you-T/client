@@ -1,11 +1,15 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
-import { Link } from "react-router-dom";
+import { ReactComponent as SwitchIcon } from "@/assets/img/typeSwitch_icon.svg";
+import { ReactComponent as AlertIcon } from "@/assets/img/alert_icon.svg";
+import { ReactComponent as CloseIcon } from "@/assets/img/close_icon.svg";
+import { ReactComponent as CheckIcon } from "@/assets/img/check_icon.svg";
+import MbtiTypesModal from "@/components/common/MbtiTypesModal";
 
-// 모달들 배경부분(공통 스타일컴포넌트로 만들기) 클릭하면 모달창이 꺼지고 선택된 state값들을 부모에게 보내줌
+// 모달 배경부분(ModalBg) 클릭하면 모달창이 꺼지고 모달컴포넌트 안에서 선택된 state값들을 부모(BoardPost)에게 보내줌
 
-// 배경 색상
+// 배경 색상 종류
 const colors = [
   { name: "화이트", color: "white" },
   { name: "퍼플", color: "#B2ACF9" },
@@ -15,6 +19,7 @@ const colors = [
   { name: "블루", color: "#78D9EE" },
   { name: "오렌지", color: "#FF9D42" },
 ];
+
 // 배경 색상 선택 모달
 function BgColorsModal({
   colors,
@@ -59,9 +64,7 @@ function BgColorsModal({
                 >
                   {color.name}
                 </span>
-                {thisColor === color.color && (
-                  <img src="/img/check_icon.svg" alt="" />
-                )}
+                {thisColor === color.color && <CheckIcon />}
               </label>
             </li>
           );
@@ -71,162 +74,12 @@ function BgColorsModal({
   );
 }
 
-// MBIT 선택 모달
-function MbtiTypesModal({
-  selectMbti,
-  onThisMbti,
-  isButton,
-}: {
-  selectMbti: string[];
-  onThisMbti: (value: string[]) => void;
-  isButton: boolean;
-}) {
-  const [mbti_IE, setMbti_IE] = useState(selectMbti[0]);
-  const [mbti_NS, setMbti_NS] = useState(selectMbti[1]);
-  const [mbti_FT, setMbti_FT] = useState(selectMbti[2]);
-  const [mbti_PJ, setMbti_PJ] = useState(selectMbti[3]);
-
-  useEffect(() => {
-    onThisMbti([mbti_IE, mbti_NS, mbti_FT, mbti_PJ]);
-  }, [mbti_IE, mbti_NS, mbti_FT, mbti_PJ, onThisMbti]);
-
-  return (
-    <ModalWrap>
-      <h3 className="text-2xl font-black text-center">MBTI 선택</h3>
-      <ul>
-        <MbtiList>
-          <Toggle className={mbti_IE === "I" ? "left" : "right"} />
-          <div className="flex-1 text-center">
-            <input
-              type="radio"
-              name="mbti_IE"
-              id="I"
-              className="hidden"
-              checked={mbti_IE === "I"}
-              onChange={(evt) => {
-                setMbti_IE(evt.target.id);
-              }}
-            />
-            <MbtiLabel htmlFor="I" className={mbti_IE === "I" ? "active" : ""}>
-              I
-            </MbtiLabel>
-          </div>
-          <div className="flex-1 text-center">
-            <input
-              type="radio"
-              name="mbti_IE"
-              id="E"
-              className="hidden"
-              checked={mbti_IE === "E"}
-              onChange={(evt) => {
-                setMbti_IE(evt.target.id);
-              }}
-            />
-            <MbtiLabel htmlFor="E" className={mbti_IE === "E" ? "active" : ""}>
-              E
-            </MbtiLabel>
-          </div>
-        </MbtiList>
-        <MbtiList>
-          <Toggle className={mbti_NS === "N" ? "left" : "right"} />
-          <div className="flex-1 text-center">
-            <input
-              type="radio"
-              name="mbti_NS"
-              id="N"
-              className="hidden"
-              checked={mbti_NS === "N"}
-              onChange={(evt) => setMbti_NS(evt.target.id)}
-            />
-            <MbtiLabel htmlFor="N" className={mbti_NS === "N" ? "active" : ""}>
-              N
-            </MbtiLabel>
-          </div>
-          <div className="flex-1 text-center">
-            <input
-              type="radio"
-              name="mbti_NS"
-              id="S"
-              className="hidden"
-              checked={mbti_NS === "S"}
-              onChange={(evt) => setMbti_NS(evt.target.id)}
-            />
-            <MbtiLabel htmlFor="S" className={mbti_NS === "S" ? "active" : ""}>
-              S
-            </MbtiLabel>
-          </div>
-        </MbtiList>
-        <MbtiList>
-          <Toggle className={mbti_FT === "F" ? "left" : "right"} />
-          <div className="flex-1 text-center">
-            <input
-              type="radio"
-              name="mbti_FT"
-              id="F"
-              className="hidden"
-              checked={mbti_FT === "F"}
-              onChange={(evt) => setMbti_FT(evt.target.id)}
-            />
-            <MbtiLabel htmlFor="F" className={mbti_FT === "F" ? "active" : ""}>
-              F
-            </MbtiLabel>
-          </div>
-          <div className="flex-1 text-center">
-            <input
-              type="radio"
-              name="mbti_FT"
-              id="T"
-              className="hidden"
-              checked={mbti_FT === "T"}
-              onChange={(evt) => setMbti_FT(evt.target.id)}
-            />
-            <MbtiLabel htmlFor="T" className={mbti_FT === "T" ? "active" : ""}>
-              T
-            </MbtiLabel>
-          </div>
-        </MbtiList>
-        <MbtiList>
-          <Toggle className={mbti_PJ === "P" ? "left" : "right"} />
-          <div className="flex-1 text-center">
-            <input
-              type="radio"
-              name="mbti_PJ"
-              id="P"
-              className="hidden"
-              checked={mbti_PJ === "P"}
-              onChange={(evt) => setMbti_PJ(evt.target.id)}
-            />
-            <MbtiLabel htmlFor="P" className={mbti_PJ === "P" ? "active" : ""}>
-              P
-            </MbtiLabel>
-          </div>
-          <div className="flex-1 text-center">
-            <input
-              type="radio"
-              name="mbti_PJ"
-              id="J"
-              className="hidden"
-              checked={mbti_PJ === "J"}
-              onChange={(evt) => setMbti_PJ(evt.target.id)}
-            />
-            <MbtiLabel htmlFor="J" className={mbti_PJ === "J" ? "active" : ""}>
-              J
-            </MbtiLabel>
-          </div>
-        </MbtiList>
-      </ul>
-      {isButton && <MbtiButton><Link to ="/stats/:mbti">확인</Link></MbtiButton>}
-    </ModalWrap>
-  );
-}
-
 // 유효성 결과 모달
-// title, contents props 설정해줘야 함
 function AlertModal() {
   return (
     <ModalWrapCenter>
       <h3 className="text-xl font-black text-center flex items-center justify-center">
-        <img src="/img/alert_icon.svg" className="w-4" alt="" />
+        <AlertIcon className="w-4" />
         <span>을 입력해주세요!</span>
       </h3>
     </ModalWrapCenter>
@@ -234,7 +87,7 @@ function AlertModal() {
 }
 
 // 게시글 작성
-function BoardPost() {
+function BoardPost({ onThisClose }: { onThisClose: () => void }) {
   const [bgColor, setBgColor] = useState("white");
   const [mbtiType, setMbtiType] = useState(["I", "N", "T", "J"]);
   const [showModal, setShowModal] = useState("");
@@ -261,11 +114,11 @@ function BoardPost() {
             bg={mbtiColor_1}
             onClick={() => setShowModal("MbtiTypesModal")}
           >
-            <img src="/img/typeSwitch_icon.svg" className="m-auto" alt="" />
+            <SwitchIcon className="m-auto" />
           </CircleButton>
           <MbtiType>{mbtiType}</MbtiType>
-          <CircleButton bg={mbtiColor_2}>
-            <img src="/img/close_icon.svg" className="m-auto" alt="" />
+          <CircleButton bg={mbtiColor_2} onClick={() => onThisClose()}>
+            <CloseIcon className="m-auto" />
           </CircleButton>
         </PostTitle>
         <form className="flex-1 text-2xl">
@@ -328,7 +181,7 @@ function BoardPost() {
   );
 }
 
-export { BoardPost, MbtiTypesModal };
+export default BoardPost;
 
 const Container = tw.main`
 bg-[#000000]
@@ -383,52 +236,4 @@ bg-white rounded-3xl p-8 text-black absolute left-1/2 top-1/2 -translate-x-1/2 w
 
 const SelectColors = tw(SpanColor)`
 w-12 h-12 radius rounded-full border-black border-4 inline-block
-`;
-
-const ActiveList = styled.li`
-  position: relative;
-  & > div {
-    z-index: 1;
-    & label {
-      &.active {
-        color: black;
-      }
-    }
-  }
-`;
-
-const MbtiLabel = tw.label`
-  block w-full cursor-pointer p-2
-`;
-
-const MbtiList = tw(ActiveList)`
-bg-black w-full text-white flex items-center p-4 rounded-full text-5xl font-black mt-5
-`;
-
-const Toggle = styled.div`
-  position: absolute;
-  z-index: -1;
-  background-color: #b2acf9;
-  display: block;
-  width: 50%;
-  height: calc(100% - 20px);
-  transition: all 0.2s;
-  border-radius: 9999px;
-  &.left {
-    left: calc(0% + 10px);
-  }
-  &.right {
-    left: calc(50% - 10px);
-  }
-`;
-
-const MbtiButton = tw.button`
-w-80
-  h-16
-  bg-yellow-400
-  rounded-full
-  text-lg
-  mt-8
-  font-bold
-  text-black
 `;

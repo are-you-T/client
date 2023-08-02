@@ -4,7 +4,7 @@ import ApexCharts from "react-apexcharts";
 import tw from "tailwind-styled-components";
 // import { IoCloseSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import { MbtiTypesModal } from "@/components/board/BoardPost";
+import MbtiTypesModal from "@/components/common/MbtiTypesModal";
 
 // 차트 데이터를 위한 인터페이스
 interface ChartData {
