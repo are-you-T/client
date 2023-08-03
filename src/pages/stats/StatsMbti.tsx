@@ -128,7 +128,7 @@ function ChartItem({ data }: IProps) {
 function StatsMbti() {
     const { mbti } = useParams();
     const [isLoading, setIsLoading] = useState(false);
-    const [stats, setStats] = useState<MbtiStatsByType | null>(null);
+    const [stats, setStats] = useState<ResponseMbtiStats['data']>(null);
 
     const fetchStats = async () => {
         setIsLoading(true);
