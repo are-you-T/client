@@ -25,6 +25,11 @@ interface MbtiStatsByType {
     mbtiData: QuestionItem[];
 }
 
+interface ResponseMbtiStats {
+    error: string | null;
+    data: MbtiStatsByType | null;
+}
+
 interface IProps {
     data: QuestionItem;
 }
