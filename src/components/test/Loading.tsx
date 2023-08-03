@@ -1,49 +1,124 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import { ReactComponent as LoadingImg } from "@/assets/img/loading_img.svg";
 
-interface LoadingProps {
+type Answer = {
+  [key: string]: string;
+};
+
+type MBTIData = {
+  idx: number;
+  subject: string;
+  answer: Answer;
+  mbtiType: string;
+  selection: string | number;
+  proportion: number;
+};
+
+type UserResponseProps = {
+  userResponse: {
+    parent: string;
+    mbtiData: MBTIData[];
+  };
   visible: boolean;
-  userResponse: any;
-}
+};
 
-export default function Loading({ visible, userResponse }: LoadingProps) {
-  console.log(
-    "🚀 ~ file: Loading.tsx:13 ~ Loading ~ userResponse:",
-    userResponse
-  );
-  const calculateScores = () => {
-    // 유형별 점수 계산
-    const energy: { [key: string]: number } = { E: 0, I: 0 };
-    const awareness: { [key: string]: number } = { N: 0, S: 0 };
-    const judgement: { [key: string]: number } = { T: 0, F: 0 };
-    const life: { [key: string]: number } = { J: 0, P: 0 };
+const Loading: React.FC<UserResponseProps> = ({ userResponse, visible }) => {
+  const [energy, setEnergy] = useState<{ E: number; I: number }>({
+    E: 0,
+    I: 0,
+  });
+  const [awareness, setAwareness] = useState<{ N: number; S: number }>({
+    N: 0,
+    S: 0,
+  });
+  const [judgement, setJudgement] = useState<{ T: number; F: number }>({
+    T: 0,
+    F: 0,
+  });
+  const [life, setLife] = useState<{ J: number; P: number }>({ J: 0, P: 0 });
 
-    userResponse.mbtiData.forEach((item: any) => {
-      const mbtiType = item.mbtiType;
-      const proportion = item.proportion;
-      const selected = item.selected;
+  useEffect(() => {
+    const calculateCategoryValues = () => {
+      const energyData = { E: 0, I: 0 };
+      const awarenessData = { N: 0, S: 0 };
+      const judgementData = { T: 0, F: 0 };
+      const lifeData = { J: 0, P: 0 };
 
-      if (mbtiType === "E") {
-        energy.E += proportion;
-        energy.I += 100 - proportion;
-      } else if (mbtiType === "N") {
-        awareness.N += proportion;
-        awareness.S += 100 - proportion;
-      } else if (mbtiType === "T") {
-        judgement.T += proportion;
-        judgement.F += 100 - proportion;
-      } else if (mbtiType === "J") {
-        life.J += proportion;
-        life.P += 100 - proportion;
+      for (const item of userResponse.mbtiData) {
+        console.log(
+          "🚀 ~ file: Loading.tsx:49 ~ calculateCategoryValues ~ userResponse.mbtiData:",
+          item
+        );
+        const { mbtiType, selection, proportion } = item;
+
+        if (mbtiType !== selection) {
+          item.proportion = 100 - proportion;
+        }
+
+        switch (selection) {
+          case "E":
+          case "I":
+            energyData[selection] += proportion;
+            break;
+          case "N":
+          case "S":
+            awarenessData[selection] += proportion;
+            break;
+          case "T":
+          case "F":
+            judgementData[selection] += proportion;
+            break;
+          case "J":
+          case "P":
+            lifeData[selection] += proportion;
+            break;
+          default:
+            break;
+        }
+
+        console.log(selection);
       }
-    });
 
-    return { energy, awareness, judgement, life };
+      setEnergy(energyData);
+      setAwareness(awarenessData);
+      setJudgement(judgementData);
+      setLife(lifeData);
+    };
+
+    calculateCategoryValues();
+
+    console.log(
+      "energy",
+      energy,
+      "awareness",
+      awareness,
+      "judgement",
+      judgement,
+      "life",
+      life
+    );
+  }, [userResponse]);
+
+  const calculateMBTIType = () => {
+    const { E, I } = energy;
+    const { N, S } = awareness;
+    const { T, F } = judgement;
+    const { J, P } = life;
+
+    const energyType = E > I ? "E" : "I";
+    const awarenessType = N > S ? "N" : "S";
+    const judgementType = T > F ? "T" : "F";
+    const lifeType = J > P ? "J" : "P";
+
+    return `${energyType}${awarenessType}${judgementType}${lifeType}`;
   };
 
-  const scores = calculateScores();
-  console.log("🚀 ~ file: Loading.tsx:46 ~ Loading ~ calculateScores:", scores);
+  calculateMBTIType();
+  console.log(
+    "🚀 ~ file: Loading.tsx:122 ~ calculateMBTIType:",
+    calculateMBTIType()
+  );
 
   return visible ? (
     <LoadingSection>
@@ -54,7 +129,9 @@ export default function Loading({ visible, userResponse }: LoadingProps) {
   ) : (
     <div />
   );
-}
+};
+
+export default Loading;
 
 const LoadingSection = tw.div`
 w-[390px]
