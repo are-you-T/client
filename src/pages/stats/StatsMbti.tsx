@@ -1,57 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import tw from 'tailwind-styled-components';
 import { ApexOptions } from 'apexcharts';
 import Chart from 'react-apexcharts';
 import { styled } from 'styled-components';
 import axiosReq from '@/api';
-
-/* Chart Options */
-const chartOptions: ApexOptions = {
-    chart: {
-        type: 'bar',
-        height: "100px",
-        stacked: true,
-        stackType: '100%',
-        toolbar: { show: false }
-    },
-    plotOptions: {
-        bar: { horizontal: true },
-    },
-    stroke: {
-        width: 1,
-        colors: ['#fff']
-    },
-    tooltip: {
-        x: {
-            show: false
-        },
-        // @ts-ignore
-        y: {
-            formatter: (_, { seriesIndex, w }) => {
-                const percentage = Math.round(w.globals.seriesPercent[seriesIndex]);
-                return `${percentage}%`;
-            },
-            title: {
-                // @ts-ignore
-                formatter: (val) => `${val} : `,
-            }
-        }
-    },
-    xaxis: {
-        labels: { show: false },
-        axisBorder: { show: false },
-        axisTicks: { show: false }
-    },
-    yaxis: {
-        labels: { show: false },
-        axisBorder: { show: false },
-        axisTicks: { show: false }
-    },
-    fill: { opacity: 1 },
-    grid: { show: false },
-    legend: { show: false }
-};
 
 // error: string | null,
 interface QuestionItem {
@@ -62,7 +15,7 @@ interface QuestionItem {
     };
     selection: {
         [key: string]: number;
-    }
+    };
 }
 
 interface MbtiStatsByType {
@@ -107,10 +60,56 @@ const ChartList = styled.ol`
 `;
 
 function ChartItem({ data }: IProps) {
-    const { idx, subject, selection } = data;
+    const { selection } = data;
 
     const [leftType, rightType] = Object.keys(selection);
     const [leftValue, rightValue] = Object.values(selection);
+
+    const chartOptions: ApexOptions = {
+        chart: {
+            type: 'bar',
+            height: "100px",
+            stacked: true,
+            stackType: '100%',
+            toolbar: { show: false }
+        },
+        plotOptions: {
+            bar: { horizontal: true },
+        },
+        stroke: {
+            width: 1,
+            colors: ['#fff']
+        },
+        tooltip: {
+            x: {
+                show: false
+            },
+            // @ts-ignore
+            y: {
+                formatter: (_, { seriesIndex, w }) => {
+                    const percentage = Math.round(w.globals.seriesPercent[seriesIndex]);
+                    return `${percentage}%`;
+                },
+                title: {
+                    // @ts-ignore
+                    formatter: (val) => `${val} : `,
+                }
+            }
+        },
+        xaxis: {
+            labels: { show: false },
+            axisBorder: { show: false },
+            axisTicks: { show: false }
+        },
+        yaxis: {
+            labels: { show: false },
+            axisBorder: { show: false },
+            axisTicks: { show: false }
+        },
+        fill: { opacity: 1 },
+        grid: { show: false },
+        legend: { show: false }
+    };
 
     const displaySeries: ApexAxisChartSeries = [
         {
@@ -123,17 +122,13 @@ function ChartItem({ data }: IProps) {
         }
     ];
 
-    return (
-        <li>
-            <p>{idx}. {subject}</p>
-            <Chart type='bar' options={chartOptions} series={displaySeries} height={100} />
-        </li>
-    );
+    return <Chart type='bar' options={chartOptions} series={displaySeries} height={100} />;
 }
 
 function StatsMbti() {
+    const { mbti } = useParams();
     const [isLoading, setIsLoading] = useState(false);
-    const [stats, setStats] = useState<MbtiStatsByType | null>(null);
+    const [stats, setStats] = useState<ResponseMbtiStats['data']>(null);
 
     const fetchStats = async () => {
         setIsLoading(true);
@@ -141,7 +136,7 @@ function StatsMbti() {
         try {
             const { data } = await axiosReq.requestAxios<ResponseMbtiStats>(
                 'get', 
-                `/stats/basic/ISFJ`
+                `/stats/basic/${mbti?.toUpperCase()}`
             );
 
             setStats(data);
@@ -194,8 +189,11 @@ function StatsMbti() {
                     </div>
                     <section>
                         <ChartList className='mt-[40px]'>
-                            {stats.mbtiData.map((data) => 
-                                <ChartItem key={data.idx} data={data} />
+                            {stats.mbtiData.map((data) =>
+                                <li key={data.idx}>
+                                    <p>{data.idx}. {data.subject}</p>
+                                    <ChartItem data={data} />
+                                </li>
                             )}
                         </ChartList>
                     </section>
