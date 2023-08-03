@@ -38,25 +38,24 @@ const Footer = tw.div`
   absolute bottom-0 left-0 right-0
 `;
 
-//@ts-ignore
 export default function BulletinBoard() {
-  // 모달창 제어 기능
+  // 모달창 상태
   const [openModal, setOpenModal] = useState(false);
   //선택한 카드의 id값
   const [selectedId, setSelectedId] = useState("");
-  //@ts-ignore
-  const showModal = (id) => {
+  //전체 게시글
+  const [postings, setPostings] = useState<Posting[]>([]);
+
+  const showModal = (id: string): void => {
     setSelectedId(id);
     setOpenModal(true);
   };
-  const closeModal = () => {
+  const closeModal = (): void => {
     setOpenModal(false);
   };
 
-  const [postings, setPostings] = useState<Posting[]>([]);
-  //게시글 작성 날짜 -> *일 전으로 변경
-  //@ts-ignore
-  const calculateDaysDiff = (dateString) => {
+  //게시글 작성 날짜 양식-> *일 전으로 변경
+  const calculateDaysDiff = (dateString: string): string => {
     const pastDate = new Date(dateString);
     const currentDate = new Date();
 
