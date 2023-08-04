@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
+import axios from "axios";
 
 import BulletinCard from "@/components/board/BulletinCard";
 import BulletinCardModal from "@/components/board/BulletinCardModal";
@@ -37,29 +38,24 @@ const Footer = tw.div`
   absolute bottom-0 left-0 right-0
 `;
 
-//@ts-ignore
 export default function BulletinBoard() {
-  // 모달창 제어 기능
+  // 모달창 상태
   const [openModal, setOpenModal] = useState(false);
-  const showModal = () => {
+  //선택한 카드의 id값
+  const [selectedId, setSelectedId] = useState("");
+  //전체 게시글
+  const [postings, setPostings] = useState<Posting[]>([]);
+
+  const showModal = (id: string): void => {
+    setSelectedId(id);
     setOpenModal(true);
   };
-  const closeModal = () => {
+  const closeModal = (): void => {
     setOpenModal(false);
   };
 
-  //게시글 타입
-  type Posting = {
-    title: string;
-    content: string;
-    category: string;
-    like: number;
-    createdAt: string;
-  };
-  const [postings, setPostings] = useState<Posting[]>([]);
-  //게시글 작성 날짜 -> *일 전으로 변경
-  //@ts-ignore
-  const calculateDaysDiff = (dateString) => {
+  //게시글 작성 날짜 양식-> *일 전으로 변경
+  const calculateDaysDiff = (dateString: string): string => {
     const pastDate = new Date(dateString);
     const currentDate = new Date();
 
@@ -71,17 +67,25 @@ export default function BulletinBoard() {
 
     return days === 1 ? "1" : `${days}`;
   };
-
+  //게시글 타입
+  type Posting = {
+    _id: string;
+    title: string;
+    content: string;
+    category: string;
+    like: number;
+    createdAt: string;
+  };
   //게시글 불러오기
   useEffect(() => {
     getBoard();
   }, []);
   async function getBoard() {
     try {
-      const response = await fetch("http://localhost:3001/api/v1/board");
-      const jsonData = await response.json();
-      console.log("jsonData", jsonData);
-      setPostings(jsonData.data);
+      const response = await axios.get("http://localhost:3001/api/v1/board");
+
+      console.log("response.data.data", response.data.data);
+      setPostings(response.data.data);
     } catch (err) {
       console.log(err);
     }
@@ -89,7 +93,9 @@ export default function BulletinBoard() {
 
   return (
     <Board>
-      {openModal && <BulletinCardModal closeModal={closeModal} />}
+      {openModal && (
+        <BulletinCardModal selectedId={selectedId} closeModal={closeModal} />
+      )}
       <Header>
         <Title>MBTI 담벼락</Title>
         {/* change icon */}
@@ -119,6 +125,8 @@ export default function BulletinBoard() {
           {postings.map((posting) => {
             return (
               <BulletinCard
+                key={posting._id}
+                id={posting._id}
                 showModal={showModal}
                 title={posting.title}
                 content={posting.content}
@@ -130,7 +138,6 @@ export default function BulletinBoard() {
           })}
         </BulletinCardWrap>
       </Main>
-
       <Footer>
         {/* post button icon */}
         <PostBtn>
