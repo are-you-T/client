@@ -54,7 +54,7 @@ export default function BulletinBoard() {
   const [postings, setPostings] = useState<board[]>([]);
   //게시글 작성 모달 상태
   const [openBoardPost, setOpenBoardPost] = useState<boolean>(false);
-  //게시글 작성완료시 페이지 이동
+  //게시글 작성완료시 유형별 게시판페이지로 이동
   const nav = useNavigate();
   const goToMbtiPage = (mbti: string): void => {
     nav(`/board/${mbti}`);
