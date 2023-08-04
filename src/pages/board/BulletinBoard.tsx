@@ -56,7 +56,7 @@ export default function BulletinBoard() {
   const [openBoardPost, setOpenBoardPost] = useState<boolean>(false);
   //게시글 작성완료시 유형별 게시판페이지로 이동
   const nav = useNavigate();
-  const goToMbtiPage = (mbti: string): void => {
+  const goDetailPage = (mbti: string): void => {
     nav(`/board/${mbti}`);
   };
   const showModal = (id: string, like: number): void => {
@@ -103,7 +103,7 @@ export default function BulletinBoard() {
         <BoardPost
           onThisClose={() => setOpenBoardPost(false)}
           onThisComplete={(mbti) => {
-            goToMbtiPage(mbti);
+            goDetailPage(mbti);
           }}
         />
       ) : (
@@ -124,6 +124,7 @@ export default function BulletinBoard() {
           )}
           <Header>
             <Title>MBTI 담벼락</Title>
+
             <ChangeMbtiBtn setMbtiTypesModal={setMbtiTypesModal} />
           </Header>
           <Main>
