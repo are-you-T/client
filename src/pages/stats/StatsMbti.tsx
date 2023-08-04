@@ -39,7 +39,9 @@ const Container = tw.main`
     bg-black
     text-white
     p-[20px]
+    w-[390px]
     min-h-[calc(100vh_-_170px)]
+    m-auto
 `;
 
 const FooterBtn = tw(Link)`
