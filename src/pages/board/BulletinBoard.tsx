@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
 import { resData, board } from "@/interfaces/index";
@@ -51,9 +52,13 @@ export default function BulletinBoard() {
   const [selectedlike, setSelectedLike] = useState<number>(0);
   //전체 게시글
   const [postings, setPostings] = useState<board[]>([]);
-
+  //게시글 작성 모달 상태
   const [openBoardPost, setOpenBoardPost] = useState<boolean>(false);
-
+  //게시글 작성완료시 페이지 이동
+  const nav = useNavigate();
+  const goToMbtiPage = (mbti: string): void => {
+    nav(`/board/${mbti}`);
+  };
   const showModal = (id: string, like: number): void => {
     setSelectedId(id);
     setSelectedLike(like);
@@ -97,8 +102,8 @@ export default function BulletinBoard() {
       {openBoardPost ? (
         <BoardPost
           onThisClose={() => setOpenBoardPost(false)}
-          onThisComplete={() => {
-            console.log("dd");
+          onThisComplete={(mbti) => {
+            goToMbtiPage(mbti);
           }}
         />
       ) : (
