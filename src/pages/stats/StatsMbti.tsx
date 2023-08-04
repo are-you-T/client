@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { styled } from 'styled-components';
 import tw from 'tailwind-styled-components';
 import { ApexOptions } from 'apexcharts';
 import Chart from 'react-apexcharts';
-import { styled } from 'styled-components';
 import axiosReq from '@/api';
+import { resData } from '@/interfaces';
 
-// error: string | null,
 interface QuestionItem {
     idx: number;
     subject: string;
@@ -23,11 +23,6 @@ interface MbtiStatsByType {
     parent: string;
     totalResponse: number;
     mbtiData: QuestionItem[];
-}
-
-interface ResponseMbtiStats {
-    error: string | null;
-    data: MbtiStatsByType | null;
 }
 
 interface IProps {
@@ -128,13 +123,13 @@ function ChartItem({ data }: IProps) {
 function StatsMbti() {
     const { mbti } = useParams();
     const [isLoading, setIsLoading] = useState(false);
-    const [stats, setStats] = useState<ResponseMbtiStats['data']>(null);
+    const [stats, setStats] = useState<MbtiStatsByType | null>(null);
 
     const fetchStats = async () => {
         setIsLoading(true);
 
         try {
-            const { data } = await axiosReq.requestAxios<ResponseMbtiStats>(
+            const { data } = await axiosReq.requestAxios<resData<MbtiStatsByType>>(
                 'get', 
                 `/stats/basic/${mbti?.toUpperCase()}`
             );
