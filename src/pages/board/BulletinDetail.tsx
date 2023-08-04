@@ -13,7 +13,7 @@ const Board = tw.div`
 `;
 const Header = tw.div`
 flex flex-row justify-between items-center
-mt-4 mb-7 
+mt-4 mb-7
 `;
 const Mbti = tw.div`
  flex flex-row items-center gap-3
@@ -22,7 +22,7 @@ const Title = tw.div`
 text-[43px] leading-[51px] font-bold text-white
 `;
 const ChangeMbtiBtn = tw.button`
-  
+
 `;
 
 const Main = tw.div`
@@ -51,7 +51,7 @@ export default function BulletinBoard() {
   };
   return (
     <Board>
-      {openModal && <BulletinCardModal closeModal={closeModal} />}
+      {/* {openModal && <BulletinCardModal closeModal={closeModal} />} */}
       <Header>
         <Mbti>
           <Title>INTJ</Title>
@@ -84,9 +84,7 @@ export default function BulletinBoard() {
         <BulletinCardWrap></BulletinCardWrap>
       </Main>
 
-      <Footer>
-        <PostBtn />
-      </Footer>
+      <Footer>{/* <PostBtn /> */}</Footer>
     </Board>
   );
 }

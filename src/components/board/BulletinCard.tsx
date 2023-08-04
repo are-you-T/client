@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
-import axios from "axios";
+import axiosRequest from "@/api/index";
+import { resData, Posting } from "@/interfaces/index";
 
 import HeartBtn from "@/components/board/HeartBtn";
 import OptionBtn from "@/components/board/OptionBtn";
@@ -43,7 +44,7 @@ const Divider = styled.div`
   height: 1px;
   width: 90%;
   margin: 0 auto;
-  background-color: #e1e1e1;
+  background-color: #898989;
 `;
 const Footer = tw.div`
   flex flex-row justify-between items-end
@@ -62,26 +63,29 @@ const HeartCount = tw.div`
   ml-[4px]
 `;
 
-//@ts-ignore
+interface BulletinCardProps {
+  id: string;
+  showModal: (id: string, like: number) => void;
+  title: string;
+  content: string;
+  category: string;
+  color: string;
+  like: number;
+  createdAt: string;
+}
 export default function BulletinCard({
-  //@ts-ignore
   id,
-  //@ts-ignore
   showModal,
-  //@ts-ignore
   title,
-  //@ts-ignore
   content,
-  //@ts-ignore
   category,
-  //@ts-ignore
+  color,
   like,
-  //@ts-ignore
   createdAt,
-}) {
+}: BulletinCardProps) {
   return (
-    <Card id={id}>
-      <div onClick={() => showModal(id)}>
+    <Card id={id} style={{ backgroundColor: color }}>
+      <div onClick={() => showModal(id, like)}>
         <Header>
           <Title>{title}</Title>
           <OptionBtn />
@@ -97,14 +101,7 @@ export default function BulletinCard({
 
       <Footer>
         <Category>{category}</Category>
-        <Heart
-          onClick={() => {
-            console.log("클릭됨");
-          }}
-        >
-          <HeartBtn />
-          <HeartCount>{like}</HeartCount>
-        </Heart>
+        <HeartBtn id={id} like={like} />
       </Footer>
     </Card>
   );
