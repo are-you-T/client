@@ -8,3 +8,10 @@ export interface board {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface boardPost {
+  category: string;
+  title: string;
+  content: string;
+  color: string;
+}
