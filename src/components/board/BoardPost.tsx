@@ -6,6 +6,8 @@ import { ReactComponent as AlertIcon } from "@/assets/img/alert_icon.svg";
 import { ReactComponent as CloseIcon } from "@/assets/img/close_icon.svg";
 import { ReactComponent as CheckIcon } from "@/assets/img/check_icon.svg";
 import MbtiTypesModal from "@/components/common/MbtiTypesModal";
+import axiosRequest from "@/api";
+import { resData, boardPost } from "@/interfaces";
 
 // 모달 배경부분(ModalBg) 클릭하면 모달창이 꺼지고 모달컴포넌트 안에서 선택된 state값들을 부모(BoardPost)에게 보내줌
 
@@ -90,6 +92,10 @@ function AlertModal() {
 function BoardPost({ onThisClose }: { onThisClose: () => void }) {
   const [bgColor, setBgColor] = useState("white");
   const [mbtiType, setMbtiType] = useState(["I", "N", "T", "J"]);
+  const [newPost, setNewPost] = useState<{ title: string; content: string }>({
+    title: "",
+    content: "",
+  });
   const [showModal, setShowModal] = useState("");
 
   // 추후에 BoardPost props가 될 것들
@@ -97,13 +103,27 @@ function BoardPost({ onThisClose }: { onThisClose: () => void }) {
   const mbtiColor_1 = "#02B26E";
   const mbtiColor_2 = "#FFA8DF";
 
+  async function postData() {
+    const category = mbtiType.join("");
+    const { title, content } = newPost;
+
+    await axiosRequest.requestAxios<resData<boardPost>>("post", "/board", {
+      category: category,
+      title: title,
+      content: content,
+      color: bgColor,
+    });
+    onThisClose();
+  }
+
   const handleThisMbti = useCallback(
     (value: string[]) => setMbtiType(value),
     []
   );
 
   const handleSubmit = () => {
-    setShowModal("AlertModal");
+    postData();
+    // setShowModal("AlertModal");
   };
 
   return (
@@ -127,11 +147,21 @@ function BoardPost({ onThisClose }: { onThisClose: () => void }) {
             name="title"
             placeholder="제목"
             className="text-white bg-black outline-0 border-b w-full py-3 mb-6"
+            onChange={(evt) =>
+              setNewPost((post) => {
+                return { ...post, title: evt.target.value };
+              })
+            }
           />
           <textarea
             name="contents"
             placeholder="내용 입력"
             className="text-white bg-black outline-0 border w-full p-3 resize-none h-5/6"
+            onChange={(evt) =>
+              setNewPost((post) => {
+                return { ...post, content: evt.target.value };
+              })
+            }
           />
         </form>
         <div>
@@ -184,12 +214,12 @@ function BoardPost({ onThisClose }: { onThisClose: () => void }) {
 export default BoardPost;
 
 const Container = tw.main`
-bg-[#000000]
 h-full
 text-white
 `;
 
 const PostWrap = tw.div`
+bg-[#000000]
 w-[390px]
 h-full
 m-auto
