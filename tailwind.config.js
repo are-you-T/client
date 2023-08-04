@@ -1,4 +1,18 @@
 /** @type {import('tailwindcss').Config} */
+
+const testCard = {
+  "0%": {
+    opacity: 0,
+    left: "80px",
+    PointerEvent: "none",
+  },
+  "100%": {
+    opacity: 1,
+    left: "0px",
+    PointerEvent: "auto",
+  },
+};
+
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   corePlugins: {
@@ -18,6 +32,12 @@ module.exports = {
       },
       fontSize: {
         vxs: "0.6rem",
+      },
+      keyframes: {
+        testCard,
+      },
+      animation: {
+        testCard: "testCard .5s ease-in-out",
       },
     },
   },
