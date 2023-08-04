@@ -4,23 +4,16 @@ import TestQuestion from "@/components/test/TestQuestion";
 import ProgressBar from "@/components/test/ProgressBar";
 import Loading from "@/components/test/Loading";
 import LoadingIndicator from "@/components/common/LoadingIndicator";
-
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
-import { question, resData } from "@/interfaces/index";
-
-// 타입 정의
-interface CurrentChoiceList {
-  mbtiType: string;
-  text: string;
-}
+import { question, resData, currentChoiceList } from "@/interfaces/index";
 
 export default function Test() {
   const [viewLoading, setViewLoading] = useState<boolean>(false);
   const [questionList, setQuestionList] = useState<any>([]);
   const [userResponse, setUserResponse] = useState<any[]>([]);
   const [currentChoiceList, setCurrentChoiceList] = useState<
-    CurrentChoiceList[]
+    currentChoiceList[]
   >([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [animate, setAnimate] = useState<boolean>(false);
@@ -57,7 +50,7 @@ export default function Test() {
             ...prevResponse,
             {
               ...currentAnswer,
-              selection: currentChoiceList[choiceIndex].mbtiType,
+              selected: currentChoiceList[choiceIndex].mbtiType,
             },
           ]);
           if (curr === questionList.length - 1) {
@@ -70,6 +63,7 @@ export default function Test() {
     },
     [currentChoiceList, questionList]
   );
+  console.log(userResponse);
 
   // 각 문항에 대한 선택지 표시
   useEffect(() => {

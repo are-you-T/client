@@ -1,4 +1,11 @@
-import { question, question2 } from "./question";
+import {
+  question,
+  question2,
+  currentChoiceList,
+  answer,
+  MBTIData,
+  userResponseProps,
+} from "./question";
 import { board, boardPost } from "./board";
 
 interface resData<D> {
@@ -6,4 +13,14 @@ interface resData<D> {
   data: D;
 }
 
-export type { resData, question, question2, board, boardPost };
+export type {
+  resData,
+  question,
+  question2,
+  currentChoiceList,
+  answer,
+  MBTIData,
+  userResponseProps,
+  board,
+  boardPost,
+};

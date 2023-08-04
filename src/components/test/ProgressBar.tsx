@@ -11,7 +11,7 @@ export default function ProgressBar({ progressNum }) {
         {progressNum}/{TOTAL_SLIDES}
       </ProgressNum>
       <Progress>
-        <Status progressNum={progressNum} />
+        <Status $progressNum={progressNum} />
       </Progress>
     </Container>
   );
@@ -45,8 +45,8 @@ bg-white
 // bg-purple-300
 // `;
 
-const Status = styled.div<{ progressNum: number }>`
-  width: ${({ progressNum }) => `${progressNum * 20}px`};
+const Status = styled.div<{ $progressNum: number }>`
+  width: ${({ $progressNum }) => `${$progressNum * 20}px`};
   height: 100%;
   border-radius: 15px;
   background-color: #b2acf9;
