@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
@@ -96,7 +96,12 @@ export default function BulletinBoard() {
   useEffect(() => {
     getPostings();
   }, []);
-
+  //mbti변경모달 관련
+  const [mbtiType, setMbtiType] = useState<string[]>(["I", "N", "T", "J"]);
+  const handleThisMbti = useCallback(
+    (value: string[]) => setMbtiType(value),
+    []
+  );
   return (
     <>
       {openBoardPost ? (
@@ -117,8 +122,8 @@ export default function BulletinBoard() {
           )}
           {mbtiTypesModal && (
             <MbtiTypesModal
-              selectMbti={["I", "N", "T", "J"]}
-              onThisMbti={() => console.log("dd")}
+              selectMbti={mbtiType}
+              onThisMbti={handleThisMbti}
               isButton={true}
             />
           )}
