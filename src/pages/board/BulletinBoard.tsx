@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
-import { resData, Posting } from "@/interfaces/index";
+import { resData, board } from "@/interfaces/index";
 
 import BulletinCard from "@/components/board/BulletinCard";
 import BulletinCardModal from "@/components/board/BulletinCardModal";
@@ -50,7 +50,7 @@ export default function BulletinBoard() {
   //선택한 카드의 좋아요수
   const [selectedlike, setSelectedLike] = useState<number>(0);
   //전체 게시글
-  const [postings, setPostings] = useState<Posting[]>([]);
+  const [postings, setPostings] = useState<board[]>([]);
 
   const [openBoardPost, setOpenBoardPost] = useState<boolean>(false);
 
@@ -77,25 +77,30 @@ export default function BulletinBoard() {
     return days === 1 ? "1" : `${days}`;
   };
 
-  useEffect(() => {
-    async function getPostings() {
-      try {
-        const response: resData<Posting[]> = await axiosRequest.requestAxios<
-          resData<Posting[]>
-        >("get", "/board");
-        // console.log("전체게시글", response.data);
-        setPostings(response.data);
-      } catch (error) {
-        console.error(error);
-      }
+  async function getPostings() {
+    try {
+      const response: resData<board[]> = await axiosRequest.requestAxios<
+        resData<board[]>
+      >("get", "/board");
+      // console.log("전체게시글", response.data);
+      setPostings(response.data);
+    } catch (error) {
+      console.error(error);
     }
+  }
+  useEffect(() => {
     getPostings();
   }, []);
 
   return (
     <>
       {openBoardPost ? (
-        <BoardPost onThisClose={() => setOpenBoardPost(false)} />
+        <BoardPost
+          onThisClose={() => setOpenBoardPost(false)}
+          onThisComplete={() => {
+            console.log("dd");
+          }}
+        />
       ) : (
         <Board>
           {openModal && (
@@ -109,7 +114,7 @@ export default function BulletinBoard() {
             <MbtiTypesModal
               selectMbti={["I", "N", "T", "J"]}
               onThisMbti={() => console.log("dd")}
-              isButton={false}
+              isButton={true}
             />
           )}
           <Header>
