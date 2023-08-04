@@ -45,14 +45,15 @@ const Container = tw.main`
 `;
 
 const FooterBtn = tw(Link)`
+    mb-[15px]
+    p-4
     bg-[#FFDF3F]
     border-solid
     border-1
-    mt-[20px]
-    px-[20px]
-    py-[20px]
-    rounded-[100px]
+    rounded-[50px]
+    font-bold
     text-center
+    text-lg
 `;
 
 const ChartList = styled.ol`
@@ -157,6 +158,18 @@ function StatsMbti() {
         return (
             <Container className="flex justify-center items-center">
                 <span className='text-2xl'>정보를 불러오고 있습니다.</span>
+            </Container>
+        );
+    }
+
+    if (!stats) {
+        return (
+            <Container>
+                <h2 className='text-white'>데이터가 존재하지 않습니다.</h2>
+                <div className="btns flex flex-col text-3xl text-black font-bold w-full m-auto">
+                    <FooterBtn to="/stats">MBTI 통계</FooterBtn>
+                    <FooterBtn to="/board">담벼락 바로가기</FooterBtn>
+                </div>
             </Container>
         );
     }
