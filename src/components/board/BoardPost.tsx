@@ -77,26 +77,33 @@ function BgColorsModal({
 }
 
 // 유효성 결과 모달
-function AlertModal() {
+function AlertModal({ error }: { error: string }) {
   return (
     <ModalWrapCenter>
       <h3 className="text-xl font-black text-center flex items-center justify-center">
-        <AlertIcon className="w-4" />
-        <span>을 입력해주세요!</span>
+        <AlertIcon className="w-4 mr-1" />
+        <span>{error}</span>
       </h3>
     </ModalWrapCenter>
   );
 }
 
 // 게시글 작성
-function BoardPost({ onThisClose }: { onThisClose: () => void }) {
-  const [bgColor, setBgColor] = useState("white");
-  const [mbtiType, setMbtiType] = useState(["I", "N", "T", "J"]);
+function BoardPost({
+  onThisClose,
+  onThisComplete,
+}: {
+  onThisClose: () => void;
+  onThisComplete: (value: string) => void;
+}) {
+  const [bgColor, setBgColor] = useState<string>("white");
+  const [mbtiType, setMbtiType] = useState<string[]>(["I", "N", "T", "J"]);
   const [newPost, setNewPost] = useState<{ title: string; content: string }>({
     title: "",
     content: "",
   });
-  const [showModal, setShowModal] = useState("");
+  const [showModal, setShowModal] = useState<string>("");
+  const [errorType, setErrorType] = useState<string>("");
 
   // 추후에 BoardPost props가 될 것들
   // mbti 타입변경할 때 마다 색상이 바뀌어야할텐데 정신없을 것 같아서 그냥 고정 색상값으로 하는 게 어떨까
@@ -104,16 +111,14 @@ function BoardPost({ onThisClose }: { onThisClose: () => void }) {
   const mbtiColor_2 = "#FFA8DF";
 
   async function postData() {
-    const category = mbtiType.join("");
     const { title, content } = newPost;
 
     await axiosRequest.requestAxios<resData<boardPost>>("post", "/board", {
-      category: category,
+      category: mbtiType.join(""),
       title: title,
       content: content,
       color: bgColor,
     });
-    onThisClose();
   }
 
   const handleThisMbti = useCallback(
@@ -122,8 +127,25 @@ function BoardPost({ onThisClose }: { onThisClose: () => void }) {
   );
 
   const handleSubmit = () => {
+    // 유효성 정상이면 api요청 보내고,
+    // 현재 mbti유형을 부모컴포넌트에게 전달해주고,
+    // 부모컴포넌트가 이 컴포넌트를 사라지게하고 스크롤이 올라가도록
+    const { title, content } = newPost;
+
+    if (title === "") {
+      setErrorType("제목을 입력해주세요!");
+      setShowModal("AlertModal");
+      return;
+    } else if (content === "") {
+      setErrorType("내용을 입력해주세요!");
+      setShowModal("AlertModal");
+      return;
+    }
+
+    console.log("작성완료");
+    setErrorType("");
     postData();
-    // setShowModal("AlertModal");
+    onThisComplete(mbtiType.join(""));
   };
 
   return (
@@ -204,7 +226,7 @@ function BoardPost({ onThisClose }: { onThisClose: () => void }) {
               selectBgColor={bgColor}
             />
           )}
-          {showModal === "AlertModal" && <AlertModal />}
+          {showModal === "AlertModal" && <AlertModal error={errorType} />}
         </>
       )}
     </Container>
