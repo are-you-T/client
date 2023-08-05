@@ -90,8 +90,8 @@ export default function BulletinDetail() {
     try {
       const response: resData<board[]> = await axiosRequest.requestAxios<
         resData<board[]>
-      >("get", "/board");
-      // console.log("전체게시글", response.data);
+      >("get", `/board/${mbti}`);
+      console.log("전체게시글", response.data);
       setPostings(response.data);
     } catch (error) {
       console.error(error);
