@@ -3,36 +3,38 @@ import TestCard from "@/components/test/TestCard";
 import TestQuestion from "@/components/test/TestQuestion";
 import ProgressBar from "@/components/test/ProgressBar";
 import Loading from "@/components/test/Loading";
+import LoadingIndicator from "@/components/common/LoadingIndicator";
 import tw from "tailwind-styled-components";
-import axios from "axios";
-
-// 타입 정의
-type CurrentChoiceList = {
-  mbtiType: string;
-  text: string;
-};
+import axiosRequest from "@/api/index";
+import { question, resData, answer, MBTIData } from "@/interfaces/index";
 
 export default function Test() {
-  const [viewLoading, setViewLoading] = useState(false);
-  const [questionList, setQuestionList] = useState<any[] | any>([]);
-  const [userResponse, setUserResponse] = useState<any[]>([]);
-  const [currentChoiceList, setCurrentChoiceList] = useState<
-    CurrentChoiceList[]
-  >([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const URL = "http://localhost:3001/api/v1/question/basic";
+  const [viewLoading, setViewLoading] = useState<boolean>(false);
+  const [questionList, setQuestionList] = useState<any>([]);
+  const [userResponse, setUserResponse] = useState<MBTIData[]>([]);
+  const [currentChoiceList, setCurrentChoiceList] = useState<answer[]>([]);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [animate, setAnimate] = useState<boolean>(false);
+
+  const animationStart = () => {
+    setAnimate((curr) => !curr);
+  };
 
   // 테스트 문항 api 호출
   useEffect(() => {
-    const getQuestionList = async () => {
+    async function fetchData() {
       try {
-        const response = await axios.get(URL);
-        setQuestionList(response.data.data);
+        const response: resData<question> = await axiosRequest.requestAxios<
+          resData<question>
+        >("get", "/question/basic");
+        setQuestionList(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error(error);
       }
-    };
-    getQuestionList();
+    }
+
+    fetchData();
+    animationStart();
   }, []);
 
   // 문항 선택지 클릭 시 발생 이벤트
@@ -46,7 +48,7 @@ export default function Test() {
             ...prevResponse,
             {
               ...currentAnswer,
-              selection: currentChoiceList[choiceIndex].mbtiType,
+              selected: currentChoiceList[choiceIndex].mbtiType,
             },
           ]);
           if (curr === questionList.length - 1) {
@@ -113,25 +115,29 @@ export default function Test() {
 
   // 테스트 페이지 UI
   if (questionList.length === 0 || currentChoiceList.length === 0) {
-    return null;
+    return <LoadingIndicator />;
   }
   return (
     <TestPage>
       <TestQuestion
         idx={String(currentIndex + 1).padStart(2, "0")}
         subject={questionList[currentIndex].subject}
+        animate={animate}
+        animationStart={animationStart}
       />
       <TestCard
         onClick={handleClickCard}
-        //@ts-ignore
         index={0}
         answer={currentChoiceList[0].text}
+        animate={animate}
+        animationStart={animationStart}
       />
       <TestCard
         onClick={handleClickCard}
-        //@ts-ignore
         index={1}
         answer={currentChoiceList[1].text}
+        animate={animate}
+        animationStart={animationStart}
       />
       <ProgressBar progressNum={currentIndex + 1} />
       <Loading
@@ -152,4 +158,5 @@ h-[790.96px]
 mx-auto 
 my-0 
 bg-black
+overflow-hidden	
 `;

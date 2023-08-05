@@ -1,14 +1,29 @@
 import React from "react";
 import tw from "tailwind-styled-components";
-//@ts-ignore
-export default function TestCard({ answer, index, onClick }) {
+import { testCardProps } from "@/interfaces/index";
+
+const TestCard = ({
+  answer,
+  index,
+  onClick,
+  animate,
+  animationStart,
+}: testCardProps) => {
   const onClickCard = onClick(index);
   return (
-    <Testcard onClick={onClickCard}>
+    <Testcard
+      onClick={() => {
+        onClickCard();
+        animationStart();
+      }}
+      key={animate.toString()}
+    >
       <TestcardText>{answer}</TestcardText>
     </Testcard>
   );
-}
+};
+
+export default TestCard;
 
 const Testcard = tw.button`
 w-80
@@ -27,6 +42,10 @@ ease-in
 duration-200
 hover:-translate-y-1
 active:translate-y-0
+
+select-none
+relative
+animate-testComponent
 `;
 
 const TestcardText = tw.p`
