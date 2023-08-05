@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
-import { resData, Posting } from "@/interfaces/index";
+import { resData, board } from "@/interfaces/index";
 
 import BulletinCard from "@/components/board/BulletinCard";
 import BulletinCardModal from "@/components/board/BulletinCardModal";
@@ -50,10 +51,14 @@ export default function BulletinBoard() {
   //선택한 카드의 좋아요수
   const [selectedlike, setSelectedLike] = useState<number>(0);
   //전체 게시글
-  const [postings, setPostings] = useState<Posting[]>([]);
-
+  const [postings, setPostings] = useState<board[]>([]);
+  //게시글 작성 모달 상태
   const [openBoardPost, setOpenBoardPost] = useState<boolean>(false);
-
+  //게시글 작성완료시 유형별 게시판페이지로 이동
+  const nav = useNavigate();
+  const goDetailPage = (mbti: string): void => {
+    nav(`/board/${mbti}`);
+  };
   const showModal = (id: string, like: number): void => {
     setSelectedId(id);
     setSelectedLike(like);
@@ -77,25 +82,36 @@ export default function BulletinBoard() {
     return days === 1 ? "1" : `${days}`;
   };
 
-  useEffect(() => {
-    async function getPostings() {
-      try {
-        const response: resData<Posting[]> = await axiosRequest.requestAxios<
-          resData<Posting[]>
-        >("get", "/board");
-        // console.log("전체게시글", response.data);
-        setPostings(response.data);
-      } catch (error) {
-        console.error(error);
-      }
+  async function getPostings() {
+    try {
+      const response: resData<board[]> = await axiosRequest.requestAxios<
+        resData<board[]>
+      >("get", "/board");
+      // console.log("전체게시글", response.data);
+      setPostings(response.data);
+    } catch (error) {
+      console.error(error);
     }
+  }
+  useEffect(() => {
     getPostings();
   }, []);
-
+  //mbti변경모달 관련
+  const [mbtiType, setMbtiType] = useState<string[]>(["I", "N", "T", "J"]);
+  const handleThisMbti = useCallback(
+    (value: string[]) => setMbtiType(value),
+    []
+  );
   return (
     <>
       {openBoardPost ? (
-        <BoardPost onThisClose={() => setOpenBoardPost(false)} />
+        <BoardPost
+          onThisClose={() => setOpenBoardPost(false)}
+          onThisComplete={(mbti) => {
+            goDetailPage(mbti);
+          }}
+          thisMbti={"INFP"}
+        />
       ) : (
         <Board>
           {openModal && (
@@ -107,13 +123,14 @@ export default function BulletinBoard() {
           )}
           {mbtiTypesModal && (
             <MbtiTypesModal
-              selectMbti={["I", "N", "T", "J"]}
-              onThisMbti={() => console.log("dd")}
-              isButton={false}
+              selectMbti={mbtiType}
+              onThisMbti={handleThisMbti}
+              isButton={true}
             />
           )}
           <Header>
             <Title>MBTI 담벼락</Title>
+
             <ChangeMbtiBtn setMbtiTypesModal={setMbtiTypesModal} />
           </Header>
           <Main>

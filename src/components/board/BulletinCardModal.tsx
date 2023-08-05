@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
-import { resData, Posting } from "@/interfaces/index";
+import { resData, board } from "@/interfaces/index";
 
 import HeartBtn from "@/components/board/HeartBtn";
 
@@ -80,14 +80,14 @@ export default function BulletinCardModal({
   selectedLike,
 }: BulletinCardModalProps) {
   //게시글 상태
-  const [posting, setPosting] = useState<Posting>({} as Posting);
+  const [posting, setPosting] = useState<board>({} as board);
 
   //선택한 게시글 불러오기
   useEffect(() => {
     async function getSelectedPosting() {
       try {
-        const response: resData<Posting> = await axiosRequest.requestAxios<
-          resData<Posting>
+        const response: resData<board> = await axiosRequest.requestAxios<
+          resData<board>
         >("get", `/board/post/${selectedId}`);
         console.log("게시글", response.data);
         setPosting(response.data);

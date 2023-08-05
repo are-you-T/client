@@ -4,6 +4,18 @@ import { ReactComponent as GitHubSvg } from "@/assets/img/github.svg";
 import { ReactComponent as ShareSvg } from "@/assets/img/share.svg";
 
 export default function Foot() {
+  const handleShareClick = async () => {
+    await share(window.location.origin);
+  };
+  const share = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("링크가 복사되었습니다!");
+    } catch (e) {
+      alert("초대코드 복사에 실패했습니다ㅜㅜ");
+    }
+  };
+
   return (
     <Footer>
       <FooterWrap>
@@ -15,10 +27,14 @@ export default function Foot() {
         </FooterTextArea>
 
         <FooterLinkIcon>
-          <FooterLink>
+          <FooterLink
+            href="https://github.com/are-you-T"
+            target="_blank"
+            rel="are-you-T noreferrer"
+          >
             <GitHubSvg />
           </FooterLink>
-          <FooterLink>
+          <FooterLink onClick={handleShareClick}>
             <ShareSvg />
           </FooterLink>
         </FooterLinkIcon>
@@ -65,6 +81,7 @@ gap-[0.7]
 const FooterLink = tw.a`
 w-auto
 mr-3
+cursor-pointer
 `;
 // mrgin right
 

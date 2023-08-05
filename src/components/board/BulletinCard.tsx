@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
-import { resData, Posting } from "@/interfaces/index";
+import { resData, board } from "@/interfaces/index";
 
 import HeartBtn from "@/components/board/HeartBtn";
 import OptionBtn from "@/components/board/OptionBtn";

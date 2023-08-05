@@ -34,6 +34,7 @@ const router = createBrowserRouter([
     path: "/post",
     element: (
       <BoardPost
+        thisMbti={"ESTP"}
         onThisClose={() => console.log("닫기")}
         onThisComplete={(value) => console.log(value)}
       />

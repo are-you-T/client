@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
-import { resData, Posting } from "@/interfaces/index";
+import { resData, board } from "@/interfaces/index";
 
 const Heart = tw.div`
   flex flex-row items-center
@@ -26,8 +26,8 @@ export default function HeartBtn({ id, like }: HeartBtnProps) {
   //좋아요 처리 api
   async function increaseLikeCount() {
     try {
-      const response: resData<Posting> = await axiosRequest.requestAxios<
-        resData<Posting>
+      const response: resData<board> = await axiosRequest.requestAxios<
+        resData<board>
       >("patch", `/board/post/${id}`);
       console.log("좋아요", response.data);
       setLikeCount(response.data.like);
