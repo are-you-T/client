@@ -49,7 +49,7 @@ const Footer = tw.div`
 export default function BulletinDetail() {
   // 모달창 상태
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [mbtiTypesModal, setMbtiTypesModal] = useState<boolean>(false);
+  const [openMbtiModal, setOpenMbtiModal] = useState<boolean>(false);
   //선택한 카드의 id값
   const [selectedId, setSelectedId] = useState<string>("");
   //선택한 카드의 좋아요수
@@ -127,7 +127,7 @@ export default function BulletinDetail() {
               closeModal={closeModal}
             />
           )}
-          {mbtiTypesModal && (
+          {openMbtiModal && (
             <MbtiTypesModal
               selectMbti={["I", "N", "T", "J"]}
               onThisMbti={() => console.log("dd")}
@@ -139,7 +139,7 @@ export default function BulletinDetail() {
               <Title>{selectedMbti}</Title>
               <MbtiColorChip />
             </Mbti>
-            <ChangeMbtiBtn setMbtiTypesModal={setMbtiTypesModal} />
+            <ChangeMbtiBtn setOpenMbtiModal={setOpenMbtiModal} />
           </Header>
           <Main>
             <BulletinCardWrap>
