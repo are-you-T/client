@@ -1,9 +1,27 @@
-import React from 'react';
+import React from "react";
 import tw from "tailwind-styled-components";
 
+interface testResultBar {
+  title: string;
+  type1: string;
+  type2: string;
+  percent1: number;
+  percent2: number;
+  bar: string;
+  textColor: string;
+  barColor: string;
+}
 
-//@ts-ignore
-export default function TypePercentageBar({title,type1,type2,percent1,percent2,bar,textColor,barColor}) {
+export default function TypePercentageBar({
+  title,
+  type1,
+  type2,
+  percent1,
+  percent2,
+  bar,
+  textColor,
+  barColor,
+}: testResultBar) {
   return (
     <Container>
       <Title>{title}</Title>
@@ -25,33 +43,32 @@ export default function TypePercentageBar({title,type1,type2,percent1,percent2,b
 }
 
 const Container = tw.div`
-bg-white
 text-center
 text-black
 p-2
-`
+`;
 const Title = tw.div`
 font-bold
 text-xl
-`
+`;
 const Main = tw.div`
 w-full
-`
+`;
 const Top = tw.div`
 flex
 justify-between
 font-bold
 items-center
 gap-2
-`
+`;
 const Bottom = tw.div`
 flex
 justify-between
-`
+`;
 const BarBackground = tw.div`
 bg-gray-100
 h-3
 w-full
 rounded-3xl
 overflow-hidden
-`
+`;
