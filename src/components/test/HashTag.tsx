@@ -1,11 +1,12 @@
-import React from 'react';
+import React from "react";
 import tw from "tailwind-styled-components";
 
-//@ts-ignore
-export default function HashTag({text}) {
-  return (
-    <Tag>#{text}</Tag>
-  );
+interface HashTagProps {
+  text: string;
+}
+
+export default function HashTag({ text }: HashTagProps) {
+  return <Tag>#{text}</Tag>;
 }
 
 const Tag = tw.li`
@@ -17,4 +18,4 @@ w-32
 mt-5
 p-2
 opacity-40
-`
+`;

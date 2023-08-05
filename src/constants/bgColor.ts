@@ -1,68 +1,68 @@
-const colorData = {
-  INFJ: {
+const colorData = [
+  { mbti: "INFJ",
     out: "#00B26E",
     in: "#FFA8DF",
   },
-  INTJ: {
+  { mbti: "INTJ",
     out: "#FFA8DF",
     in: "#00B26E",
   },
-  ESTP: {
+  { mbti: "ESTP",
     out: "#9FEEA2",
     in: "#0272F1",
   },
-  ESFP: {
+  { mbti: "ESFP",
     out: "#0272F1",
     in: "#9FEEA2",
   },
-  ENFP: {
+  { mbti: "ENFP",
     out: "#78D9EE",
     in: "#FF9D42",
   },
-  ENTP: {
+  { mbti: "ENTP",
     out: "#FF9D42",
     in: "#78D9EE",
   },
-  ISTJ: {
+  { mbti: "ISTJ",
     out: "#78D9EE",
     in: "#EFC7D6",
   },
-  ISFJ: {
+  { mbti: "ISFJ",
     out: "#78D9EE",
     in: "#EFC7D6",
   },
-  INFP: {
+  { mbti: "INFP",
     out: "#0272F1",
     in: "#B2ACF9",
   },
-  INTP: {
+  { mbti: "INTP",
     out: "#B2ACF9",
     in: "#0272F1",
   },
-  ISTP: {
+  { mbti: "ISTP",
     out: "#9FEEA2",
     in: "#B2ACF9",
   },
-  ISFP: {
+  { mbti: "ISFP",
     out: "#B2ACF9",
     in: "#9FEEA2",
   },
-  ESTJ: {
+  { mbti: "ESTJ",
     out: "#FC5013",
     in: "#78D9EE",
   },
-  ESFJ: {
+  { mbti: "ESFJ",
     out: "#78D9EE",
     in: "#FC5013",
   },
-  ENFJ: {
+  { mbti: "ENFJ",
     out: "#0272F2",
     in: "#EFC7D6",
   },
-  ENTJ: {
+  { mbti: "ENTJ",
     out: "#EFC7D6",
     in: "#0272F2",
   },
-};
+];
 
 export default colorData;
