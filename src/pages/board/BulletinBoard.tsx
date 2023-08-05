@@ -9,7 +9,7 @@ import BulletinCardModal from "@/components/board/BulletinCardModal";
 import PostBtn from "@/components/board/PostBtn";
 import ChangeMbtiBtn from "@/components/board/ChangeMbtiBtn";
 import BoardPost from "@/components/board/BoardPost";
-import MbtiTypesModal, { ModalBg } from "@/components/common/MbtiTypesModal";
+import MbtiTypesModal from "@/components/common/MbtiTypesModal";
 
 const Board = tw.div`
   flex flex-col
@@ -40,13 +40,12 @@ const Footer = tw.div`
   self-end
   pt-3 pb-3
   absolute bottom-0 left-0 right-0
-  
 `;
 
 export default function BulletinBoard() {
   // 모달창 상태
-  const [openCardModal, setOpenCardModal] = useState<boolean>(false);
-  const [openMbtiModal, setOpenMbtiModal] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [mbtiTypesModal, setMbtiTypesModal] = useState<boolean>(false);
   //선택한 카드의 id값
   const [selectedId, setSelectedId] = useState<string>("");
   //선택한 카드의 좋아요수
@@ -63,10 +62,10 @@ export default function BulletinBoard() {
   const showModal = (id: string, like: number): void => {
     setSelectedId(id);
     setSelectedLike(like);
-    setOpenCardModal(true);
+    setOpenModal(true);
   };
   const closeModal = (): void => {
-    setOpenCardModal(false);
+    setOpenModal(false);
   };
 
   //게시글 작성 날짜 양식-> *일 전으로 변경
@@ -97,18 +96,12 @@ export default function BulletinBoard() {
   useEffect(() => {
     getPostings();
   }, []);
-
   //mbti변경모달 관련
-  const [mbtiType, setMbtiType] = useState<string[]>(["I", "N", "F", "P"]);
+  const [mbtiType, setMbtiType] = useState<string[]>(["I", "N", "T", "J"]);
   const handleThisMbti = useCallback(
     (value: string[]) => setMbtiType(value),
     []
   );
-  const handleThisConfirm = () => {
-    const mbti = mbtiType.reduce((acc, cur) => acc + cur);
-    goDetailPage(mbti);
-  };
-
   return (
     <>
       {openBoardPost ? (
@@ -121,28 +114,24 @@ export default function BulletinBoard() {
         />
       ) : (
         <Board>
-          {openCardModal && (
+          {openModal && (
             <BulletinCardModal
               selectedId={selectedId}
               selectedLike={selectedlike}
               closeModal={closeModal}
             />
           )}
-          {openMbtiModal && (
-            <>
-              <ModalBg />
-              <MbtiTypesModal
-                selectMbti={mbtiType}
-                onThisMbti={handleThisMbti}
-                isButton={true}
-                onThisConfirm={handleThisConfirm}
-              />
-            </>
+          {mbtiTypesModal && (
+            <MbtiTypesModal
+              selectMbti={mbtiType}
+              onThisMbti={handleThisMbti}
+              isButton={true}
+            />
           )}
           <Header>
             <Title>MBTI 담벼락</Title>
 
-            <ChangeMbtiBtn setOpenMbtiModal={setOpenMbtiModal} />
+            <ChangeMbtiBtn setMbtiTypesModal={setMbtiTypesModal} />
           </Header>
           <Main>
             <BulletinCardWrap>

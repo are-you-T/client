@@ -3,15 +3,15 @@ import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
 interface ChangeMbtiBtnProps {
-  setOpenMbtiModal: (value: boolean) => void;
+  setMbtiTypesModal: (value: boolean) => void;
 }
 export default function ChangeMbtiBtn({
-  setOpenMbtiModal,
+  setMbtiTypesModal,
 }: ChangeMbtiBtnProps) {
   return (
     <div
       onClick={() => {
-        setOpenMbtiModal(true);
+        setMbtiTypesModal(true);
       }}
     >
       <svg
