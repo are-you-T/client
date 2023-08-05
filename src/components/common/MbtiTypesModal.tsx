@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
+const ModalBg = tw.div`
+w-[390px] absolute top-0 left-1/2 -translate-x-1/2 h-full backdrop-blur-sm bg-black/[.3]
+`;
+
+export { ModalBg };
+
 // MBTI 선택 모달
 function MbtiTypesModal({
   selectMbti,
