@@ -27,6 +27,10 @@ export default function Test() {
     const getQuestionList = async () => {
       try {
         const response = await axios.get(URL);
+        console.log(
+          "🚀 ~ file: Test.tsx:30 ~ getQuestionList ~ const:",
+          response.data.data
+        );
         setQuestionList(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
