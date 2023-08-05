@@ -1,11 +1,47 @@
 import { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
-import { ReactComponent as LoadingImg } from "@/assets/img/loading_img.svg";
 import axiosRequest from "@/api/index";
 import { userResponseProps } from "@/interfaces/index";
 import { useNavigate } from "react-router-dom";
+import LoadingImg from "@/components/test/LoadingImg";
 
 function Loading({ userResponse, visible }: userResponseProps) {
+  // 애니메이션 *************************************************************
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const [currentColorIndex, setCurrentColorIndex] = useState(0);
+  const texts = ["T", "F", "N", "S", "E", "I", "P", "J"];
+  const colors = [
+    "#B2ACF9",
+    "#FFDF3F",
+    "#EFC7D6",
+    "#9FEEA2",
+    "#ECEE9F",
+    "#78D9EE",
+    "#FF9D42",
+    "#F9BAAC",
+    "#AC78EE",
+    "#C7E1EF",
+  ];
+
+  useEffect(() => {
+    if (visible) {
+      const colorInterval = setInterval(changeColor, 450);
+      const textInterval = setInterval(changeText, 450);
+      return () => {
+        clearInterval(colorInterval);
+        clearInterval(textInterval);
+      };
+    }
+  }, [currentColorIndex, currentTextIndex, visible]);
+
+  const changeColor = () => {
+    setCurrentColorIndex((prevIndex) => (prevIndex + 1) % colors.length);
+  };
+
+  const changeText = () => {
+    setCurrentTextIndex((prevIndex) => (prevIndex + 1) % texts.length);
+  };
+
   // mbti 계산 *************************************************************
   const [energy, setEnergy] = useState<{ E: number; I: number }>({
     E: 0,
@@ -66,8 +102,6 @@ function Loading({ userResponse, visible }: userResponseProps) {
           default:
             break;
         }
-
-        // console.log(selection);
       }
 
       energyData.E = Math.round((energyData.E / energySum) * 100);
@@ -100,7 +134,17 @@ function Loading({ userResponse, visible }: userResponseProps) {
       "life",
       life
     );
-  }, [userResponse]);
+
+    // visible 상태가 true일 때 한 번만 호출
+    if (visible) {
+      // 결과 페이지로 이동 ***** 4초로 설정
+      const timer = setTimeout(() => {
+        calculateMBTIType();
+      }, 4000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [userResponse, visible]);
   console.log("🚀🚀🚀🚀🚀🚀테스트에서 보내주는 userResponse:", userResponse);
 
   const calculateMBTIType = async () => {
@@ -139,22 +183,19 @@ function Loading({ userResponse, visible }: userResponseProps) {
       );
       console.log(response, "🚀🚀🚀🚀🚀🚀put 요청 response");
       console.log("resultData", resultData);
-      navigate("/result", { state: { resultData } });
+
+      // 결과페이지에 데이터 전송 ***********************************
+      const queryParams = new URLSearchParams({ mbti: resultData.mbtiType });
+      navigate("/result?" + queryParams.toString(), { state: { resultData } });
     } catch (error) {
       console.error(error);
     }
   };
 
-  useEffect(() => {
-    if (visible) {
-      calculateMBTIType();
-    }
-  }, [visible]);
-
   return visible ? (
     <LoadingSection>
-      <TextTop>너 T야?</TextTop>
-      <LoadingImg />
+      <TextTop>너 {texts[currentTextIndex]}야?</TextTop>
+      <LoadingImg color={colors[currentColorIndex]} />
       <TextBottom>분석중...</TextBottom>
     </LoadingSection>
   ) : (
