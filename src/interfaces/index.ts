@@ -10,6 +10,7 @@ import {
 import { board, boardPost } from "./board";
 import { color } from "./color";
 import { resMbti } from "./resMbti";
+import { stats } from "./stats";
 interface resData<D> {
   error: string | null;
   data: D;
@@ -28,4 +29,5 @@ export type {
   boardPost,
   color,
   resMbti,
+  stats,
 };
