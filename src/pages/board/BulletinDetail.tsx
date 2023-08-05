@@ -116,6 +116,7 @@ export default function BulletinDetail() {
           onThisComplete={(mbti) => {
             goToMbtiPage(mbti);
           }}
+          thisMbti={mbti}
         />
       ) : (
         <Board>

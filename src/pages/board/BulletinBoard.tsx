@@ -110,6 +110,7 @@ export default function BulletinBoard() {
           onThisComplete={(mbti) => {
             goDetailPage(mbti);
           }}
+          thisMbti={"INFP"}
         />
       ) : (
         <Board>
