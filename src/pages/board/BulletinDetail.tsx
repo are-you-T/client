@@ -11,6 +11,7 @@ import PostBtn from "@/components/board/PostBtn";
 import ChangeMbtiBtn from "@/components/board/ChangeMbtiBtn";
 import BoardPost from "@/components/board/BoardPost";
 import MbtiTypesModal from "@/components/common/MbtiTypesModal";
+import colorData from "@/constants/bgColor";
 
 const Board = tw.div`
   flex flex-col
@@ -49,11 +50,11 @@ const Footer = tw.div`
 export default function BulletinDetail() {
   // 모달창 상태
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [mbtiTypesModal, setMbtiTypesModal] = useState<boolean>(false);
+  const [openMbtiModal, setOpenMbtiModal] = useState<boolean>(false);
   //선택한 카드의 id값
   const [selectedId, setSelectedId] = useState<string>("");
   //선택한 카드의 좋아요수
-  const [selectedlike, setSelectedLike] = useState<number>(0);
+
   //전체 게시글
   const [postings, setPostings] = useState<board[]>([]);
   //게시글 작성 모달 상태
@@ -65,7 +66,6 @@ export default function BulletinDetail() {
   };
   const showModal = (id: string, like: number): void => {
     setSelectedId(id);
-    setSelectedLike(like);
     setOpenModal(true);
   };
   const closeModal = (): void => {
@@ -90,8 +90,8 @@ export default function BulletinDetail() {
     try {
       const response: resData<board[]> = await axiosRequest.requestAxios<
         resData<board[]>
-      >("get", "/board");
-      // console.log("전체게시글", response.data);
+      >("get", `/board/${mbti}`);
+      console.log("전체게시글", response.data);
       setPostings(response.data);
     } catch (error) {
       console.error(error);
@@ -123,11 +123,10 @@ export default function BulletinDetail() {
           {openModal && (
             <BulletinCardModal
               selectedId={selectedId}
-              selectedLike={selectedlike}
               closeModal={closeModal}
             />
           )}
-          {mbtiTypesModal && (
+          {openMbtiModal && (
             <MbtiTypesModal
               selectMbti={["I", "N", "T", "J"]}
               onThisMbti={() => console.log("dd")}
@@ -137,9 +136,9 @@ export default function BulletinDetail() {
           <Header>
             <Mbti>
               <Title>{selectedMbti}</Title>
-              <MbtiColorChip />
+              <MbtiColorChip selectedMbti={selectedMbti} />
             </Mbti>
-            <ChangeMbtiBtn setMbtiTypesModal={setMbtiTypesModal} />
+            <ChangeMbtiBtn setOpenMbtiModal={setOpenMbtiModal} />
           </Header>
           <Main>
             <BulletinCardWrap>

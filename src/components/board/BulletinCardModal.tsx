@@ -72,12 +72,10 @@ const Date = tw.div`
 interface BulletinCardModalProps {
   closeModal: () => void;
   selectedId: string;
-  selectedLike: number;
 }
 export default function BulletinCardModal({
   closeModal,
   selectedId,
-  selectedLike,
 }: BulletinCardModalProps) {
   //게시글 상태
   const [posting, setPosting] = useState<board>({} as board);
@@ -140,7 +138,7 @@ export default function BulletinCardModal({
         <FooterWrap>
           <Divider />
           <Footer>
-            <HeartBtn id={selectedId} like={selectedLike} />
+            <HeartBtn id={selectedId} like={posting.like} />
             <Date>{changeDateFormat(posting.createdAt)}</Date>
           </Footer>
         </FooterWrap>
