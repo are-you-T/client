@@ -164,7 +164,7 @@ function MbtiTypesModal({
 export default MbtiTypesModal;
 
 const ModalWrap = tw.div`
-bg-white rounded-t-3xl p-8 text-black absolute bottom-0 left-1/2 -translate-x-1/2 w-[390px] m-auto z-10
+bg-white rounded-t-3xl p-8 text-black absolute bottom-0 left-1/2 -translate-x-1/2 w-[390px] m-auto
 `;
 
 const ActiveList = styled.li`

@@ -1,7 +1,8 @@
 import React from "react";
 import tw from "tailwind-styled-components";
-//@ts-ignore
-export default function TestQuestion({ idx, subject }) {
+import { questionText } from "@/interfaces/index";
+
+export default function TestQuestion({ idx, subject, animate }: questionText) {
   return (
     <QuestionDiv>
       <QuestionNum>{idx}</QuestionNum>
@@ -13,6 +14,10 @@ export default function TestQuestion({ idx, subject }) {
 const QuestionDiv = tw.div`
 mb-9
 h-[190px]
+
+select-none
+relative
+animate-testComponent
 `;
 
 const QuestionNum = tw.h2`
