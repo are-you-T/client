@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
 import { resData, board } from "@/interfaces/index";
@@ -51,9 +52,13 @@ export default function BulletinBoard() {
   const [selectedlike, setSelectedLike] = useState<number>(0);
   //전체 게시글
   const [postings, setPostings] = useState<board[]>([]);
-
+  //게시글 작성 모달 상태
   const [openBoardPost, setOpenBoardPost] = useState<boolean>(false);
-
+  //게시글 작성완료시 유형별 게시판페이지로 이동
+  const nav = useNavigate();
+  const goDetailPage = (mbti: string): void => {
+    nav(`/board/${mbti}`);
+  };
   const showModal = (id: string, like: number): void => {
     setSelectedId(id);
     setSelectedLike(like);
@@ -91,14 +96,19 @@ export default function BulletinBoard() {
   useEffect(() => {
     getPostings();
   }, []);
-
+  //mbti변경모달 관련
+  const [mbtiType, setMbtiType] = useState<string[]>(["I", "N", "T", "J"]);
+  const handleThisMbti = useCallback(
+    (value: string[]) => setMbtiType(value),
+    []
+  );
   return (
     <>
       {openBoardPost ? (
         <BoardPost
           onThisClose={() => setOpenBoardPost(false)}
-          onThisComplete={() => {
-            console.log("dd");
+          onThisComplete={(mbti) => {
+            goDetailPage(mbti);
           }}
         />
       ) : (
@@ -112,13 +122,14 @@ export default function BulletinBoard() {
           )}
           {mbtiTypesModal && (
             <MbtiTypesModal
-              selectMbti={["I", "N", "T", "J"]}
-              onThisMbti={() => console.log("dd")}
+              selectMbti={mbtiType}
+              onThisMbti={handleThisMbti}
               isButton={true}
             />
           )}
           <Header>
             <Title>MBTI 담벼락</Title>
+
             <ChangeMbtiBtn setMbtiTypesModal={setMbtiTypesModal} />
           </Header>
           <Main>
