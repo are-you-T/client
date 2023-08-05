@@ -92,12 +92,14 @@ function AlertModal({ error }: { error: string }) {
 function BoardPost({
   onThisClose,
   onThisComplete,
+  thisMbti,
 }: {
   onThisClose: () => void;
   onThisComplete: (value: string) => void;
+  thisMbti: string;
 }) {
   const [bgColor, setBgColor] = useState<string>("white");
-  const [mbtiType, setMbtiType] = useState<string[]>(["I", "N", "T", "J"]);
+  const [mbtiType, setMbtiType] = useState<string[]>(Array.from(thisMbti));
   const [newPost, setNewPost] = useState<{ title: string; content: string }>({
     title: "",
     content: "",
