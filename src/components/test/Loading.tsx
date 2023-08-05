@@ -1,29 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import { ReactComponent as LoadingImg } from "@/assets/img/loading_img.svg";
+import axiosRequest from "@/api/index";
+import { userResponseProps } from "@/interfaces/index";
+import { useNavigate } from "react-router-dom";
 
-type Answer = {
-  [key: string]: string;
-};
-
-type MBTIData = {
-  idx: number;
-  subject: string;
-  answer: Answer;
-  mbtiType: string;
-  selection: string | number;
-  proportion: number;
-};
-
-type UserResponseProps = {
-  userResponse: {
-    parent: string;
-    mbtiData: MBTIData[];
-  };
-  visible: boolean;
-};
-
-const Loading: React.FC<UserResponseProps> = ({ userResponse, visible }) => {
+function Loading({ userResponse, visible }: userResponseProps) {
+  // mbti 계산 *************************************************************
   const [energy, setEnergy] = useState<{ E: number; I: number }>({
     E: 0,
     I: 0,
@@ -38,6 +21,8 @@ const Loading: React.FC<UserResponseProps> = ({ userResponse, visible }) => {
   });
   const [life, setLife] = useState<{ J: number; P: number }>({ J: 0, P: 0 });
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const calculateCategoryValues = () => {
       const energyData = { E: 0, I: 0 };
@@ -45,40 +30,57 @@ const Loading: React.FC<UserResponseProps> = ({ userResponse, visible }) => {
       const judgementData = { T: 0, F: 0 };
       const lifeData = { J: 0, P: 0 };
 
-      for (const item of userResponse.mbtiData) {
-        console.log(
-          "🚀 ~ file: Loading.tsx:49 ~ calculateCategoryValues ~ userResponse.mbtiData:",
-          item
-        );
-        const { mbtiType, selection, proportion } = item;
+      let energySum = 0;
+      let awarenessSum = 0;
+      let judgementSum = 0;
+      let lifeSum = 0;
 
-        if (mbtiType !== selection) {
+      for (const item of userResponse.mbtiData) {
+        const { mbtiType, selected, proportion } = item;
+
+        if (mbtiType !== selected) {
           item.proportion = 100 - proportion;
         }
 
-        switch (selection) {
+        switch (selected) {
           case "E":
           case "I":
-            energyData[selection] += proportion;
+            energyData[selected] += proportion;
+            energySum += proportion;
             break;
           case "N":
           case "S":
-            awarenessData[selection] += proportion;
+            awarenessData[selected] += proportion;
+            awarenessSum += proportion;
             break;
           case "T":
           case "F":
-            judgementData[selection] += proportion;
+            judgementData[selected] += proportion;
+            judgementSum += proportion;
             break;
           case "J":
           case "P":
-            lifeData[selection] += proportion;
+            lifeData[selected] += proportion;
+            lifeSum += proportion;
             break;
           default:
             break;
         }
 
-        console.log(selection);
+        // console.log(selection);
       }
+
+      energyData.E = Math.round((energyData.E / energySum) * 100);
+      energyData.I = Math.round((energyData.I / energySum) * 100);
+
+      awarenessData.N = Math.round((awarenessData.N / awarenessSum) * 100);
+      awarenessData.S = Math.round((awarenessData.S / awarenessSum) * 100);
+
+      judgementData.T = Math.round((judgementData.T / judgementSum) * 100);
+      judgementData.F = Math.round((judgementData.F / judgementSum) * 100);
+
+      lifeData.J = Math.round((lifeData.J / lifeSum) * 100);
+      lifeData.P = Math.round((lifeData.P / lifeSum) * 100);
 
       setEnergy(energyData);
       setAwareness(awarenessData);
@@ -99,8 +101,9 @@ const Loading: React.FC<UserResponseProps> = ({ userResponse, visible }) => {
       life
     );
   }, [userResponse]);
+  console.log("🚀🚀🚀🚀🚀🚀테스트에서 보내주는 userResponse:", userResponse);
 
-  const calculateMBTIType = () => {
+  const calculateMBTIType = async () => {
     const { E, I } = energy;
     const { N, S } = awareness;
     const { T, F } = judgement;
@@ -111,14 +114,42 @@ const Loading: React.FC<UserResponseProps> = ({ userResponse, visible }) => {
     const judgementType = T > F ? "T" : "F";
     const lifeType = J > P ? "J" : "P";
 
-    return `${energyType}${awarenessType}${judgementType}${lifeType}`;
+    const userMBTI = `${energyType}${awarenessType}${judgementType}${lifeType}`;
+
+    const updatedUserResponse = {
+      ...userResponse,
+      mbtiType: userMBTI,
+    };
+
+    console.log("put할 때 보내주는 데이터 ", updatedUserResponse);
+
+    const resultData = {
+      energy,
+      awareness,
+      judgement,
+      life,
+      mbtiType: updatedUserResponse.mbtiType,
+    };
+
+    try {
+      const response: userResponseProps = await axiosRequest.requestAxios(
+        "put",
+        "/stats",
+        updatedUserResponse
+      );
+      console.log(response, "🚀🚀🚀🚀🚀🚀put 요청 response");
+      console.log("resultData", resultData);
+      navigate("/result", { state: { resultData } });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  calculateMBTIType();
-  console.log(
-    "🚀 ~ file: Loading.tsx:122 ~ calculateMBTIType:",
-    calculateMBTIType()
-  );
+  useEffect(() => {
+    if (visible) {
+      calculateMBTIType();
+    }
+  }, [visible]);
 
   return visible ? (
     <LoadingSection>
@@ -129,7 +160,7 @@ const Loading: React.FC<UserResponseProps> = ({ userResponse, visible }) => {
   ) : (
     <div />
   );
-};
+}
 
 export default Loading;
 
