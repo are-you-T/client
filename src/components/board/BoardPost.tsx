@@ -5,7 +5,7 @@ import { ReactComponent as SwitchIcon } from "@/assets/img/typeSwitch_icon.svg";
 import { ReactComponent as AlertIcon } from "@/assets/img/alert_icon.svg";
 import { ReactComponent as CloseIcon } from "@/assets/img/close_icon.svg";
 import { ReactComponent as CheckIcon } from "@/assets/img/check_icon.svg";
-import MbtiTypesModal from "@/components/common/MbtiTypesModal";
+import MbtiTypesModal, { ModalBg } from "@/components/common/MbtiTypesModal";
 import axiosRequest from "@/api";
 import { resData, boardPost } from "@/interfaces";
 
@@ -272,10 +272,6 @@ const SpanColor = styled.span<{ bg: string }>`
 const CircleButton = tw(ButtonColor)`
 w-14 h-14 radius rounded-full
 text-black
-`;
-
-const ModalBg = tw.div`
-w-[390px] absolute top-0 left-1/2 -translate-x-1/2 h-full backdrop-blur-sm bg-black/[.3]
 `;
 
 const ModalWrap = tw.div`
