@@ -1,9 +1,12 @@
-import React, { useState, useCallback, useEffect, useRef} from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import ApexCharts from "react-apexcharts";
 import tw from "tailwind-styled-components";
-// import { IoCloseSharp } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MbtiTypesModal from "@/components/common/MbtiTypesModal";
+import { stats, resData } from "@/interfaces";
+import axiosRequest from "@/api";
+import Character from "@/components/common/Character";
+// import { error } from "console";
 
 // 차트 데이터를 위한 인터페이스
 interface ChartData {
@@ -16,6 +19,7 @@ interface ApexChartState {
   options: ApexCharts.ApexOptions;
 }
 
+//map 함수 데이터 가공
 // 클래스 컴포넌트 생성
 class ApexChart extends React.Component<{}, ApexChartState> {
   constructor(props: {}) {
@@ -159,12 +163,14 @@ class ApexChart extends React.Component<{}, ApexChartState> {
 export default function Stats() {
   const [showModal, setShowModal] = useState("");
   const [mbtiType, setMbtiType] = useState(["I", "N", "T", "J"]);
+  const [data, setData] = useState<stats | null>(null);
 
   const handleThisMbti = useCallback(
     (value: string[]) => setMbtiType(value),
     []
   );
 
+  //모달
   const modalRef = useRef(null);
   const handleOutsideClick = useCallback(
     (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -175,22 +181,35 @@ export default function Stats() {
     [setShowModal]
   );
 
+  //확인버튼
+  const navigate = useNavigate();
+  const mbti = mbtiType.join("");
+
+  //api
   useEffect(() => {
-    if (showModal !== "") {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
+    async function fetchData() {
+      try {
+        const response: resData<stats> = await axiosRequest.requestAxios<
+          resData<stats>
+        >("get", "/stats");
+        setData(response.data); //데이터를 상태에 저장 주석처리하면 null값
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }, [showModal]);
+
+    fetchData();
+  }, []);
+  console.log("DATA", data);
+
+  if (data === null) return <Character bgcolor={"#808080"} gcolor={"#666"} />;
 
   return (
     <Secton>
       <h3 className="text-2xl font-bold mb-2 text-white">MBTI 통계</h3>
-
       <StyledApexChart>
         <ApexChart />
       </StyledApexChart>
-
       <Button onClick={() => setShowModal("MbtiTypesModal")}>
         MBTI별 통계
       </Button>
@@ -200,13 +219,14 @@ export default function Stats() {
       </Button>
 
       {showModal !== "" && (
-        <ModalWrap onClick={handleOutsideClick} ref={modalRef} >
+        <ModalWrap onClick={handleOutsideClick} ref={modalRef}>
           {showModal === "MbtiTypesModal" && (
-              <MbtiTypesModal
-                selectMbti={mbtiType}
-                onThisMbti={handleThisMbti}
-                isButton={true}
-              />
+            <MbtiTypesModal
+              selectMbti={mbtiType}
+              onThisMbti={handleThisMbti}
+              isButton={true}
+              onThisConfirm={() => navigate(`/stats/${mbti}`)}
+            />
           )}
         </ModalWrap>
       )}
@@ -256,4 +276,4 @@ z-50
 flex
 items-center
 justify-center
-`
+`;
