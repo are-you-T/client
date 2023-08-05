@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 
-const testCard = {
+const testComponent = {
   "0%": {
     opacity: 0,
     left: "80px",
@@ -34,10 +34,10 @@ module.exports = {
         vxs: "0.6rem",
       },
       keyframes: {
-        testCard,
+        testComponent,
       },
       animation: {
-        testCard: "testCard .5s ease-in-out",
+        testComponent: "testComponent .5s ease-in-out",
       },
     },
   },

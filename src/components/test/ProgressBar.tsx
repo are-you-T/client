@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
-//@ts-ignore
-export default function ProgressBar({ progressNum }) {
+export default function ProgressBar({ progressNum }: { progressNum: number }) {
   const TOTAL_SLIDES = 16;
 
   return (
@@ -36,14 +35,6 @@ mt-2
 mb-5
 bg-white
 `;
-
-// props 받아서 bar 기능 적용하기
-// const Status = tw.div`
-// progress
-// w-[26px]
-// h-full
-// bg-purple-300
-// `;
 
 const Status = styled.div<{ $progressNum: number }>`
   width: ${({ $progressNum }) => `${$progressNum * 20}px`};

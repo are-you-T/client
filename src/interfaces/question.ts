@@ -14,6 +14,7 @@ export interface question {
   };
   mbtiType: string;
   proportion: number;
+  text?: string;
 }
 
 export interface question2 {
@@ -37,7 +38,7 @@ export interface MBTIData {
   subject: string;
   answer: answer;
   mbtiType: string;
-  selection: string | number;
+  selected: string | number;
   proportion: number;
 }
 
@@ -49,7 +50,9 @@ export interface userResponseProps {
   visible: boolean;
 }
 
-export interface currentChoiceList {
-  mbtiType: string;
-  text: string;
+export interface questionText {
+  idx: number | string;
+  subject: string;
+  animate: boolean;
+  animationStart: () => void;
 }

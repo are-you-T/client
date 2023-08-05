@@ -45,7 +45,7 @@ active:translate-y-0
 
 select-none
 relative
-animate-testCard
+animate-testComponent
 `;
 
 const TestcardText = tw.p`
