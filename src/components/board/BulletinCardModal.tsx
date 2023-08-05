@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
-import axios from "axios";
+import axiosRequest from "@/api/index";
+import { resData, board } from "@/interfaces/index";
 
 import HeartBtn from "@/components/board/HeartBtn";
 
@@ -68,50 +69,43 @@ const Date = tw.div`
   font-extralight
 `;
 
-const Heart = tw.div`
-  flex flex-row items-center
-`;
+interface BulletinCardModalProps {
+  closeModal: () => void;
+  selectedId: string;
+  selectedLike: number;
+}
+export default function BulletinCardModal({
+  closeModal,
+  selectedId,
+  selectedLike,
+}: BulletinCardModalProps) {
+  //게시글 상태
+  const [posting, setPosting] = useState<board>({} as board);
 
-const HeartCount = tw.div`
-  font-extralight
-  ml-1
-`;
-//@ts-ignore
-export default function BulletinCardModal({ closeModal, selectedId }) {
-  const [posting, setPosting] = useState<Posting>({} as Posting);
-
-  //선택한 게시글 타입
-  type Posting = {
-    _id: string;
-    title: string;
-    content: string;
-    category: string;
-    like: number;
-    createdAt: string;
-  };
   //선택한 게시글 불러오기
   useEffect(() => {
+    async function getSelectedPosting() {
+      try {
+        const response: resData<board> = await axiosRequest.requestAxios<
+          resData<board>
+        >("get", `/board/post/${selectedId}`);
+        console.log("게시글", response.data);
+        setPosting(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
     getSelectedPosting();
   }, []);
 
-  async function getSelectedPosting() {
-    try {
-      const response = await axios.get(
-        `http://localhost:3001/api/v1/board/post/${selectedId}`
-      );
-
-      console.log("getPosting", response.data.data);
-      setPosting(response.data.data);
-    } catch (err) {
-      console.log(err);
-    }
-  }
   //날짜 양식 맞추기
-  //@ts-ignore
-  const changeDateFormat = (dateString) => {
-    if (dateString) {
-      const date = dateString.substr(0, 10);
-      return date.replace(/-/g, ".");
+  const changeDateFormat = (date: Date): string => {
+    if (date) {
+      const dateString: string = date
+        .toString()
+        .substring(0, 10)
+        .replace(/-/g, ".");
+      return dateString;
     }
     return "";
   };
@@ -146,11 +140,7 @@ export default function BulletinCardModal({ closeModal, selectedId }) {
         <FooterWrap>
           <Divider />
           <Footer>
-            <Heart>
-              <HeartBtn />
-              <HeartCount>{posting.like}</HeartCount>
-            </Heart>
-
+            <HeartBtn id={selectedId} like={selectedLike} />
             <Date>{changeDateFormat(posting.createdAt)}</Date>
           </Footer>
         </FooterWrap>
