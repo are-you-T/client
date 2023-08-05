@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import tw from "tailwind-styled-components";
 import HashTag from "@/components/test/HashTag";
 import RelationType from "@/components/test/RelationType";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import axiosRequest from "@/api/index";
 import TypePercentageBars from "@/components/test/TypePercentageBars";
 import { resData, resMbti, color } from "@/interfaces";
@@ -10,10 +10,31 @@ import colorData from "@/constants/bgColor";
 
 //구현 해야하는것 1.결과공유하기버튼 2.내검사결과useLocation으로받아서데이터바인딩 3.캐릭터컬러변경
 export default function TestResult() {
-  const [mbti, setMbti] = useState<any>({});
-  const mbtiType = "ENFP";
+  const [mbti, setMbti] = useState<resMbti>({
+    _id: "",
+    name: "",
+    count: 0,
+    summary: "",
+    content: {
+      description: "",
+      good: {
+        name: "",
+        description: "",
+      },
+      bad: {
+        name: "",
+        description: "",
+      },
+      __v: 0,
+    },
+    tag: [],
+  });
+  const location = useLocation();
+  const searchParms = new URLSearchParams(location.search);
+  const mbtiType = searchParms.get('mbti');
   const colorObj: color = colorData.filter((color) => color.mbti === mbtiType)[0];
-
+  const resultData = location.state;
+  console.log(resultData);
   useEffect(() => {
     const getMbti = async () => {
       try {
