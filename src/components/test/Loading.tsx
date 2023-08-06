@@ -182,7 +182,8 @@ function Loading({ userResponse, visible }: userResponseProps) {
         updatedUserResponse
       );
 
-      const patchResponse: userResponseProps = await axiosRequest.requestAxios(
+      // console.log("USERMBTI", userMBTI);
+      const patchResponse = await axiosRequest.requestAxios(
         "patch",
         `/stats/${userMBTI}`
       );
