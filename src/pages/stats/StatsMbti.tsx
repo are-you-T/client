@@ -7,6 +7,7 @@ import Chart from 'react-apexcharts';
 import axiosReq from '@/api';
 import { resData } from '@/interfaces';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
+import Character from '@/components/common/Character';
 
 interface QuestionItem {
     idx: number;
@@ -161,11 +162,14 @@ function StatsMbti() {
 
     if (!stats) {
         return (
-            <Container>
-                <h2 className='text-white'>데이터가 존재하지 않습니다.</h2>
-                <div className="btns flex flex-col text-3xl text-black font-bold w-full m-auto">
-                    <FooterBtn to="/stats">MBTI 통계</FooterBtn>
-                    <FooterBtn to="/board">담벼락 바로가기</FooterBtn>
+            <Container className='p-0 pt-16'>
+                <Character bgcolor={"#00B26E"} gcolor={"#FFA8DF"} />
+                <div className='bg-[#00B26E] p-[20px] text-center'>
+                    <h2 className='mb-8 text-6xl text-black font-bold'>No data</h2> 
+                    <div className="btns flex flex-col text-3xl text-black font-bold w-full m-auto">
+                        <FooterBtn to="/stats">MBTI 통계</FooterBtn>
+                        <FooterBtn to="/board">담벼락 바로가기</FooterBtn>
+                    </div>
                 </div>
             </Container>
         );
