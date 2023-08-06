@@ -88,6 +88,7 @@ export default function BulletinBoard() {
     return days === 1 ? "1" : `${days}`;
   };
 
+  //게시글 get요청
   async function getPostings() {
     try {
       const response: resData<board[]> = await axiosRequest.requestAxios<
@@ -112,12 +113,18 @@ export default function BulletinBoard() {
   const handleThisConfirm = () => {
     const mbti = mbtiType.reduce((acc, cur) => acc + cur);
     goDetailPage(mbti);
+    setOpenMbtiModal(false);
   };
 
   //Detail 페이지에 필요한 변수,메소드
 
   //파라미터 :mbti 가져오기
   const { mbti } = useParams() as { mbti: string };
+
+  //파라미터로 mbti가 전달되자마자 게시글 데이터 업데이트
+  useEffect(() => {
+    getPostings();
+  }, [mbti]);
 
   //유형별게시판과 전체게시판 구분
   const [onDetailPage, setOnDetailPage] = useState<boolean>(false);
