@@ -1,5 +1,5 @@
 export default function Character({bgcolor, gcolor}:{bgcolor:string, gcolor:string}) {
-  return <svg width="390" height="342" viewBox="0 0 390 342" fill="none" xmlns="http://www.w3.org/2000/svg">
+  return <svg width="390" height="342" viewBox="0 0 390 340" fill="none" xmlns="http://www.w3.org/2000/svg">
   <path d="M107 18.5C58.3875 38.1239 36.3421 55.5725 0.5 91L1 340.5H390V91C359.07 58.8419 335.404 42.4974 283.5 18.4999C215.321 -2.17282 178.542 -6.2725 107 18.5Z" fill={bgcolor} stroke={bgcolor} stroke-width="2"/>
   <rect x="60" y="151.857" width="269.571" height="19.4286" rx="9.71429" fill={gcolor}/>
   <circle cx="256.714" cy="164" r="51" fill={gcolor}/>
