@@ -1,12 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
+
+import colorData from "@/constants/bgColor";
 
 const MbtiColor = tw.div`
  flex flex-row gap-2
 `;
 
-export default function MbtiColorChip() {
+interface MbtiColorChipProps {
+  selectedMbti: string;
+}
+interface Color {
+  mbti: string;
+  out: string;
+  in: string;
+}
+export default function MbtiColorChip({ selectedMbti }: MbtiColorChipProps) {
+  //공통 컬러 데이타
+  const colors: Color[] = colorData;
+  const selectedColorData: Color | undefined = colors.find(
+    (el) => el.mbti === selectedMbti
+  );
+  if (selectedColorData === undefined) {
+    throw new Error("에러가 발생했습니다.");
+  }
+
+  // console.log(selectedColorData);
+
+  //mbti별 컬러
+  const colorIn = selectedColorData.in;
+  const colorOut = selectedColorData.out;
+
   return (
     <MbtiColor>
       {/* 컬러 props로 받기 */}
@@ -19,7 +44,7 @@ export default function MbtiColorChip() {
         <ellipse
           cx="18.088"
           cy="17.833"
-          fill="#00B26E"
+          fill={colorIn}
           rx="18.088"
           ry="17.833"
         />
@@ -34,7 +59,7 @@ export default function MbtiColorChip() {
         <ellipse
           cx="18.088"
           cy="17.833"
-          fill="#FFA8DF"
+          fill={colorOut}
           rx="18.088"
           ry="17.833"
         />

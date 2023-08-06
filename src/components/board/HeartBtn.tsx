@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
@@ -21,7 +21,11 @@ interface HeartBtnProps {
 }
 export default function HeartBtn({ id, like }: HeartBtnProps) {
   //좋아요수 상태
-  const [likeCount, setLikeCount] = useState<number>(like);
+  const [likeCount, setLikeCount] = useState<number>(0);
+
+  useEffect(() => {
+    setLikeCount(like);
+  }, [like]);
 
   //좋아요 처리 api
   async function increaseLikeCount() {
