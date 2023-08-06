@@ -6,6 +6,7 @@ import { ApexOptions } from 'apexcharts';
 import Chart from 'react-apexcharts';
 import axiosReq from '@/api';
 import { resData } from '@/interfaces';
+import LoadingIndicator from '@/components/common/LoadingIndicator';
 
 interface QuestionItem {
     idx: number;
@@ -155,11 +156,7 @@ function StatsMbti() {
     }, []);
 
     if (isLoading) {
-        return (
-            <Container className="flex justify-center items-center">
-                <span className='text-2xl'>정보를 불러오고 있습니다.</span>
-            </Container>
-        );
+        return <LoadingIndicator />;
     }
 
     if (!stats) {
