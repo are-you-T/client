@@ -21,7 +21,7 @@ const Board = tw.div`
 `;
 const Header = tw.div`
   flex flex-row justify-between items-center
-  mt-4 mb-7 
+  mt-4 mb-7
 `;
 const Mbti = tw.div`
  flex flex-row items-center gap-3
