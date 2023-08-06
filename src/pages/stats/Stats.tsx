@@ -160,9 +160,11 @@ export default function Stats() {
   //확인버튼
   const navigate = useNavigate();
   const mbti = mbtiType.join("");
+
   console.log("---------------");
   console.log(wrap);
   console.log("---------------");
+
   return (
     <Secton>
       <h3 className="text-2xl font-bold mb-2 text-white">MBTI 통계</h3>

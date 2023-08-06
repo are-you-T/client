@@ -13,6 +13,5 @@ export default function Character({bgcolor, gcolor}:{bgcolor:string, gcolor:stri
   <circle cx="195.5" cy="230.5" r="15.5" fill="black"/>
   <circle cx="260.961" cy="238.553" r="18.4472" fill="white"/>
   <path d="M259.229 205C259.999 203.667 261.923 203.667 262.693 205L278.248 231.941C279.017 233.275 278.055 234.941 276.516 234.941H245.406C243.867 234.941 242.904 233.275 243.674 231.941L259.229 205Z" fill="white"/>
-  </svg>
-  
+  </svg> 
 }

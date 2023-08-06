@@ -9,7 +9,6 @@ import NotFound from "@/pages/NotFound";
 import Test from "@/pages/test/Test";
 import TestResult from "@/pages/test/TestResult";
 import BulletinBoard from "@/pages/board/BulletinBoard";
-import BulletinDetail from "@/pages/board/BulletinDetail";
 import Stats from "@/pages/stats/Stats";
 import StatsMbti from "@/pages/stats/StatsMbti";
 import BoardPost from "@/components/board/BoardPost";
@@ -24,7 +23,7 @@ const router = createBrowserRouter([
       { path: "/test", element: <Test /> },
       { path: "/result", element: <TestResult /> },
       { path: "/board", element: <BulletinBoard /> },
-      { path: "/board/:mbti", element: <BulletinDetail /> },
+      { path: "/board/:mbti", element: <BulletinBoard /> },
       { path: "/stats", element: <Stats /> },
       { path: "/stats/:mbti", element: <StatsMbti /> },
     ],

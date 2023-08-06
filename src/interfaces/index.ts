@@ -1,8 +1,7 @@
 import {
   question,
-  question2,
   testCardProps,
-  answer,
+  userAnswer,
   MBTIData,
   userResponseProps,
   questionText,
@@ -10,7 +9,7 @@ import {
 import { board, boardPost } from "./board";
 import { color } from "./color";
 import { resMbti } from "./resMbti";
-import {stats} from "./stats"
+import { stats } from "./stats";
 interface resData<D> {
   error: string | null;
   data: D;
@@ -19,9 +18,8 @@ interface resData<D> {
 export type {
   resData,
   question,
-  question2,
   testCardProps,
-  answer,
+  userAnswer,
   MBTIData,
   userResponseProps,
   questionText,
