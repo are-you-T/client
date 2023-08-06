@@ -1,4 +1,6 @@
 import axios from "axios";
+import dotenv from "dotenv";
+dotenv.config();
 
 const allowMethod: string[] = ["get", "post", "put", "patch", "delete"];
 const API_END_POINT: string =
