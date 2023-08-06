@@ -67,6 +67,7 @@ export default function BulletinBoard() {
   };
   const closeModal = (): void => {
     setOpenCardModal(false);
+    getPostings();
   };
 
   //게시글 작성 날짜 양식-> *일 전으로 변경
