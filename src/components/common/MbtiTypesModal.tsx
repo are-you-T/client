@@ -188,7 +188,8 @@ const MbtiLabel = tw.label`
 `;
 
 const MbtiList = tw(ActiveList)`
-bg-black w-full text-white flex items-center p-4 rounded-full text-5xl font-black mt-5
+bg-black 
+w-full text-white flex items-center p-4 rounded-full text-5xl font-black mt-5
 `;
 
 const Toggle = styled.div`
@@ -207,3 +208,4 @@ const Toggle = styled.div`
     left: calc(50% - 10px);
   }
 `;
+

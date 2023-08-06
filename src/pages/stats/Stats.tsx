@@ -1,99 +1,36 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { stats, resData } from "@/interfaces";
 import ApexCharts from "react-apexcharts";
 import tw from "tailwind-styled-components";
-import { Link, useNavigate } from "react-router-dom";
 import MbtiTypesModal from "@/components/common/MbtiTypesModal";
-import { stats, resData } from "@/interfaces";
 import axiosRequest from "@/api";
 import Character from "@/components/common/Character";
-// import { error } from "console";
+import LoadingIndicator from "@/components/common/LoadingIndicator";
 
-// 차트 데이터를 위한 인터페이스
 interface ChartData {
   data: { x: string; y: number }[];
 }
 
 // 컴포넌트 상태를 위한 인터페이스
 interface ApexChartState {
+  isLoading: boolean;
   series: ChartData[];
   options: ApexCharts.ApexOptions;
 }
 
-//map 함수 데이터 가공
+let wrap:ChartData['data'] = [];
+
 // 클래스 컴포넌트 생성
 class ApexChart extends React.Component<{}, ApexChartState> {
   constructor(props: {}) {
     super(props);
 
     this.state = {
+      isLoading: true,
       series: [
         {
-          data: [
-            {
-              x: "ISFJ",
-              y: 200,
-            },
-            {
-              x: "ISTJ",
-              y: 149,
-            },
-            {
-              x: "INFP",
-              y: 184,
-            },
-            {
-              x: "INFJ",
-              y: 55,
-            },
-            {
-              x: "ENFP",
-              y: 84,
-            },
-            {
-              x: "ISFP",
-              y: 31,
-            },
-            {
-              x: "ENFJ",
-              y: 70,
-            },
-            {
-              x: "ESFJ",
-              y: 30,
-            },
-            {
-              x: "ESTJ",
-              y: 44,
-            },
-            {
-              x: "ISTP",
-              y: 68,
-            },
-            {
-              x: "INTJ",
-              y: 28,
-            },
-            {
-              x: "ESFP",
-              y: 19,
-            },
-            {
-              x: "INTP",
-              y: 29,
-            },
-            {
-              x: "ENTJ",
-              y: 29,
-            },
-            {
-              x: "ENTP",
-              y: 29,
-            },
-            {
-              x: "ESTP",
-              y: 29,
-            },
-          ],
+          data: []
         },
       ],
       options: {
@@ -139,14 +76,54 @@ class ApexChart extends React.Component<{}, ApexChartState> {
   componentDidMount(): void {
     let data = document.querySelectorAll(".apexcharts-treemap-rect");
     data?.forEach((x) => {
-      x.setAttribute("rx", "70");
-      x.setAttribute("ry", "70");
       x.setAttribute("stroke", "#000");
       x.setAttribute("stroke-width", "8");
     });
+
+    //api호출
+    // let scaledData: ChartData['data'] = [];
+    const fetchData = async () => {
+      try {
+        const response: resData<stats[]> = await axiosRequest.requestAxios<
+          resData<stats[]>
+        >("get", "/stats");
+        console.log(response.data);
+
+
+        const scaledData: ChartData['data'] = response.data
+          .map((item: stats) => ({ x: item.name, y: item.count }))
+          .filter(item => item.y !== 0)
+          .sort((a, b) => b.y - a.y);
+        // this.setState({series:[{data:[]}]})//데이터가 빈 값일때 테스트용  
+        this.setState({ series: [{ data: scaledData }] });
+        wrap = scaledData
+        setTimeout(() => {
+          this.setState({ isLoading: false });
+        }, 500);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
+
+    console.log('componentDidMount');
+    
   }
   render() {
+    //로딩컴포넌트
+    const {isLoading} = this.state
+    if(isLoading) return <LoadingIndicator/>
+
     console.log("render");
+    console.log(this.state.series[0].data)
+    console.log(this.state.series[0].data.length) 
+    //data없을때
+    if (!this.state.series[0].data.length) 
+    return <>
+      <Character bgcolor={"#00B26E"} gcolor={"#FFA8DF"} />
+      <Title>nodata</Title>
+    </>;
+
     return (
       <div id="chart">
         <ApexCharts
@@ -163,7 +140,6 @@ class ApexChart extends React.Component<{}, ApexChartState> {
 export default function Stats() {
   const [showModal, setShowModal] = useState("");
   const [mbtiType, setMbtiType] = useState(["I", "N", "T", "J"]);
-  const [data, setData] = useState<stats | null>(null);
 
   const handleThisMbti = useCallback(
     (value: string[]) => setMbtiType(value),
@@ -185,24 +161,9 @@ export default function Stats() {
   const navigate = useNavigate();
   const mbti = mbtiType.join("");
 
-  //api
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response: resData<stats> = await axiosRequest.requestAxios<
-          resData<stats>
-        >("get", "/stats");
-        setData(response.data); //데이터를 상태에 저장 주석처리하면 null값
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    fetchData();
-  }, []);
-  console.log("DATA", data);
-
-  if (data === null) return <Character bgcolor={"#808080"} gcolor={"#666"} />;
+  console.log("---------------");
+  console.log(wrap);
+  console.log("---------------");
 
   return (
     <Secton>
@@ -210,6 +171,7 @@ export default function Stats() {
       <StyledApexChart>
         <ApexChart />
       </StyledApexChart>
+    <ButtonWrap className={wrap.length ? "bg-[#000]" : "bg-[#00B26E]"}>
       <Button onClick={() => setShowModal("MbtiTypesModal")}>
         MBTI별 통계
       </Button>
@@ -217,7 +179,7 @@ export default function Stats() {
       <Button>
         <Link to="/board">담벼락 바로가기</Link>
       </Button>
-
+    </ButtonWrap>
       {showModal !== "" && (
         <ModalWrap onClick={handleOutsideClick} ref={modalRef}>
           {showModal === "MbtiTypesModal" && (
@@ -236,21 +198,41 @@ export default function Stats() {
 
 //Style
 const Secton = tw.section`
+  w-[390px]
+  m-auto
   flex
   flex-col
   items-center
   bg-black
   pt-10
-  pb-10
+  
 `;
 
 const StyledApexChart = tw.div`
-    w-96
-    p-4
-    bg-black
-    rounded-2xl
-    stroke-10
+  w-full
+  
+  bg-black
+  rounded-2xl
+  stroke-10
 `;
+
+const Title = tw.h3`
+font-bold
+text-6xl
+text-center
+pb-[60px]
+text-[#fff]
+bg-[#00B26E]
+`;
+
+const ButtonWrap = tw.div`
+  w-full
+  pb-10
+  flex
+  flex-col
+  items-center
+  justify-center
+`
 
 const Button = tw.button`
   w-80
