@@ -1,8 +1,10 @@
 import axios from "axios";
+// import dotenv from "dotenv";
+// dotenv.config();
 
 const allowMethod: string[] = ["get", "post", "put", "patch", "delete"];
 const API_END_POINT: string =
-  process.env.API_END_POINT ?? "http://localhost:3001/api/v1";
+  process.env.API_END_POINT ?? "https://port-0-server-3prof2llkz3atwx.sel4.cloudtype.app/api/v1";
 // 정의된 함수 시그니처에 맞게 인터페이스 생성
 interface AxiosRequest {
   requestAxios: <T>(method: string, url: string, data?: {}) => Promise<T>;
