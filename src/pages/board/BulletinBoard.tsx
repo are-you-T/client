@@ -92,8 +92,8 @@ export default function BulletinBoard() {
     try {
       const response: resData<board[]> = await axiosRequest.requestAxios<
         resData<board[]>
-      >("get", mbti ? "/board" : `/board/${mbti}`);
-      // console.log("전체게시글", response.data);
+      >("get", mbti ? `/board/${mbti}` : "/board");
+      console.log("전체게시글", response.data);
       setPostings(response.data);
     } catch (error) {
       console.error(error);
@@ -117,10 +117,17 @@ export default function BulletinBoard() {
   //Detail 페이지에 필요한 변수,메소드
 
   //파라미터 :mbti 가져오기
-  let { mbti } = useParams() as { mbti: string };
+  const { mbti } = useParams() as { mbti: string };
 
-  let selectedMbti: string = mbti.toUpperCase();
-  // console.log("selectedMbti", selectedMbti);
+  //유형별게시판과 전체게시판 구분
+  const [onDetailPage, setOnDetailPage] = useState<boolean>(false);
+  useEffect(() => {
+    if (mbti) {
+      setOnDetailPage(true);
+    } else {
+      setOnDetailPage(false);
+    }
+  }, []);
 
   //전체 게시글
   const boardAll = postings.map((posting) => {
@@ -140,7 +147,7 @@ export default function BulletinBoard() {
   });
   //유형별 게시글
   const boardDetail = postings
-    .filter((posting) => posting.category === selectedMbti)
+    .filter((posting) => posting.category === mbti)
     .map((posting) => {
       return (
         <BulletinCard
@@ -187,10 +194,10 @@ export default function BulletinBoard() {
             </>
           )}
           <Header>
-            {selectedMbti ? (
+            {onDetailPage ? (
               <Mbti>
-                <Title>{selectedMbti}</Title>
-                <MbtiColorChip selectedMbti={selectedMbti} />
+                <Title>{mbti}</Title>
+                <MbtiColorChip selectedMbti={mbti} />
               </Mbti>
             ) : (
               <Title>MBTI 담벼락</Title>
@@ -199,7 +206,7 @@ export default function BulletinBoard() {
           </Header>
           <Main>
             <BulletinCardWrap>
-              {selectedMbti ? boardDetail : boardAll}
+              {onDetailPage ? boardDetail : boardAll}
             </BulletinCardWrap>
           </Main>
           <Footer>

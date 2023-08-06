@@ -9,7 +9,7 @@ const MbtiColor = tw.div`
 `;
 
 interface MbtiColorChipProps {
-  selectedMbti: string;
+  selectedMbti: string | null;
 }
 interface Color {
   mbti: string;
