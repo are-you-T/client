@@ -93,7 +93,7 @@ export default function BulletinBoard() {
       const response: resData<board[]> = await axiosRequest.requestAxios<
         resData<board[]>
       >("get", mbti ? `/board/${mbti}` : "/board");
-      console.log("전체게시글", response.data);
+      // console.log("전체게시글", response.data);
       setPostings(response.data);
     } catch (error) {
       console.error(error);
