@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
 import { resData, board } from "@/interfaces/index";
@@ -10,6 +10,7 @@ import PostBtn from "@/components/board/PostBtn";
 import ChangeMbtiBtn from "@/components/board/ChangeMbtiBtn";
 import BoardPost from "@/components/board/BoardPost";
 import MbtiTypesModal, { ModalBg } from "@/components/common/MbtiTypesModal";
+import MbtiColorChip from "@/components/board/MbtiColorChip";
 
 const Board = tw.div`
   flex flex-col
@@ -20,6 +21,9 @@ const Board = tw.div`
 const Header = tw.div`
   flex flex-row justify-between items-center
   mt-4 mb-7 
+`;
+const Mbti = tw.div`
+ flex flex-row items-center gap-3
 `;
 const Title = tw.div`
   text-[43px] leading-[51px]  font-bold text-white
@@ -67,6 +71,7 @@ export default function BulletinBoard() {
   };
   const closeModal = (): void => {
     setOpenCardModal(false);
+    getPostings();
   };
 
   //게시글 작성 날짜 양식-> *일 전으로 변경
@@ -87,7 +92,7 @@ export default function BulletinBoard() {
     try {
       const response: resData<board[]> = await axiosRequest.requestAxios<
         resData<board[]>
-      >("get", "/board");
+      >("get", mbti ? `/board/${mbti}` : "/board");
       // console.log("전체게시글", response.data);
       setPostings(response.data);
     } catch (error) {
@@ -108,6 +113,56 @@ export default function BulletinBoard() {
     const mbti = mbtiType.reduce((acc, cur) => acc + cur);
     goDetailPage(mbti);
   };
+
+  //Detail 페이지에 필요한 변수,메소드
+
+  //파라미터 :mbti 가져오기
+  const { mbti } = useParams() as { mbti: string };
+
+  //유형별게시판과 전체게시판 구분
+  const [onDetailPage, setOnDetailPage] = useState<boolean>(false);
+  useEffect(() => {
+    if (mbti) {
+      setOnDetailPage(true);
+    } else {
+      setOnDetailPage(false);
+    }
+  }, []);
+
+  //전체 게시글
+  const boardAll = postings.map((posting) => {
+    return (
+      <BulletinCard
+        key={posting._id}
+        id={posting._id}
+        showModal={showModal}
+        title={posting.title}
+        content={posting.content}
+        category={posting.category}
+        color={posting.color}
+        like={posting.like}
+        createdAt={calculateDaysDiff(posting.createdAt)}
+      />
+    );
+  });
+  //유형별 게시글
+  const boardDetail = postings
+    .filter((posting) => posting.category === mbti)
+    .map((posting) => {
+      return (
+        <BulletinCard
+          key={posting._id}
+          id={posting._id}
+          showModal={showModal}
+          title={posting.title}
+          content={posting.content}
+          category={posting.category}
+          color={posting.color}
+          like={posting.like}
+          createdAt={calculateDaysDiff(posting.createdAt)}
+        />
+      );
+    });
 
   return (
     <>
@@ -139,27 +194,19 @@ export default function BulletinBoard() {
             </>
           )}
           <Header>
-            <Title>MBTI 담벼락</Title>
-
+            {onDetailPage ? (
+              <Mbti>
+                <Title>{mbti}</Title>
+                <MbtiColorChip selectedMbti={mbti} />
+              </Mbti>
+            ) : (
+              <Title>MBTI 담벼락</Title>
+            )}
             <ChangeMbtiBtn setOpenMbtiModal={setOpenMbtiModal} />
           </Header>
           <Main>
             <BulletinCardWrap>
-              {postings.map((posting) => {
-                return (
-                  <BulletinCard
-                    key={posting._id}
-                    id={posting._id}
-                    showModal={showModal}
-                    title={posting.title}
-                    content={posting.content}
-                    category={posting.category}
-                    color={posting.color}
-                    like={posting.like}
-                    createdAt={calculateDaysDiff(posting.createdAt)}
-                  />
-                );
-              })}
+              {onDetailPage ? boardDetail : boardAll}
             </BulletinCardWrap>
           </Main>
           <Footer>
