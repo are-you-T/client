@@ -3,8 +3,10 @@ import axios from "axios";
 // dotenv.config();
 
 const allowMethod: string[] = ["get", "post", "put", "patch", "delete"];
-const API_END_POINT: string =
-  process.env.API_END_POINT ?? "https://port-0-server-3prof2llkz3atwx.sel4.cloudtype.app/api/v1";
+axios.defaults.baseURL =
+  process.env.REACT_APP_API_URL ?? "http://localhost:3001/api/v1";
+// const API_END_POINT: string =
+//   process.env.REACT_APP_API_END_POINT ?? "http://localhost:3001/api/v1"; //"https://port-0-server-3prof2llkz3atwx.sel4.cloudtype.app/api/v1";
 // 정의된 함수 시그니처에 맞게 인터페이스 생성
 interface AxiosRequest {
   requestAxios: <T>(method: string, url: string, data?: {}) => Promise<T>;
@@ -12,7 +14,7 @@ interface AxiosRequest {
 
 const axiosRequest: AxiosRequest = {
   /**
-   * 작성자명   : 원종석
+   * 작성자명   : 000
    * 작성일자   : 2023.08.02.(수)
    * 수정일자   : none
    * 작성내용   : axios로 요청 보내기
@@ -28,7 +30,7 @@ const axiosRequest: AxiosRequest = {
     try {
       const response = await axios({
         method,
-        url: `${API_END_POINT}${url}`,
+        url: `${axios.defaults.baseURL}${url}`,
         data,
       });
 
