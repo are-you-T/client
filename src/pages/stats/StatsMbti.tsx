@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import tw from 'tailwind-styled-components';
 import { ApexOptions } from 'apexcharts';
@@ -8,6 +8,7 @@ import axiosReq from '@/api';
 import { resData } from '@/interfaces';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import Character from '@/components/common/Character';
+import MbtiTypesModal, { ModalBg } from '@/components/common/MbtiTypesModal';
 
 interface QuestionItem {
     idx: number;
@@ -132,8 +133,24 @@ function ChartItem({ data }: IProps) {
 
 function StatsMbti() {
     const { mbti } = useParams();
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [stats, setStats] = useState<ResponseMbtiStats['data']>(null);
+
+    // 모달 관련
+    const [isOpenModal, setIsOpenModal] = useState(false);
+    const [mbtiType, setMbtiType] = useState(mbti?.toUpperCase().split(""));
+
+    const handleThisMbti = useCallback((value: string[]) => setMbtiType(value), []);
+
+    const handleThisConfirm = () => {
+        if (mbtiType) {
+            const mbti = mbtiType.reduce((acc, cur) => acc + cur).toLowerCase();
+            navigate(`/stats/${mbti}`);
+            window.location.reload();
+        }
+    };
+  
 
     const fetchStats = async () => {
         setIsLoading(true);
@@ -155,6 +172,10 @@ function StatsMbti() {
     useEffect(() => {
         fetchStats();
     }, []);
+
+    if (!mbti) {
+        navigate('/');
+    }
 
     if (isLoading) {
         return <LoadingIndicator />;
@@ -179,44 +200,60 @@ function StatsMbti() {
         <Container>
             {stats && 
                 <>
-                    <div className="flex place-content-between items-center">
-                        <h3 className="text-5xl font-bold">{stats.mbtiType}</h3>
-                        {/* MBTI 변경 버튼 */}
-                        <button>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="48"
-                                height="47"
-                                fill="none"
-                            >
-                                <ellipse
-                                    cx="23.536"
-                                    cy="23.204"
-                                    fill="#00B26E"
-                                    rx="23.536"
-                                    ry="23.204"
-                                />
-                                <path
-                                    fill="#000"
-                                    d="M19.024 18.303a6.762 6.762 0 0 1 9.523-.042l-1.741 1.737a1.016 1.016 0 0 0 .718 1.733H32.935c.562 0 1.014-.452 1.014-1.014v-5.41a1.016 1.016 0 0 0-1.733-.719l-1.758 1.758c-3.703-3.656-9.667-3.643-13.348.043a9.414 9.414 0 0 0-2.232 3.542 1.352 1.352 0 0 0 2.549.9 6.694 6.694 0 0 1 1.598-2.528Zm-5.363 7.148v5.41a1.016 1.016 0 0 0 1.733.718l1.758-1.758c3.703 3.656 9.667 3.644 13.348-.042a9.443 9.443 0 0 0 2.236-3.538 1.352 1.352 0 0 0-2.549-.9 6.693 6.693 0 0 1-1.597 2.527 6.762 6.762 0 0 1-9.523.043l1.737-1.742a1.016 1.016 0 0 0-.719-1.733h-5.41c-.562 0-1.014.453-1.014 1.015Z"
-                                />
-                            </svg>
-                        </button>
-                    </div>
-                    <section>
-                        <ChartList className='mt-[40px]'>
-                            {stats.mbtiData.map((data) =>
-                                <li key={data.idx}>
-                                    <p>{data.idx}. {data.subject}</p>
-                                    <ChartItem data={data} />
-                                </li>
-                            )}
-                        </ChartList>
-                    </section>
-                    <div className="btns flex flex-col text-3xl text-black font-bold w-full m-auto">
-                        <FooterBtn to="/stats">MBTI 통계</FooterBtn>
-                        <FooterBtn to="/board">담벼락 바로가기</FooterBtn>
-                    </div>
+                {
+                    isOpenModal ?
+                    <>
+                        <ModalBg />
+                        <MbtiTypesModal
+                        selectMbti={mbtiType || []}
+                        onThisMbti={handleThisMbti}
+                        isButton={true}
+                        onThisConfirm={handleThisConfirm}
+                        />
+                    </>
+                    : (
+                        <>
+                            <div className="flex place-content-between items-center">
+                                <h3 className="text-5xl font-bold">{stats.mbtiType}</h3>
+                                {/* MBTI 변경 버튼 */}
+                                <button onClick={() => setIsOpenModal(prev => !prev)}>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="48"
+                                        height="47"
+                                        fill="none"
+                                    >
+                                        <ellipse
+                                            cx="23.536"
+                                            cy="23.204"
+                                            fill="#00B26E"
+                                            rx="23.536"
+                                            ry="23.204"
+                                        />
+                                        <path
+                                            fill="#000"
+                                            d="M19.024 18.303a6.762 6.762 0 0 1 9.523-.042l-1.741 1.737a1.016 1.016 0 0 0 .718 1.733H32.935c.562 0 1.014-.452 1.014-1.014v-5.41a1.016 1.016 0 0 0-1.733-.719l-1.758 1.758c-3.703-3.656-9.667-3.643-13.348.043a9.414 9.414 0 0 0-2.232 3.542 1.352 1.352 0 0 0 2.549.9 6.694 6.694 0 0 1 1.598-2.528Zm-5.363 7.148v5.41a1.016 1.016 0 0 0 1.733.718l1.758-1.758c3.703 3.656 9.667 3.644 13.348-.042a9.443 9.443 0 0 0 2.236-3.538 1.352 1.352 0 0 0-2.549-.9 6.693 6.693 0 0 1-1.597 2.527 6.762 6.762 0 0 1-9.523.043l1.737-1.742a1.016 1.016 0 0 0-.719-1.733h-5.41c-.562 0-1.014.453-1.014 1.015Z"
+                                        />
+                                    </svg>
+                                </button>
+                            </div>
+                            <section>
+                                <ChartList className='mt-[40px]'>
+                                    {stats.mbtiData.map((data) =>
+                                        <li key={data.idx}>
+                                            <p>{data.idx}. {data.subject}</p>
+                                            <ChartItem data={data} />
+                                        </li>
+                                    )}
+                                </ChartList>
+                            </section>
+                            <div className="btns flex flex-col text-3xl text-black font-bold w-full m-auto">
+                                <FooterBtn to="/stats">MBTI 통계</FooterBtn>
+                                <FooterBtn to="/board">담벼락 바로가기</FooterBtn>
+                            </div>
+                        </>
+                    )
+                }
                 </>
             }
         </Container>
