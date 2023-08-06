@@ -1,4 +1,3 @@
-import React from "react";
 import tw from "tailwind-styled-components";
 import { testCardProps } from "@/interfaces/index";
 
@@ -41,7 +40,8 @@ hover:border-transparent
 ease-in
 duration-200
 hover:-translate-y-1
-active:translate-y-0
+active:translate-y+1
+active:bg-violet-400
 
 select-none
 relative
@@ -50,4 +50,5 @@ animate-testComponent
 
 const TestcardText = tw.p`
 ml-2
+text-black
 `;
