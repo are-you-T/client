@@ -1,8 +1,7 @@
 import {
   question,
-  question2,
   testCardProps,
-  answer,
+  userAnswer,
   MBTIData,
   userResponseProps,
   questionText,
@@ -19,9 +18,8 @@ interface resData<D> {
 export type {
   resData,
   question,
-  question2,
   testCardProps,
-  answer,
+  userAnswer,
   MBTIData,
   userResponseProps,
   questionText,

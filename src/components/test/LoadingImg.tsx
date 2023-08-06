@@ -8,8 +8,8 @@ export default function LoadingImg({ color }: { color: string }) {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        // fill-rule="evenodd"
+        // clip-rule="evenodd"
         d="M0.207031 172.801C3.37911 129.47 42.6285 95.2256 90.5808 95.2256C138.826 95.2256 178.262 129.89 181.009 173.596C158.01 196.7 126.175 211 91.0001 211C55.4234 211 23.2634 196.371 0.207031 172.801Z"
         fill={color}
       />
