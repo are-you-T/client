@@ -145,7 +145,7 @@ function Loading({ userResponse, visible }: userResponseProps) {
       return () => clearTimeout(timer);
     }
   }, [userResponse, visible]);
-  console.log("🚀🚀🚀🚀🚀🚀테스트에서 보내주는 userResponse:", userResponse);
+  // console.log("🚀🚀🚀🚀🚀🚀테스트에서 보내주는 userResponse:", userResponse);
 
   const calculateMBTIType = async () => {
     const { E, I } = energy;
@@ -176,12 +176,19 @@ function Loading({ userResponse, visible }: userResponseProps) {
     };
 
     try {
-      const response: userResponseProps = await axiosRequest.requestAxios(
+      const putResponse: userResponseProps = await axiosRequest.requestAxios(
         "put",
         "/stats",
         updatedUserResponse
       );
-      console.log(response, "🚀🚀🚀🚀🚀🚀put 요청 response");
+
+      const patchResponse: userResponseProps = await axiosRequest.requestAxios(
+        "patch",
+        `/stats/${userMBTI}`
+      );
+
+      console.log(patchResponse, "🚀🚀🚀🚀🚀🚀patch 요청 response");
+      console.log(putResponse, "🚀🚀🚀🚀🚀🚀put 요청 response");
       console.log("resultData", resultData);
 
       // 결과페이지에 데이터 전송 ***********************************
