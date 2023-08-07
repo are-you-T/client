@@ -33,7 +33,7 @@ export default function HeartBtn({ id, like }: HeartBtnProps) {
       const response: resData<board> = await axiosRequest.requestAxios<
         resData<board>
       >("patch", `/board/post/${id}`);
-      console.log("좋아요", response.data);
+      // console.log("좋아요", response.data);
       setLikeCount(response.data.like);
     } catch (error) {
       console.error(error);
