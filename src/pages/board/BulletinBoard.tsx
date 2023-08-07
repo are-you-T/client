@@ -186,7 +186,7 @@ export default function BulletinBoard() {
         <Board>
           {openCardModal && (
             <>
-              <ModalBg />
+              <ModalBg onClick={() => setOpenMbtiModal(false)} />
               <BulletinCardModal
                 selectedId={selectedId}
                 closeModal={closeModal}

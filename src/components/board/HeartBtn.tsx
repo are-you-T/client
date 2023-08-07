@@ -41,7 +41,7 @@ export default function HeartBtn({ id, like }: HeartBtnProps) {
   }
   //하트 클릭시 좋아요수 증가시키는 함수
   const handleHeartClick = async () => {
-    console.log("클릭됨");
+    // console.log("클릭됨");
     await increaseLikeCount();
   };
   return (

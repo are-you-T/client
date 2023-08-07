@@ -3,8 +3,13 @@ import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
 import { resData, board } from "@/interfaces/index";
-
 import HeartBtn from "@/components/board/HeartBtn";
+
+// const CardModalBg = tw.div`
+// w-[390px] absolute top-0 left-1/2 -translate-x-1/2 h-full bg-black-semi-transparent
+// `;
+
+// export { CardModalBg };
 
 const CardModalContainer = tw.div`
   h-full
