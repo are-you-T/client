@@ -132,8 +132,8 @@ function ChartItem({ data }: IProps) {
 }
 
 function StatsMbti() {
-    const { mbti } = useParams();
     const navigate = useNavigate();
+    const { mbti } = useParams();
     const [isLoading, setIsLoading] = useState(false);
     const [stats, setStats] = useState<ResponseMbtiStats['data']>(null);
 
@@ -141,13 +141,13 @@ function StatsMbti() {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [mbtiType, setMbtiType] = useState(mbti?.toUpperCase().split(""));
 
-    const handleThisMbti = useCallback((value: string[]) => setMbtiType(value), []);
+    const handleMbtiType = useCallback((value: string[]) => setMbtiType(value), []);
 
-    const handleThisConfirm = () => {
+    const onChangeMbtiType = () => {
         if (mbtiType) {
-            const mbti = mbtiType.reduce((acc, cur) => acc + cur).toLowerCase();
+            const mbti = mbtiType.join('').toLowerCase();
             navigate(`/stats/${mbti}`);
-            window.location.reload();
+            navigate(0);
         }
     };
   
@@ -205,10 +205,10 @@ function StatsMbti() {
                     <>
                         <ModalBg />
                         <MbtiTypesModal
-                        selectMbti={mbtiType || []}
-                        onThisMbti={handleThisMbti}
-                        isButton={true}
-                        onThisConfirm={handleThisConfirm}
+                            selectMbti={mbtiType || []}
+                            onThisMbti={handleMbtiType}
+                            isButton={true}
+                            onThisConfirm={onChangeMbtiType}
                         />
                     </>
                     : (
