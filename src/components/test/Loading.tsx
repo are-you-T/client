@@ -124,16 +124,16 @@ function Loading({ userResponse, visible }: userResponseProps) {
 
     calculateCategoryValues();
 
-    console.log(
-      "energy",
-      energy,
-      "awareness",
-      awareness,
-      "judgement",
-      judgement,
-      "life",
-      life
-    );
+    // console.log(
+    //   "energy",
+    //   energy,
+    //   "awareness",
+    //   awareness,
+    //   "judgement",
+    //   judgement,
+    //   "life",
+    //   life
+    // );
 
     // visible 상태가 true일 때 한 번만 호출
     if (visible) {
@@ -165,7 +165,7 @@ function Loading({ userResponse, visible }: userResponseProps) {
       mbtiType: userMBTI,
     };
 
-    console.log("put할 때 보내주는 데이터 ", updatedUserResponse);
+    // console.log("put할 때 보내주는 데이터 ", updatedUserResponse);
 
     const resultData = {
       energy,
@@ -188,15 +188,15 @@ function Loading({ userResponse, visible }: userResponseProps) {
         `/stats/${userMBTI}`
       );
 
-      console.log(patchResponse, "🚀🚀🚀🚀🚀🚀patch 요청 response");
-      console.log(putResponse, "🚀🚀🚀🚀🚀🚀put 요청 response");
-      console.log("resultData", resultData);
+      // console.log(patchResponse, "🚀🚀🚀🚀🚀🚀patch 요청 response");
+      // console.log(putResponse, "🚀🚀🚀🚀🚀🚀put 요청 response");
+      // console.log("resultData", resultData);
 
       // 결과페이지에 데이터 전송 ***********************************
       const queryParams = new URLSearchParams({ mbti: resultData.mbtiType });
       navigate("/result?" + queryParams.toString(), { state: { resultData } });
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
 
