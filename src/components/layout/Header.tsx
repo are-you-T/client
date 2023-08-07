@@ -23,7 +23,8 @@ export default function Head() {
         <DrawerToggle
           id="my-drawer"
           type="checkbox"
-          defaultChecked={isChecked}
+          checked={isChecked}
+          readOnly
         ></DrawerToggle>
         <DrawerContent onClick={handleDrawerToggle}>
           <DrawerButton htmlFor="my-drawer">
