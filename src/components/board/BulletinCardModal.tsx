@@ -5,12 +5,6 @@ import axiosRequest from "@/api/index";
 import { resData, board } from "@/interfaces/index";
 import HeartBtn from "@/components/board/HeartBtn";
 
-// const CardModalBg = tw.div`
-// w-[390px] absolute top-0 left-1/2 -translate-x-1/2 h-full bg-black-semi-transparent
-// `;
-
-// export { CardModalBg };
-
 const CardModalContainer = tw.div`
   h-full
   fixed z-10 inset-0
@@ -86,18 +80,18 @@ export default function BulletinCardModal({
   const [posting, setPosting] = useState<board>({} as board);
 
   //선택한 게시글 불러오기
-  useEffect(() => {
-    async function getSelectedPosting() {
-      try {
-        const response: resData<board> = await axiosRequest.requestAxios<
-          resData<board>
-        >("get", `/board/post/${selectedId}`);
-        // console.log("게시글", response.data);
-        setPosting(response.data);
-      } catch (error) {
-        console.error(error);
-      }
+  async function getSelectedPosting() {
+    try {
+      const response: resData<board> = await axiosRequest.requestAxios<
+        resData<board>
+      >("get", `/board/post/${selectedId}`);
+      // console.log("게시글", response.data);
+      setPosting(response.data);
+    } catch (error) {
+      console.error(error);
     }
+  }
+  useEffect(() => {
     getSelectedPosting();
   }, []);
 
@@ -112,13 +106,16 @@ export default function BulletinCardModal({
     }
     return "";
   };
-
+  // 이벤트 버블링을 막음
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
   return (
-    <CardModalContainer>
-      <CardModal>
+    <CardModalContainer onClick={closeModal}>
+      <CardModal onClick={handleClick}>
         <Header>
           <Category>{posting.category}</Category>
-          {/* close icon */}
+
           <CloseBtn onClick={closeModal}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
