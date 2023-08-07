@@ -17,10 +17,6 @@ export interface question {
   text?: string;
 }
 
-export interface question2 {
-  aaa: number;
-}
-
 export interface testCardProps {
   answer?: string;
   index: number;
