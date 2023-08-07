@@ -30,18 +30,6 @@ export default function TestResult() {
     tag: [],
   });
 
-  const handleShareClick = async () => {
-    await share(window.location.origin);
-  };
-  const share = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      alert("링크가 복사되었습니다!");
-    } catch (e) {
-      alert("초대코드 복사에 실패했습니다ㅜㅜ");
-    }
-  };
-
   const location = useLocation();
   const searchParms = new URLSearchParams(location.search);
   const mbtiType: string | null = searchParms.get('mbti');
@@ -63,6 +51,19 @@ export default function TestResult() {
     };
     getMbti();
   }, []);
+
+  const handleShareClick = async () => {
+    const url = `${window.location.origin}/result${location.search}`;
+    await share(url);
+  };
+  const share = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("링크가 복사되었습니다!");
+    } catch (e) {
+      alert("초대코드 복사에 실패했습니다ㅜㅜ");
+    }
+  };
 
   const { name, summary, content, tag } = mbti;
   return (
