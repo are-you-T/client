@@ -1,17 +1,13 @@
 import React from "react";
 import TypePercentageBar from "./TypePercentageBar";
 import tw from "tailwind-styled-components";
+import { resResultData } from "@/interfaces";
 
-// interface resultObj {
-//   awareness: {N:number, S:number},
-//   energy: {E:number, I:number},
-//   judgement: {T:number, F:number},
-//   life: {J:number, P:number},
-//   mbtiType: string
-// }
+interface OwnProps {
+  result : Omit<resResultData,'mbtiType'>;
+}
 
-//@ts-ignore
-export default function TypePercentageBars({result}) {
+export default function TypePercentageBars({result}:OwnProps) {
   const {energy, awareness, judgement, life  } = result;
   return (
     <Container>

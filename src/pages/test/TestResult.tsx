@@ -5,7 +5,7 @@ import RelationType from "@/components/test/RelationType";
 import { Link, useLocation } from "react-router-dom";
 import axiosRequest from "@/api/index";
 import TypePercentageBars from "@/components/test/TypePercentageBars";
-import { resData, resMbti, color } from "@/interfaces";
+import { resData, resMbti, color, resResultData } from "@/interfaces";
 import colorData from "@/constants/bgColor";
 import Character from "@/components/common/Character";
 
@@ -44,10 +44,10 @@ export default function TestResult() {
 
   const location = useLocation();
   const searchParms = new URLSearchParams(location.search);
-  const mbtiType = searchParms.get('mbti');
+  const mbtiType: string | null = searchParms.get('mbti');
   const colorObj: color = colorData.filter((color) => color.mbti === mbtiType)[0];
-  const resultData = location.state ? location.state.resultData : null;
-  
+  const resultData: resResultData | null = location.state ? location.state.resultData : null;
+
   useEffect(() => {
     const getMbti = async () => {
       try {
