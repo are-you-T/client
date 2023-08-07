@@ -144,10 +144,11 @@ function StatsMbti() {
     const handleMbtiType = useCallback((value: string[]) => setMbtiType(value), []);
 
     const onChangeMbtiType = () => {
+        setIsOpenModal(false);
+
         if (mbtiType) {
             const mbti = mbtiType.join('').toLowerCase();
             navigate(`/stats/${mbti}`);
-            navigate(0);
         }
     };
 
@@ -195,15 +196,13 @@ function StatsMbti() {
 
     useEffect(() => {
         fetchStats();
-    }, []);
+    }, [mbti]);
 
     if (!mbti) {
         navigate('/');
     }
 
-    if (isLoading) {
-        return <LoadingIndicator />;
-    }
+    if (isLoading) return <LoadingIndicator />;
 
     if (!stats) {
         return (
