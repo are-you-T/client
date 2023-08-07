@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { stats, resData } from "@/interfaces";
 import ApexCharts from "react-apexcharts";
@@ -13,124 +13,81 @@ interface ChartData {
 }
 
 // 컴포넌트 상태를 위한 인터페이스
-interface ApexChartState {
-  isLoading: boolean;
-  series: ChartData[];
+interface ApexChartFormProps {
+  series: ChartData["data"];
   options: ApexCharts.ApexOptions;
+  height: number;
 }
 
-let wrap:ChartData['data'] = [];
+const options: ApexCharts.ApexOptions = {
+  legend: {
+    show: false,
+  },
+  chart: {
+    height: 650,
+    type: "treemap",
+    toolbar: {
+      show: false,
+    },
+  },
+  colors: [
+    "#0272F1",
+    "#B2ACF9",
+    "#FFDF3F",
+    "#EFC7D6",
+    "#9FEEA2",
+    "#FC5013",
+    "#78D9EE",
+    "#FF9D42",
+    "#D0F102",
+    "#F9BAAC",
+    "#3FFFBA",
+    "#C7E1EF",
+    "#ECEE9F",
+    "#13FCEE",
+    "#AC78EE",
+    "#FF42B3",
+  ],
+  plotOptions: {
+    treemap: {
+      distributed: true,
+      enableShades: false,
+      useFillColorAsStroke: false,
+    },
+  },
+};
 
 // 클래스 컴포넌트 생성
-class ApexChart extends React.Component<{}, ApexChartState> {
-  constructor(props: {}) {
-    super(props);
-
-    this.state = {
-      isLoading: true,
-      series: [
-        {
-          data: []
-        },
-      ],
-      options: {
-        legend: {
-          show: false,
-        },
-        chart: {
-          height: 650,
-          type: "treemap",
-          toolbar: {
-            show: false,
-          },
-        },
-        colors: [
-          "#0272F1",
-          "#B2ACF9",
-          "#FFDF3F",
-          "#EFC7D6",
-          "#9FEEA2",
-          "#FC5013",
-          "#78D9EE",
-          "#FF9D42",
-          "#D0F102",
-          "#F9BAAC",
-          "#3FFFBA",
-          "#C7E1EF",
-          "#ECEE9F",
-          "#13FCEE",
-          "#AC78EE",
-          "#FF42B3",
-        ],
-        plotOptions: {
-          treemap: {
-            distributed: true,
-            enableShades: false,
-            useFillColorAsStroke: false,
-          },
-        },
-      },
-    };
-  }
+class ApexChartForm extends React.Component<ApexChartFormProps> {
   //chart svg속성 변경
   componentDidMount(): void {
     let data = document.querySelectorAll(".apexcharts-treemap-rect");
     data?.forEach((x) => {
       x.setAttribute("stroke", "#000");
-      x.setAttribute("stroke-width", "8");
+      x.setAttribute("strokeWidth", "8");
     });
-
-    //api호출
-    // let scaledData: ChartData['data'] = [];
-    const fetchData = async () => {
-      try {
-        const response: resData<stats[]> = await axiosRequest.requestAxios<
-          resData<stats[]>
-        >("get", "/stats");
-        console.log(response.data);
-
-
-        const scaledData: ChartData['data'] = response.data
-          .map((item: stats) => ({ x: item.name, y: item.count }))
-          .filter(item => item.y !== 0)
-          .sort((a, b) => b.y - a.y);
-        // this.setState({series:[{data:[]}]})//데이터가 빈 값일때 테스트용  
-        this.setState({ series: [{ data: scaledData }] });
-        wrap = scaledData
-        setTimeout(() => {
-          this.setState({ isLoading: false });
-        }, 500);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchData();
-
-    console.log('componentDidMount');
-    
+    console.log("componentDidMount");
   }
   render() {
-    //로딩컴포넌트
-    const {isLoading} = this.state
-    if(isLoading) return <LoadingIndicator/>
+    const { options, series, height } = this.props;
 
     console.log("render");
-    console.log(this.state.series[0].data)
-    console.log(this.state.series[0].data.length) 
-    //data없을때
-    if (!this.state.series[0].data.length) 
-    return <>
-      <Character bgcolor={"#00B26E"} gcolor={"#FFA8DF"} />
-      <Title>nodata</Title>
-    </>;
+    if (!series.length)
+      return (
+        <>
+          <Character bgcolor={"#00B26E"} gcolor={"#FFA8DF"} />
+          <Title>nodata</Title>
+        </>
+      );
+    const seriesData = [{ data: series }];
 
     return (
       <div id="chart">
         <ApexCharts
-          options={this.state.options}
-          series={this.state.series}
+          options={options}
+          series={seriesData}
           type="treemap"
-          height={650}
+          height={height}
         />
       </div>
     );
@@ -140,6 +97,8 @@ class ApexChart extends React.Component<{}, ApexChartState> {
 export default function Stats() {
   const [showModal, setShowModal] = useState("");
   const [mbtiType, setMbtiType] = useState(["I", "N", "T", "J"]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState<ChartData["data"]>([{ x: "", y: 0 }]);
 
   const handleThisMbti = useCallback(
     (value: string[]) => setMbtiType(value),
@@ -161,25 +120,52 @@ export default function Stats() {
   const navigate = useNavigate();
   const mbti = mbtiType.join("");
 
-  console.log("---------------");
-  console.log(wrap);
-  console.log("---------------");
+  //로딩컴포넌트
+  // const { isLoading } = this.state;
+  // if (isLoading) return <LoadingIndicator />;
+
+  //api호출
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response: resData<stats[]> = await axiosRequest.requestAxios<
+          resData<stats[]>
+        >("get", "/stats");
+
+        const scaledData: ChartData["data"] = response.data
+          .map((item: stats) => ({ x: item.name, y: item.count }))
+          .filter((item) => item.y !== 0)
+          .sort((a, b) => b.y - a.y);
+        // setData([]); //데이터가 빈 값일때 테스트용
+        setData(scaledData);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <Secton>
       <h3 className="text-2xl font-bold mb-2 text-white">MBTI 통계</h3>
       <StyledApexChart>
-        <ApexChart />
+        {isLoading && <LoadingIndicator />}
+        {!isLoading && (
+          <ApexChartForm options={options} series={data} height={650} />
+        )}
       </StyledApexChart>
-    <ButtonWrap className={wrap.length ? "bg-[#000]" : "bg-[#00B26E]"}>
-      <Button onClick={() => setShowModal("MbtiTypesModal")}>
-        MBTI별 통계
-      </Button>
+      <ButtonWrap className={data.length ? "bg-[#000]" : "bg-[#00B26E]"}>
+        <Button onClick={() => setShowModal("MbtiTypesModal")}>
+          MBTI별 통계
+        </Button>
 
-      <Button>
-        <Link to="/board">담벼락 바로가기</Link>
-      </Button>
-    </ButtonWrap>
+        <Button>
+          <Link to="/board">담벼락 바로가기</Link>
+        </Button>
+      </ButtonWrap>
       {showModal !== "" && (
         <ModalWrap onClick={handleOutsideClick} ref={modalRef}>
           {showModal === "MbtiTypesModal" && (
@@ -232,7 +218,7 @@ const ButtonWrap = tw.div`
   flex-col
   items-center
   justify-center
-`
+`;
 
 const Button = tw.button`
   w-80
