@@ -1,47 +1,7 @@
-import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import tw from "tailwind-styled-components";
-import axiosRequest from '@/api/index';
-
-interface resQuestion {
-  error: string | null,
-  data: {
-    idx: number,
-    subject: string,
-    parent: string,
-    answer: {
-      I?: string,
-      E?: string,
-      S?: string,
-      N?: string,
-      T?: string,
-      F?: string,
-      J?: string,
-      P?: string,
-    },
-    mbtiType: string,
-    proportion: number
-  }
-}
 
 export default function Home() {
-  const [data, setData] = useState({});
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response:resQuestion = await axiosRequest.requestAxios("get", "/question/basic", {});
-        setData(response.data); // 데이터를 상태에 저장
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  console.log('Data:', data);
-
   return (
     <Background>
       <Container>
