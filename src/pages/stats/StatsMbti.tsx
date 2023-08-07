@@ -152,6 +152,35 @@ function StatsMbti() {
     };
   
 
+    const filterStats = (data: MbtiStatsByType | null) => {
+        if (!data) {
+            return data;
+        }
+
+        data.mbtiData.forEach((question) => {
+            const { answer, selection } = question;
+            const mbtiTypes: string[] = [];
+            const filteredData: Pick<QuestionItem, 'answer' | 'selection'> = {
+                answer: {},
+                selection: {}
+            };
+            
+            Object.entries(answer).forEach(([type, val]) => {
+                if (val) mbtiTypes.push(type);
+            });
+
+            mbtiTypes.forEach((type) => {
+                filteredData.answer[type] = answer[type];
+                filteredData.selection[type] = selection[type];
+            });
+
+            question.answer = filteredData.answer;
+            question.selection = filteredData.selection;
+        });
+    
+        return data;
+    }
+
     const fetchStats = async () => {
         setIsLoading(true);
 
@@ -161,7 +190,9 @@ function StatsMbti() {
                 `/stats/basic/${mbti?.toUpperCase()}`
             );
 
-            setStats(data);
+            const filteredStats = filterStats(data);
+            console.log(filteredStats);
+            setStats(filteredStats);
         } catch (error) {
             alert("데이터를 받아오던 중 에러가 발생했습니다.");
         } finally {
