@@ -5,10 +5,10 @@ import RelationType from "@/components/test/RelationType";
 import { Link, useLocation } from "react-router-dom";
 import axiosRequest from "@/api/index";
 import TypePercentageBars from "@/components/test/TypePercentageBars";
-import { resData, resMbti, color } from "@/interfaces";
+import { resData, resMbti, color, resResultData } from "@/interfaces";
 import colorData from "@/constants/bgColor";
+import Character from "@/components/common/Character";
 
-//구현 해야하는것 1.결과공유하기버튼 2.내검사결과useLocation으로받아서데이터바인딩 3.캐릭터컬러변경
 export default function TestResult() {
   const [mbti, setMbti] = useState<resMbti>({
     _id: "",
@@ -29,12 +29,25 @@ export default function TestResult() {
     },
     tag: [],
   });
+
+  const handleShareClick = async () => {
+    await share(window.location.origin);
+  };
+  const share = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("링크가 복사되었습니다!");
+    } catch (e) {
+      alert("초대코드 복사에 실패했습니다ㅜㅜ");
+    }
+  };
+
   const location = useLocation();
   const searchParms = new URLSearchParams(location.search);
-  const mbtiType = searchParms.get('mbti');
+  const mbtiType: string | null = searchParms.get('mbti');
   const colorObj: color = colorData.filter((color) => color.mbti === mbtiType)[0];
-  const resultData = location.state;
-  console.log(resultData);
+  const resultData: resResultData | null = location.state ? location.state.resultData : null;
+
   useEffect(() => {
     const getMbti = async () => {
       try {
@@ -43,7 +56,6 @@ export default function TestResult() {
           `/mbti/${mbtiType}`,
           {}
         );
-        console.log(response.data);
         setMbti(response.data);
       } catch (e) {
         console.error(e);
@@ -57,12 +69,12 @@ export default function TestResult() {
     <Container style={{ backgroundColor: colorObj.out }}>
       <Header>
         <Title>{name}</Title>
-        <ShareButton>결과 공유하기</ShareButton>
+        <ShareButton onClick={handleShareClick}>결과 공유하기</ShareButton>
       </Header>
       <Main>
         <MainTop>
-          <CharacterImg />
-          <ContentWrapper>
+        <Character bgcolor={colorObj.in} gcolor={colorObj.out}/>
+          <ContentWrapper style={{ backgroundColor: colorObj.in }}>
             <ContentTitle>
               {summary} {name}
             </ContentTitle>
@@ -76,14 +88,14 @@ export default function TestResult() {
           </ContentWrapper>
         </MainTop>
         <MainBottom style={{ backgroundColor: colorObj.out }}>
-          <TypePercentageBars />
+          {resultData && <TypePercentageBars result={resultData}/>}
           <RelationType good={content?.good ?? ""} bad={content?.bad ?? ""} />
         </MainBottom>
       </Main>
       <Buttons>
         <HyperText to="/test">다시하기</HyperText>
-        <HyperText to="/stats">통계 보러가기</HyperText>
-        <HyperText to="/board">담벼락 보러가기</HyperText>
+        <HyperText to={`/stats/${mbtiType}`}>통계 보러가기</HyperText>
+        <HyperText to={`/board/${mbtiType}`}>담벼락 보러가기</HyperText>
       </Buttons>
     </Container>
   );
