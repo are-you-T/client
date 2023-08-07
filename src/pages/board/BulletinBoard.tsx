@@ -53,8 +53,7 @@ export default function BulletinBoard() {
   const [openMbtiModal, setOpenMbtiModal] = useState<boolean>(false);
   //선택한 카드의 id값
   const [selectedId, setSelectedId] = useState<string>("");
-  //선택한 카드의 좋아요수
-  const [selectedlike, setSelectedLike] = useState<number>(0);
+
   //전체 게시글
   const [postings, setPostings] = useState<board[]>([]);
   //게시글 작성 모달 상태
@@ -64,14 +63,15 @@ export default function BulletinBoard() {
   const goDetailPage = (mbti: string): void => {
     nav(`/board/${mbti}`);
   };
-  const showModal = (id: string, like: number): void => {
+  const showModal = (id: string): void => {
     setSelectedId(id);
-    setSelectedLike(like);
     setOpenCardModal(true);
+    document.body.style.overflow = "hidden";
   };
   const closeModal = (): void => {
     setOpenCardModal(false);
     getPostings();
+    document.body.style.overflow = "unset";
   };
 
   //게시글 작성 날짜 양식-> *일 전으로 변경
