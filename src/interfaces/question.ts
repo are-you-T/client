@@ -17,26 +17,24 @@ export interface question {
   text?: string;
 }
 
-export interface question2 {
-  aaa: number;
-}
-
 export interface testCardProps {
-  answer: string;
+  answer?: string;
   index: number;
   onClick: (choiceIndex: number) => () => void;
   animate: boolean;
   animationStart: () => void;
 }
 
-export interface answer {
-  [key: string]: string;
+export interface userAnswer {
+  // [key: string]: string;
+  mbtiType: string;
+  text?: string;
 }
 
 export interface MBTIData {
   idx: number;
   subject: string;
-  answer: answer;
+  answer: userAnswer;
   mbtiType: string;
   selected: string | number;
   proportion: number;

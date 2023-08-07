@@ -6,13 +6,13 @@ import Loading from "@/components/test/Loading";
 import LoadingIndicator from "@/components/common/LoadingIndicator";
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
-import { question, resData, answer, MBTIData } from "@/interfaces/index";
+import { question, resData, userAnswer, MBTIData } from "@/interfaces/index";
 
 export default function Test() {
   const [viewLoading, setViewLoading] = useState<boolean>(false);
-  const [questionList, setQuestionList] = useState<any>([]);
+  const [questionList, setQuestionList] = useState<question[]>([]);
   const [userResponse, setUserResponse] = useState<MBTIData[]>([]);
-  const [currentChoiceList, setCurrentChoiceList] = useState<answer[]>([]);
+  const [currentChoiceList, setCurrentChoiceList] = useState<userAnswer[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [animate, setAnimate] = useState<boolean>(false);
 
@@ -24,8 +24,8 @@ export default function Test() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response: resData<question> = await axiosRequest.requestAxios<
-          resData<question>
+        const response: resData<question[]> = await axiosRequest.requestAxios<
+          resData<question[]>
         >("get", "/question/basic");
         setQuestionList(response.data);
       } catch (error) {
@@ -42,15 +42,27 @@ export default function Test() {
     (choiceIndex: number) => () => {
       if (currentChoiceList.length > 0 && questionList.length > 0) {
         setCurrentIndex((curr) => {
-          const currentAnswer = questionList[curr];
-          delete currentAnswer.parent;
-          setUserResponse((prevResponse) => [
-            ...prevResponse,
-            {
+          // const currentAnswer = questionList[curr];
+          // delete currentAnswer.parent;
+
+          const { idx, subject, answer, mbtiType, proportion } =
+            questionList[curr];
+          const currentAnswer = {
+            idx,
+            subject,
+            answer,
+            mbtiType,
+            proportion,
+            // text,
+          };
+
+          setUserResponse((prevResponse) => {
+            const updatedResponse = {
               ...currentAnswer,
               selected: currentChoiceList[choiceIndex].mbtiType,
-            },
-          ]);
+            } as unknown as MBTIData; // 형식 변환
+            return [...prevResponse, updatedResponse];
+          });
           if (curr === questionList.length - 1) {
             setViewLoading(true);
             return curr;

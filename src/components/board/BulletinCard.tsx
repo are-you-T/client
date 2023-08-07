@@ -12,6 +12,7 @@ const Card = tw.div`
   bg-white rounded-md
   w-[170px] min-h-[165px]
   cursor-pointer
+  text-gray-800
 `;
 const Header = tw.div`
   flex flex-row justify-between items-center
@@ -54,18 +55,10 @@ const Footer = tw.div`
 const Category = tw.div`
   font-medium
 `;
-const Heart = tw.div`
-  flex flex-row items-center
-`;
-
-const HeartCount = tw.div`
-  font-light
-  ml-[4px]
-`;
 
 interface BulletinCardProps {
   id: string;
-  showModal: (id: string, like: number) => void;
+  showModal: (id: string) => void;
   title: string;
   content: string;
   category: string;
@@ -85,7 +78,7 @@ export default function BulletinCard({
 }: BulletinCardProps) {
   return (
     <Card id={id} style={{ backgroundColor: color }}>
-      <div onClick={() => showModal(id, like)}>
+      <div onClick={() => showModal(id)}>
         <Header>
           <Title>{title}</Title>
           <OptionBtn />
