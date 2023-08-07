@@ -2,12 +2,16 @@ import React from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
+const Post = tw.div`
+  cursor-pointer
+`;
+
 interface PostBtnProps {
   setOpenBoardPost: (value: boolean) => void;
 }
 export default function PostBtn({ setOpenBoardPost }: PostBtnProps) {
   return (
-    <div
+    <Post
       onClick={() => {
         setOpenBoardPost(true);
       }}
@@ -24,6 +28,6 @@ export default function PostBtn({ setOpenBoardPost }: PostBtnProps) {
           d="M21.913 35.217v-9.473H12.49V22.57h9.424v-9.424h3.174v9.424h9.473v3.174h-9.473v9.473h-3.174Z"
         />
       </svg>
-    </div>
+    </Post>
   );
 }

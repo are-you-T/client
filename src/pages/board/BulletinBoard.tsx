@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
@@ -53,8 +53,7 @@ export default function BulletinBoard() {
   const [openMbtiModal, setOpenMbtiModal] = useState<boolean>(false);
   //선택한 카드의 id값
   const [selectedId, setSelectedId] = useState<string>("");
-  //선택한 카드의 좋아요수
-  const [selectedlike, setSelectedLike] = useState<number>(0);
+
   //전체 게시글
   const [postings, setPostings] = useState<board[]>([]);
   //게시글 작성 모달 상태
@@ -64,14 +63,15 @@ export default function BulletinBoard() {
   const goDetailPage = (mbti: string): void => {
     nav(`/board/${mbti}`);
   };
-  const showModal = (id: string, like: number): void => {
+  const showModal = (id: string): void => {
     setSelectedId(id);
-    setSelectedLike(like);
     setOpenCardModal(true);
+    document.body.style.overflow = "hidden";
   };
   const closeModal = (): void => {
     setOpenCardModal(false);
     getPostings();
+    document.body.style.overflow = "unset";
   };
 
   //게시글 작성 날짜 양식-> *일 전으로 변경
@@ -88,6 +88,7 @@ export default function BulletinBoard() {
     return days === 1 ? "1" : `${days}`;
   };
 
+  //게시글 get요청
   async function getPostings() {
     try {
       const response: resData<board[]> = await axiosRequest.requestAxios<
@@ -112,12 +113,18 @@ export default function BulletinBoard() {
   const handleThisConfirm = () => {
     const mbti = mbtiType.reduce((acc, cur) => acc + cur);
     goDetailPage(mbti);
+    setOpenMbtiModal(false);
   };
 
   //Detail 페이지에 필요한 변수,메소드
 
   //파라미터 :mbti 가져오기
   const { mbti } = useParams() as { mbti: string };
+
+  //파라미터로 mbti가 전달되자마자 게시글 데이터 업데이트
+  useEffect(() => {
+    getPostings();
+  }, [mbti]);
 
   //유형별게시판과 전체게시판 구분
   const [onDetailPage, setOnDetailPage] = useState<boolean>(false);
@@ -171,27 +178,31 @@ export default function BulletinBoard() {
           onThisClose={() => setOpenBoardPost(false)}
           onThisComplete={(mbti) => {
             goDetailPage(mbti);
+            setOpenBoardPost(false);
           }}
           thisMbti={"INFP"}
         />
       ) : (
         <Board>
           {openCardModal && (
-            <BulletinCardModal
-              selectedId={selectedId}
-              closeModal={closeModal}
-            />
+            <>
+              <ModalBg onClick={() => setOpenMbtiModal(false)} />
+              <BulletinCardModal
+                selectedId={selectedId}
+                closeModal={closeModal}
+              />
+            </>
           )}
           {openMbtiModal && (
-            <>
-              <ModalBg />
+            <div>
+              <ModalBg onClick={() => setOpenMbtiModal(false)} />
               <MbtiTypesModal
                 selectMbti={mbtiType}
                 onThisMbti={handleThisMbti}
                 isButton={true}
                 onThisConfirm={handleThisConfirm}
               />
-            </>
+            </div>
           )}
           <Header>
             {onDetailPage ? (
