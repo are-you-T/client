@@ -12,6 +12,7 @@ const Card = tw.div`
   bg-white rounded-md
   w-[170px] min-h-[165px]
   cursor-pointer
+  text-gray-800
 `;
 const Header = tw.div`
   flex flex-row justify-between items-center

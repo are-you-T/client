@@ -8,7 +8,7 @@ import HeartBtn from "@/components/board/HeartBtn";
 
 const CardModalContainer = tw.div`
   h-full
-  fixed z-50 inset-0
+  fixed z-10 inset-0
   bg-black-semi-transparent
   flex justify-center items-center
   `;
@@ -87,7 +87,7 @@ export default function BulletinCardModal({
         const response: resData<board> = await axiosRequest.requestAxios<
           resData<board>
         >("get", `/board/post/${selectedId}`);
-        console.log("게시글", response.data);
+        // console.log("게시글", response.data);
         setPosting(response.data);
       } catch (error) {
         console.error(error);

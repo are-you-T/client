@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
@@ -178,27 +178,31 @@ export default function BulletinBoard() {
           onThisClose={() => setOpenBoardPost(false)}
           onThisComplete={(mbti) => {
             goDetailPage(mbti);
+            setOpenBoardPost(false);
           }}
           thisMbti={"INFP"}
         />
       ) : (
         <Board>
           {openCardModal && (
-            <BulletinCardModal
-              selectedId={selectedId}
-              closeModal={closeModal}
-            />
-          )}
-          {openMbtiModal && (
             <>
               <ModalBg />
+              <BulletinCardModal
+                selectedId={selectedId}
+                closeModal={closeModal}
+              />
+            </>
+          )}
+          {openMbtiModal && (
+            <div>
+              <ModalBg onClick={() => setOpenMbtiModal(false)} />
               <MbtiTypesModal
                 selectMbti={mbtiType}
                 onThisMbti={handleThisMbti}
                 isButton={true}
                 onThisConfirm={handleThisConfirm}
               />
-            </>
+            </div>
           )}
           <Header>
             {onDetailPage ? (
