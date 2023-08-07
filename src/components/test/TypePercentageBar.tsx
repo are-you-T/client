@@ -2,40 +2,37 @@ import React from "react";
 import tw from "tailwind-styled-components";
 
 interface testResultBar {
-  title: string;
-  type1: string;
-  type2: string;
-  percent1: number;
-  percent2: number;
-  bar: string;
-  textColor: string;
-  barColor: string;
+  title: string,
+  textColor: string,
+  barColor: string,
+  result: any
 }
 
 export default function TypePercentageBar({
   title,
-  type1,
-  type2,
-  percent1,
-  percent2,
-  bar,
   textColor,
   barColor,
+  result,
 }: testResultBar) {
+  const key1 = Object.keys(result)[0];
+  const key2 = Object.keys(result)[1];
+  const t1 = result[key1] > result[key2] ? key1: key2;
+  const t2 = result[key1] > result[key2] ? key2: key1;
+  const num1 = result[t1];
   return (
     <Container>
       <Title>{title}</Title>
       <Main>
         <Top>
-          <span className={textColor}>{percent1}%</span>
+          <span className={textColor}>{result[t1]}%</span>
           <BarBackground>
-            <div className={`${barColor} ${bar} h-3`}></div>
+            <div className={`${barColor} h-3`} style={{width:`${num1}%`}}></div>
           </BarBackground>
-          <span>{percent2}%</span>
+          <span>{result[t2]}%</span>
         </Top>
         <Bottom>
-          <span className={textColor}>{type1}</span>
-          <span>{type2}</span>
+          <span className={textColor}>{t1}</span>
+          <span>{t2}</span>
         </Bottom>
       </Main>
     </Container>
