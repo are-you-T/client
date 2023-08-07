@@ -34,7 +34,6 @@ const Container = tw.div`
 flex
 flex-col
 items-center
-mt-10
 px-4
 text-black
 bg-white
