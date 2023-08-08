@@ -72,7 +72,7 @@ class ApexChartForm extends React.Component<ApexChartFormProps> {
       return (
         <>
           <Character bgcolor={"#00B26E"} gcolor={"#FFA8DF"} />
-          <Title>nodata</Title>
+          <Title>No data</Title>
         </>
       );
     const seriesData = [{ data: series }];
@@ -198,7 +198,7 @@ font-bold
 text-6xl
 text-center
 pb-[60px]
-text-[#fff]
+text-[#000]
 bg-[#00B26E]
 `;
 
