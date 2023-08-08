@@ -11,7 +11,7 @@
 ## 페르소나
 ![페르소나 (2)](https://github.com/are-you-T/client/assets/87935496/3adae08a-34ed-41ea-b7e2-ed64d4e1ba99)
 <br />
-💡차정언(24세): "나의 MBTI 유형에 대한 사람들의 생각이 궁금해!"
+💡차언정(24세): "나의 MBTI 유형에 대한 사람들의 생각이 궁금해!"
 
 ## 기능 구현 리스트
 
@@ -176,6 +176,7 @@ MBTI 유형 카테고리를 수정할 수 있는 버튼이고 클릭 시 MBTI �
 |  Tailwind CSS   |  node.js   |  Vercel   |
 |  daisyUI   |   express.js   |  CloudType   |
 |  React.js   |  mongodb   |     |
+|  Tailwind-styled-component   |     |     |
 |  TypeScript   |     |     |
 |  ApexCharts.js   |     |    |
 
