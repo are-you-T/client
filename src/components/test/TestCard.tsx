@@ -41,7 +41,6 @@ ease-in
 duration-200
 hover:-translate-y-1
 active:translate-y+1
-active:bg-violet-400
 
 select-none
 relative
