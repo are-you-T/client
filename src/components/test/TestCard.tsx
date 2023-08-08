@@ -36,7 +36,6 @@ rounded-2xl
 bg-white
 
 [@media(hover:hover){&:hover}]:bg-violet-400
-[@media(hover:hover){&:hover}]:text-white
 [@media(hover:hover){&:hover}]:border-transparent
 [@media(hover:hover){&:hover}]:-translate-y-1
 active:translate-y+1
@@ -49,6 +48,7 @@ animate-testComponent
 `;
 
 const TestcardText = tw.p`
+[@media(hover:hover){&:hover}]:text-white	
 ml-2
 text-black
 `;
