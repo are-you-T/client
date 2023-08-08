@@ -128,8 +128,8 @@ export default function Stats() {
           .map((item: stats) => ({ x: item.name, y: item.count }))
           .filter((item) => item.y !== 0)
           .sort((a, b) => b.y - a.y);
-        setData([]); //데이터가 빈 값일때 테스트용
-        // setData(scaledData);
+        // setData([]); //데이터가 빈 값일때 테스트용
+        setData(scaledData);
         setTimeout(() => {
           setIsLoading(false);
         }, 500);
