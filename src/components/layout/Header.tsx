@@ -57,7 +57,7 @@ export default function Head() {
             </Link>
             <SideBarFooter>
               <SideBarFooterContent>AYT Company</SideBarFooterContent>
-              <SideBarFooterContent className="pointer-events-auto">
+              <SideBarFooterContent className="pointer-events-auto text-black">
                 <a
                   href="https://github.com/are-you-T"
                   target="_blank"
