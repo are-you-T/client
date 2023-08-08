@@ -66,12 +66,9 @@ class ApexChartForm extends React.Component<ApexChartFormProps> {
       x.setAttribute("stroke", "#000");
       x.setAttribute("strokeWidth", "8");
     });
-    console.log("componentDidMount");
   }
   render() {
     const { options, series, height } = this.props;
-
-    console.log("render");
     if (!series.length)
       return (
         <>
@@ -142,7 +139,6 @@ export default function Stats() {
           setIsLoading(false);
         }, 500);
       } catch (error) {
-        console.log(error);
       }
     };
     fetchData();
