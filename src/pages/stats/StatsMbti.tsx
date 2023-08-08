@@ -66,7 +66,7 @@ function Footer({ mbtiType }: { mbtiType: string | undefined }) {
 }
 
 function ChartItem({ data }: { data: QuestionItem }) {
-    const { selection } = data;
+    const { idx, subject, answer, selection } = data;
 
     const [leftType, rightType] = Object.keys(selection);
     const [leftValue, rightValue] = Object.values(selection);
@@ -118,17 +118,20 @@ function ChartItem({ data }: { data: QuestionItem }) {
     };
 
     const displaySeries: ApexAxisChartSeries = [
-        {
-            name: leftType,
-            data: [leftValue]
-        },
-        {
-            name: rightType,
-            data: [rightValue]
-        }
+        { name: leftType, data: [leftValue] },
+        { name: rightType, data: [rightValue] }
     ];
 
-    return <Chart type='bar' options={chartOptions} series={displaySeries} height={100} />;
+    return (
+        <li>
+            <p>{idx}. {subject}</p>
+            <Chart type='bar' options={chartOptions} series={displaySeries} height={100} />
+            <ul className="mb-[50px] mt-[-30px] ml-[45px] list-disc">
+                <li>{leftType} : {answer[leftType]}</li>
+                <li>{rightType} : {answer[rightType]}</li>
+            </ul>
+        </li>
+    ); 
 }
 
 function StatsMbti() {
@@ -258,12 +261,7 @@ function StatsMbti() {
                             </div>
                             <section>
                                 <ChartList className='mt-[40px]'>
-                                    {stats.mbtiData.map((data) =>
-                                        <li key={data.idx}>
-                                            <p>{data.idx}. {data.subject}</p>
-                                            <ChartItem data={data} />
-                                        </li>
-                                    )}
+                                    {stats.mbtiData.map((data) => <ChartItem key={data.idx} data={data} />)}
                                 </ChartList>
                             </section>
                             <Footer mbtiType={currMbti} />
