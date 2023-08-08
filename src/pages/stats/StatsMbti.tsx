@@ -133,13 +133,13 @@ function ChartItem({ data }: IProps) {
 
 function StatsMbti() {
     const navigate = useNavigate();
-    const { mbti } = useParams();
+    const { mbti: currMbti } = useParams();
     const [isLoading, setIsLoading] = useState(false);
     const [stats, setStats] = useState<ResponseMbtiStats['data']>(null);
 
     // 모달 관련
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [mbtiType, setMbtiType] = useState(mbti?.toUpperCase().split(""));
+    const [mbtiType, setMbtiType] = useState(currMbti?.toUpperCase().split(""));
 
     const handleMbtiType = useCallback((value: string[]) => setMbtiType(value), []);
 
@@ -147,8 +147,7 @@ function StatsMbti() {
         setIsOpenModal(false);
 
         if (mbtiType) {
-            const mbti = mbtiType.join('').toLowerCase();
-            navigate(`/stats/${mbti}`);
+            navigate(`/stats/${mbtiType.join("")}`);
         }
     };
 
@@ -182,7 +181,7 @@ function StatsMbti() {
         try {
             const { data } = await axiosReq.requestAxios<resData<MbtiStatsByType>>(
                 'get', 
-                `/stats/basic/${mbti?.toUpperCase()}`
+                `/stats/basic/${currMbti?.toUpperCase()}`
             );
 
             const filteredStats = filterStats(data);
@@ -196,9 +195,9 @@ function StatsMbti() {
 
     useEffect(() => {
         fetchStats();
-    }, [mbti]);
+    }, [currMbti]);
 
-    if (!mbti) {
+    if (!currMbti) {
         navigate('/');
     }
 
@@ -212,7 +211,7 @@ function StatsMbti() {
                     <h2 className='mb-8 text-6xl text-black font-bold'>No data</h2> 
                     <div className="btns flex flex-col text-3xl text-black font-bold w-full m-auto">
                         <FooterBtn to="/stats">MBTI 통계</FooterBtn>
-                        <FooterBtn to="/board">담벼락 바로가기</FooterBtn>
+                        <FooterBtn to={`/board/${currMbti}`}>담벼락 바로가기</FooterBtn>
                     </div>
                 </div>
             </Container>
@@ -272,7 +271,7 @@ function StatsMbti() {
                             </section>
                             <div className="btns flex flex-col text-3xl text-black font-bold w-full m-auto">
                                 <FooterBtn to="/stats">MBTI 통계</FooterBtn>
-                                <FooterBtn to="/board">담벼락 바로가기</FooterBtn>
+                                <FooterBtn to={`/board/${currMbti}`}>담벼락 바로가기</FooterBtn>
                             </div>
                         </>
                     )
