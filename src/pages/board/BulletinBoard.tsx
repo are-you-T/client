@@ -76,7 +76,7 @@ export default function BulletinBoard() {
 
   //게시글 작성 날짜 양식-> *일 전으로 변경
   const calculateDaysDiff = (date: Date): number => {
-    //서버 저장되는 시간이 한국표준시임
+    //서버 저장되는 시간이 (한국표준시Z)의 형태임
     //Date()를 거치면 원래는 UTC -> local시간으로 되는 건데
     //한국표준시를 인자로 넣었기 때문에 한국표준시보다 +9시간 차이가 나게 된다.
     //리팩토링 시 서버에 저장되는 시간을 UTC로 바꾸면 메서드의 용도에 맞고 이해가 쉬울 듯 하다.
