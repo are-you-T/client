@@ -87,4 +87,5 @@ cursor-pointer
 
 const FooterText = tw.div`
   text-vxs
+  text-black
 `;
