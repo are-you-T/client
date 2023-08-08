@@ -34,13 +34,14 @@ cursor-pointer
 text-left
 rounded-2xl
 bg-white
-hover:bg-violet-400
-hover:text-white
-hover:border-transparent
+
+[@media(hover:hover){&:hover}]:bg-violet-400
+[@media(hover:hover){&:hover}]:text-white
+[@media(hover:hover){&:hover}]:border-transparent
+[@media(hover:hover){&:hover}]:-translate-y-1
+active:translate-y+1
 ease-in
 duration-200
-hover:-translate-y-1
-active:translate-y+1
 
 select-none
 relative
