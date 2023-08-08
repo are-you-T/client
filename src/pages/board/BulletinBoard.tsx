@@ -121,8 +121,9 @@ export default function BulletinBoard() {
   );
   const handleThisConfirm = () => {
     const mbti = mbtiType.reduce((acc, cur) => acc + cur);
-    goDetailPage(mbti);
     setOpenMbtiModal(false);
+    setOnDetailPage(true);
+    goDetailPage(mbti);
   };
 
   //Detail 페이지에 필요한 변수,메소드
