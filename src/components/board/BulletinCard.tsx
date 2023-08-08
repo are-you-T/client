@@ -64,7 +64,7 @@ interface BulletinCardProps {
   category: string;
   color: string;
   like: number;
-  createdAt: string;
+  createdAt: number;
 }
 export default function BulletinCard({
   id,
@@ -76,6 +76,15 @@ export default function BulletinCard({
   like,
   createdAt,
 }: BulletinCardProps) {
+  //날짜 계산
+  const calculateDate = (createdAt: number): string => {
+    if (createdAt === 0) {
+      return "오늘";
+    } else {
+      return `${createdAt}일 전`;
+    }
+  };
+
   return (
     <Card id={id} style={{ backgroundColor: color }}>
       <div onClick={() => showModal(id)}>
@@ -86,7 +95,7 @@ export default function BulletinCard({
 
         <Main>
           <Content>{content}</Content>
-          <Date>{createdAt}일 전</Date>
+          <Date>{calculateDate(createdAt)}</Date>
         </Main>
       </div>
 

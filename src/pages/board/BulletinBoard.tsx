@@ -22,7 +22,7 @@ const Header = tw.div`
   flex flex-row justify-between items-center
   mt-4 mb-7 
 `;
-const Mbti = tw.div`
+const MbtiTitle = tw.div`
  flex flex-row items-center gap-3
 `;
 const Title = tw.div`
@@ -75,17 +75,26 @@ export default function BulletinBoard() {
   };
 
   //게시글 작성 날짜 양식-> *일 전으로 변경
-  const calculateDaysDiff = (dateString: Date): string => {
-    const pastDate: Date = new Date(dateString);
-    const currentDate: Date = new Date();
+  const calculateDaysDiff = (date: Date): number => {
+    //서버 저장되는 시간이 한국표준시임
+    //Date()를 거치면 원래는 UTC -> local시간으로 되는 건데
+    //한국표준시를 인자로 넣었기 때문에 한국표준시보다 +9시간 차이가 나게 된다.
+    //리팩토링 시 서버에 저장되는 시간을 UTC로 바꾸면 메서드의 용도에 맞고 이해가 쉬울 듯 하다.
+    const pastDate: Date = new Date(date); //local(한국표준시 +9시간)
+    const currentDate: Date = new Date(); //local(한국표준시)
 
-    pastDate.setHours(0, 0, 0, 0);
-    currentDate.setHours(0, 0, 0, 0);
+    //local시간 ->UTC로 바꾸는 명령어 :한국표준시 -9시간
+    const pastLocalDate = pastDate.getUTCDate(); //작성시 local(한국표준시)
+    const currentLocalDate = currentDate.getDate(); //현재 local(한국표준시)
 
-    const diffInMilliseconds: number = Number(currentDate) - Number(pastDate);
-    const days: number = diffInMilliseconds / (1000 * 60 * 60 * 24);
+    const diffInDate: number = currentLocalDate - pastLocalDate;
 
-    return days === 1 ? "1" : `${days}`;
+    // console.log("서버시간", date);
+    // console.log("작성날짜", pastDate, pastLocalDate);
+    // console.log("현재날짜", currentDate, currentLocalDate);
+    // console.log("날짜 차이", diffInDate);
+
+    return diffInDate;
   };
 
   //게시글 get요청
@@ -203,10 +212,10 @@ export default function BulletinBoard() {
           )}
           <Header>
             {onDetailPage ? (
-              <Mbti>
+              <MbtiTitle>
                 <Title>{mbti}</Title>
                 <MbtiColorChip selectedMbti={mbti} />
-              </Mbti>
+              </MbtiTitle>
             ) : (
               <Title>MBTI 담벼락</Title>
             )}
