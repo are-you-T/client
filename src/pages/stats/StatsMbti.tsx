@@ -28,15 +28,6 @@ interface MbtiStatsByType {
     mbtiData: QuestionItem[];
 }
 
-interface ResponseMbtiStats {
-    error: string | null;
-    data: MbtiStatsByType | null;
-}
-
-interface IProps {
-    data: QuestionItem;
-}
-
 const Container = tw.main`
     container
     bg-black
@@ -65,7 +56,16 @@ const ChartList = styled.ol`
     }
 `;
 
-function ChartItem({ data }: IProps) {
+function Footer({ mbtiType }: { mbtiType: string | undefined }) {
+    return (
+        <div className="btns flex flex-col text-3xl text-black font-bold w-full m-auto">
+            <FooterBtn to="/stats">MBTI 통계</FooterBtn>
+            <FooterBtn to={`/board/${mbtiType}`}>담벼락 바로가기</FooterBtn>
+        </div>
+    );
+}
+
+function ChartItem({ data }: { data: QuestionItem }) {
     const { selection } = data;
 
     const [leftType, rightType] = Object.keys(selection);
@@ -135,7 +135,7 @@ function StatsMbti() {
     const navigate = useNavigate();
     const { mbti: currMbti } = useParams();
     const [isLoading, setIsLoading] = useState(false);
-    const [stats, setStats] = useState<ResponseMbtiStats['data']>(null);
+    const [stats, setStats] = useState<MbtiStatsByType | null>(null);
 
     // 모달 관련
     const [isOpenModal, setIsOpenModal] = useState(false);
@@ -209,10 +209,7 @@ function StatsMbti() {
                 <Character bgcolor={"#00B26E"} gcolor={"#FFA8DF"} />
                 <div className='bg-[#00B26E] p-[20px] text-center'>
                     <h2 className='mb-8 text-6xl text-black font-bold'>No data</h2> 
-                    <div className="btns flex flex-col text-3xl text-black font-bold w-full m-auto">
-                        <FooterBtn to="/stats">MBTI 통계</FooterBtn>
-                        <FooterBtn to={`/board/${currMbti}`}>담벼락 바로가기</FooterBtn>
-                    </div>
+                    <Footer mbtiType={currMbti} />
                 </div>
             </Container>
         );
@@ -269,10 +266,7 @@ function StatsMbti() {
                                     )}
                                 </ChartList>
                             </section>
-                            <div className="btns flex flex-col text-3xl text-black font-bold w-full m-auto">
-                                <FooterBtn to="/stats">MBTI 통계</FooterBtn>
-                                <FooterBtn to={`/board/${currMbti}`}>담벼락 바로가기</FooterBtn>
-                            </div>
+                            <Footer mbtiType={currMbti} />
                         </>
                     )
                 }
