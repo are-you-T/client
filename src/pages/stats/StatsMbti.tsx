@@ -29,7 +29,6 @@ interface MbtiStatsByType {
 }
 
 const Container = tw.main`
-    container
     bg-black
     text-white
     p-[20px]
@@ -188,7 +187,7 @@ function StatsMbti() {
             );
 
             const filteredStats = filterStats(data);
-            setStats(filteredStats);
+            // setStats(filteredStats);
         } catch (error) {
             alert("데이터를 받아오던 중 에러가 발생했습니다.");
         } finally {
@@ -208,9 +207,9 @@ function StatsMbti() {
 
     if (!stats) {
         return (
-            <Container className='p-0 pt-16'>
+            <Container className='p-0 pt-16 flex flex-col justify-end'>
                 <Character bgcolor={"#00B26E"} gcolor={"#FFA8DF"} />
-                <div className='bg-[#00B26E] p-[20px] text-center'>
+                <div className='bg-[#00B26E] p-[20px] text-center grow'>
                     <h2 className='mb-8 text-6xl text-black font-bold'>No data</h2> 
                     <Footer mbtiType={currMbti} />
                 </div>
