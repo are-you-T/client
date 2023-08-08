@@ -277,11 +277,11 @@ text-black
 `;
 
 const ModalWrap = tw.div`
-bg-white rounded-t-3xl p-8 text-black absolute bottom-0 left-1/2 -translate-x-1/2 w-[390px] m-auto
+bg-white rounded-t-3xl p-8 text-black fixed bottom-0 left-1/2 -translate-x-1/2 w-[390px] m-auto
 `;
 
 const ModalWrapCenter = tw.div`
-bg-white rounded-3xl p-8 text-black absolute left-1/2 top-1/2 -translate-x-1/2 w-[370px] m-auto
+bg-white rounded-3xl p-8 text-black fixed left-1/2 top-1/2 -translate-x-1/2 w-[370px] m-auto
 `;
 
 const SelectColors = tw(SpanColor)`

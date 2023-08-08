@@ -3,7 +3,7 @@ import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
 const ModalBg = tw.div`
-w-[390px] absolute top-0 left-1/2 -translate-x-1/2 h-full backdrop-blur-sm bg-black/[.3]
+w-[390px] fixed top-0 left-1/2 -translate-x-1/2 h-full backdrop-blur-sm bg-black/[.3]
 `;
 
 export { ModalBg };
@@ -164,7 +164,7 @@ function MbtiTypesModal({
 export default MbtiTypesModal;
 
 const ModalWrap = tw.div`
-bg-white rounded-t-3xl p-8 text-black absolute bottom-0 left-1/2 -translate-x-1/2 w-[390px] m-auto z-10
+bg-white rounded-t-3xl p-8 text-black fixed bottom-0 left-1/2 -translate-x-1/2 w-[390px] m-auto z-10
 `;
 
 const ActiveList = styled.li`
@@ -208,4 +208,3 @@ const Toggle = styled.div`
     left: calc(50% - 10px);
   }
 `;
-
