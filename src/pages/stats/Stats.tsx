@@ -64,7 +64,6 @@ class ApexChartForm extends React.Component<ApexChartFormProps> {
     let data = document.querySelectorAll(".apexcharts-treemap-rect");
     data?.forEach((x) => {
       x.setAttribute("stroke", "#000");
-      x.setAttribute("strokeWidth", "8");
     });
   }
   render() {
@@ -117,10 +116,6 @@ export default function Stats() {
   const navigate = useNavigate();
   const mbti = mbtiType.join("");
 
-  //로딩컴포넌트
-  // const { isLoading } = this.state;
-  // if (isLoading) return <LoadingIndicator />;
-
   //api호출
   useEffect(() => {
     const fetchData = async () => {
@@ -139,6 +134,7 @@ export default function Stats() {
           setIsLoading(false);
         }, 500);
       } catch (error) {
+        alert("데이터를 받아오던 중 에러가 발생했습니다.");
       }
     };
     fetchData();
@@ -192,7 +188,6 @@ const Secton = tw.section`
 
 const StyledApexChart = tw.div`
   w-full
-  
   bg-black
   rounded-2xl
   stroke-10
