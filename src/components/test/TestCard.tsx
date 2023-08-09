@@ -34,11 +34,17 @@ cursor-pointer
 text-left
 rounded-2xl
 bg-white
+text-black
 
 [@media(hover:hover){&:hover}]:bg-violet-400
 [@media(hover:hover){&:hover}]:border-transparent
 [@media(hover:hover){&:hover}]:-translate-y-1
+[@media(hover:hover){&:hover}]:text-white	
+
 active:translate-y+1
+active:bg-purple-400
+active:text-white
+
 ease-in
 duration-200
 
@@ -48,7 +54,5 @@ animate-testComponent
 `;
 
 const TestcardText = tw.p`
-[@media(hover:hover){&:hover}]:text-white	
 ml-2
-text-black
 `;
