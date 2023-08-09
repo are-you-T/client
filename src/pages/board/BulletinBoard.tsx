@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import tw from "tailwind-styled-components";
+import styled from "styled-components";
 import axiosRequest from "@/api/index";
 import { resData, board } from "@/interfaces/index";
 
@@ -12,6 +13,14 @@ import BoardPost from "@/components/board/BoardPost";
 import MbtiTypesModal, { ModalBg } from "@/components/common/MbtiTypesModal";
 import MbtiColorChip from "@/components/board/MbtiColorChip";
 
+const Main = styled.div`
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  width: 100%;
+  overflow: auto;
+  padding-bottom: 71px;
+`;
 const Board = tw.div`
   flex flex-col
   h-screen w-[390px] bg-black
@@ -29,10 +38,6 @@ const Title = tw.div`
   text-[43px] leading-[51px]  font-bold text-white
 `;
 
-const Main = tw.div`
-  w-full overflow-auto
-  pb-[71px]
-`;
 const BulletinCardWrap = tw.div`
   flex flex-wrap justify-start gap-[15px]
   mx-auto

@@ -5,7 +5,6 @@ import axiosRequest from "@/api/index";
 import { resData, board } from "@/interfaces/index";
 
 import HeartBtn from "@/components/board/HeartBtn";
-import OptionBtn from "@/components/board/OptionBtn";
 
 const Card = tw.div`
   flex flex-col
@@ -84,10 +83,10 @@ export default function BulletinCard({
   createdAt,
 }: BulletinCardProps) {
   //내용 글자수 제한
-  const strLimit: number = 28;
-  const toggleEllipsis = (str: string): string => {
-    if (str.length > strLimit) {
-      return str.slice(0, strLimit) + "...";
+
+  const toggleEllipsis = (str: string, limit: number) => {
+    if (str.length > limit) {
+      return str.slice(0, limit) + "...";
     } else {
       return str;
     }
@@ -106,12 +105,11 @@ export default function BulletinCard({
     <Card id={id} style={{ backgroundColor: color }}>
       <div onClick={() => showModal(id)}>
         <Header>
-          <Title>{title}</Title>
-          <OptionBtn />
+          <Title>{toggleEllipsis(title, 8)}</Title>
         </Header>
 
         <Main>
-          <Content>{toggleEllipsis(content)}</Content>
+          <Content>{toggleEllipsis(content, 29)}</Content>
         </Main>
       </div>
 
