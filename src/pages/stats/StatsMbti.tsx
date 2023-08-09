@@ -77,7 +77,6 @@ const chartOptions: ApexOptions = {
 const Container = styled.main<{ isOpenModal?: boolean }>`
     margin: auto;
     padding: 20px;
-    position: relative;
     width: 390px;
     min-height: calc(100vh - 170px);
     color: white;
@@ -86,8 +85,8 @@ const Container = styled.main<{ isOpenModal?: boolean }>`
     ${({ isOpenModal }) => 
         isOpenModal && 
         css`
+            position: relative;
             overflow-y: hidden;
-            height: calc(100vh - 170px);
     `}
 `;
 
@@ -164,6 +163,12 @@ function StatsMbti() {
     const [mbtiType, setMbtiType] = useState(currMbti?.toUpperCase().split(""));
 
     const handleMbtiType = useCallback((value: string[]) => setMbtiType(value), []);
+
+    const handleModal = ({ currentTarget, target }: React.MouseEvent<HTMLDivElement>) => {
+        if (currentTarget === target) {
+            setIsOpenModal(false);
+        }
+    }
 
     const onChangeMbtiType = () => {
         setIsOpenModal(false);
@@ -262,7 +267,10 @@ function StatsMbti() {
             <Footer mbtiType={currMbti} />
             {
                 isOpenModal &&
-                <div className='mt-[-20px] ml-[-20px] bottom-0 absolute w-[390px] backdrop-blur-sm h-full'>
+                <div 
+                    className='fixed top-0 left-0 w-full h-full bg-black bg-black/[.3] backdrop-blur-sm z-50 flex items-center justify-center'
+                    onClick={handleModal}
+                >
                     <MbtiTypesModal
                         selectMbti={mbtiType || []}
                         onThisMbti={handleMbtiType}
