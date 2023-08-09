@@ -97,12 +97,9 @@ export default function BulletinCardModal({
 
   //날짜 양식 맞추기
   const changeDateFormat = (date: Date): string => {
+    // console.log(date);
     if (date) {
-      const dateString: string = date
-        .toString()
-        .substring(0, 10)
-        .replace(/-/g, ".");
-      return dateString;
+      return date.toString().substring(0, 10).replace(/-/g, ".");
     }
     return "";
   };
