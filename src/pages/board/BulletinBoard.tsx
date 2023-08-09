@@ -197,7 +197,7 @@ export default function BulletinBoard() {
             setOnDetailPage(true);
             goDetailPage(mbti);
           }}
-          thisMbti={onDetailPage ? mbti : "INFP"}
+          thisMbti={mbti ? mbti : "INFP"}
         />
       ) : (
         <Board>
@@ -219,7 +219,7 @@ export default function BulletinBoard() {
             </div>
           )}
           <Header>
-            {onDetailPage ? (
+            {mbti ? (
               <MbtiTitle>
                 <Title>{mbti}</Title>
                 <MbtiColorChip selectedMbti={mbti} />
@@ -230,9 +230,7 @@ export default function BulletinBoard() {
             <ChangeMbtiBtn setOpenMbtiModal={setOpenMbtiModal} />
           </Header>
           <Main>
-            <BulletinCardWrap>
-              {onDetailPage ? boardDetail : boardAll}
-            </BulletinCardWrap>
+            <BulletinCardWrap>{mbti ? boardDetail : boardAll}</BulletinCardWrap>
           </Main>
           <Footer>
             <PostBtn setOpenBoardPost={setOpenBoardPost} />
