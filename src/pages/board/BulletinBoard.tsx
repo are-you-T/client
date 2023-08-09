@@ -192,11 +192,12 @@ export default function BulletinBoard() {
         <BoardPost
           onThisClose={() => setOpenBoardPost(false)}
           onThisComplete={(mbti) => {
+            getPostings();
             setOpenBoardPost(false);
             setOnDetailPage(true);
             goDetailPage(mbti);
           }}
-          thisMbti={"INFP"}
+          thisMbti={onDetailPage ? mbti : "INFP"}
         />
       ) : (
         <Board>
