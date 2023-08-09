@@ -86,6 +86,7 @@ cursor-pointer
 // mrgin right
 
 const FooterText = tw.div`
-  text-vxs
+  text-xs
   text-black
+
 `;
