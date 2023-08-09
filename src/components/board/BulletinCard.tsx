@@ -100,10 +100,17 @@ export default function BulletinCard({
       return `${createdAt}일 전`;
     }
   };
-
+  // 이벤트 버블링을 막음
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
   return (
-    <Card id={id} style={{ backgroundColor: color }}>
-      <div onClick={() => showModal(id)}>
+    <Card
+      id={id}
+      style={{ backgroundColor: color }}
+      onClick={() => showModal(id)}
+    >
+      <div>
         <Header>
           <Title>{toggleEllipsis(title, 8)}</Title>
         </Header>
@@ -118,7 +125,7 @@ export default function BulletinCard({
           <Date>{calculateDate(createdAt)}</Date>
           <Divider />
         </div>
-        <FooterCol>
+        <FooterCol onClick={handleClick}>
           <Category>{category}</Category>
           <HeartBtn id={id} like={like} />
         </FooterCol>
