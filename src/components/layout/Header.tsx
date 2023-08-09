@@ -6,6 +6,7 @@ import Logo from "@/components/layout/Logo";
 
 const ScaledBsList = tw(BsList)`
 text-4xl
+text-black
 `;
 
 export default function Head() {
@@ -56,7 +57,7 @@ export default function Head() {
               </SiderBarItem>
             </Link>
             <SideBarFooter>
-              <SideBarFooterContent>AYT Company</SideBarFooterContent>
+              <SideBarFooterContent className="text-black">AYT Company</SideBarFooterContent>
               <SideBarFooterContent className="pointer-events-auto text-black">
                 <a
                   href="https://github.com/are-you-T"
