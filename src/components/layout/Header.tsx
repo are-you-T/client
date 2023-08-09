@@ -41,7 +41,7 @@ export default function Head() {
               <Logo></Logo>
             </Link>
             <Link to="/test" onClick={handleDrawerToggle}>
-              <SiderBarItem className="bg-regal-yellow">
+              <SiderBarItem className="bg-regal-yellow text-black">
                 테스트 하러가기
               </SiderBarItem>
             </Link>
@@ -57,7 +57,7 @@ export default function Head() {
             </Link>
             <SideBarFooter>
               <SideBarFooterContent>AYT Company</SideBarFooterContent>
-              <SideBarFooterContent className="pointer-events-auto">
+              <SideBarFooterContent className="pointer-events-auto text-black">
                 <a
                   href="https://github.com/are-you-T"
                   target="_blank"
@@ -107,6 +107,7 @@ h-full
 
 const DrawerToggle = tw.input`
   drawer-toggle
+  text-black
 `;
 
 const DrawerOverlay = tw.label`
