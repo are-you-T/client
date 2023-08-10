@@ -187,9 +187,6 @@
 | TypeScript                |            |           |
 | ApexCharts.js             |            |           |
 
- <br/>
-
-### 데모 영상(임시)
 
 <br />
 
@@ -209,6 +206,242 @@
 | 백민혁 | MBTI 전체 유형 통계 화면 개발   | 검사 결과에 대한 MBTI 유형별 횟수를 통계로 표시                                                                                             |
 
 <br />
+
+## 스키마 명세서
+
+<details><summary>테스트 스키마</summary>
+
+```
+  // 어떤 테스트인지? 사실 테스트는 1개만 만들 것이지만, 나중에 확장성을 위해 만든다.
+const TestSchema = new Schema({
+  name: {
+    type: String,
+    required: true
+  },
+});
+```
+
+</details>
+
+<details><summary>문항 스키마</summary>
+
+```
+// 어떤 테스트에 대한 문항인지. 사실 테스트는 1개만 만들 것이지만, 
+// 나중에 확장성을 위해 이렇게 정의한다.
+const QuestionSchema = new Schema({
+  // 문항 번호
+  idx: {
+    type: Number,
+    required: true,
+  },
+  // 문항 질문(주제)
+  subject: {
+    type: String,
+    required: true,
+  },
+  // 테스트 제목
+  parent: {
+    type: String,
+    required: true,
+    // TestSchema 참조. 테스트가 어떤 테스트인지를 판별하는 요소
+  },
+  answer: {
+		type: {
+      E: { type: String, required: false },
+      I: { type: String, required: false },
+      N: { type: String, required: false },
+      S: { type: String, required: false },
+      T: { type: String, required: false },
+      F: { type: String, required: false },
+      J: { type: String, required: false },
+      P: { type: String, required: false },
+    },
+    required: true,
+  }
+  // 어떤 mbti 판별에 대한 문항인지의 타입
+  // E, I, N, S, F, T, P, J
+  mbtiType: {
+    type: String,
+    required: true,
+  },
+  // mbtiType에 대한 답변
+  typeAnswer: {
+	  type: String,
+    required: true
+  },
+  // 중요도
+  proportion: {
+		type: Number,
+    required: true
+  }
+});
+```
+
+</details>
+
+<details><summary>게시글 스키마 (MBTI 별로 데이터 저장)</summary>
+
+```
+const BoardSchema = new Schema({
+    // 사용자 uuid (일단 보류.)
+    uuid: {
+      type: String,
+      required: false,
+    },
+    // mbti 카테고리 (16개의 mbti)
+    category: {
+      type: String,
+      required: true,
+    },
+    // 게시글 제목
+    title: {
+      type: String,
+      required: true
+    },
+    // 게시글 내용
+    content: {
+      type: String,
+      required: true,
+    },
+    color: {
+      type: String,
+      required: true,
+    },
+    // 공감
+    like: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+  },
+  {
+    collection: 'boards',
+    timestamps: { currentTime: () => new Date(new Date().getTime() + 1000 * 60 * 60 * 9) },
+  }
+});
+```
+
+</details>
+
+<details><summary>통계 스키마 (MBTI 결과에 대해 선택 결과 저장)</summary>
+
+```
+const StatisticSchema = new Schema({
+  // 특정 mbti 유형
+  mbtiType: {
+    type: String,
+    required: true,
+  },
+  // 테스트 제목
+  parent: {
+    type: String,
+    required: true,
+    // TestSchema 참조. 테스트가 어떤 테스트인지를 판별하는 요소
+  },
+  totalResponse: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  mbtiData: [
+    {
+      idx: {
+        type: Number,
+        required: true,
+      },
+      subject: {
+        type: String,
+        required: true,
+      },
+      answer: {
+        E: { type: String, required: false },
+        I: { type: String, required: false },
+        N: { type: String, required: false },
+        S: { type: String, required: false },
+        T: { type: String, required: false },
+        F: { type: String, required: false },
+        J: { type: String, required: false },
+        P: { type: String, required: false },
+      },
+      selection: {
+        E: { type: Number, required: false },
+        I: { type: Number, required: false },
+        N: { type: Number, required: false },
+        S: { type: Number, required: false },
+        T: { type: Number, required: false },
+        F: { type: Number, required: false },
+        J: { type: Number, required: false },
+        P: { type: Number, required: false },
+      },
+    },
+  ],
+});
+```
+
+</details>
+
+<details><summary>MBTI 스키마 (16개 MBTI에 대한 설명, 잘 맞는 MBTI 안 맞는 MBTI)</summary>
+
+```
+const MBTISchema = new Schema({
+	//
+  // 16개 mbti 통계 데이터
+  name: {
+		  type: String,
+      required: true
+  },
+  // 전체 mbti 비율 통계를 위한 데이터
+  count: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  // 해당 mbti에 대한 특징 요약
+  summary: {
+    type: String,
+    required: true,
+  },
+  // 해당 mbti에 대한 키워드
+  tag: {
+		type: Array,
+    required: true
+  },
+	content: {
+     // 해당 mbti에 대한 설명
+     description: {
+		     type: String,
+         required: true
+     }
+     // 잘 맞는 mbti
+	   good: {
+       // 잘 맞는 mbti 유형 1개
+		   name: {
+					type: String,
+          required: true
+	     },
+       // 이에 대한 설명 (왜 잘맞나요?)
+	     description: {
+			    type: String,
+          required: true
+	     }
+	  },
+	  bad : {
+      // 잘 안맞는 mbti 유형 1개
+			name: {
+				type: String,
+        required: true
+	    },
+      // 이에 대한 설명 (왜 잘 안맞나요?)
+	    description: {
+				type: String,
+        required: true
+	    }
+	  },
+	},
+});
+```
+
+</details>
 
 ## Collaboration Tools
 
@@ -239,6 +472,7 @@
 ## 브랜치 전략
 
 ### main - develop - feature/A
+
 
 ---
 
