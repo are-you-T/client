@@ -1,4 +1,4 @@
-export interface resMbti {
+export interface ResMbti {
   _id:string,
   name:string,
   count:number,

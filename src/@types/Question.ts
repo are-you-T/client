@@ -1,4 +1,4 @@
-export interface question {
+export interface Question {
   idx: number;
   subject: string;
   parent: string;
@@ -17,7 +17,7 @@ export interface question {
   text?: string;
 }
 
-export interface testCardProps {
+export interface TestCardProps {
   answer?: string;
   index: number;
   onClick: (choiceIndex: number) => () => void;
@@ -25,7 +25,7 @@ export interface testCardProps {
   animationStart: () => void;
 }
 
-export interface userAnswer {
+export interface UserAnswer {
   // [key: string]: string;
   mbtiType: string;
   text?: string;
@@ -34,13 +34,13 @@ export interface userAnswer {
 export interface MBTIData {
   idx: number;
   subject: string;
-  answer: userAnswer;
+  answer: UserAnswer;
   mbtiType: string;
   selected: string | number;
   proportion: number;
 }
 
-export interface userResponseProps {
+export interface UserResponseProps {
   userResponse: {
     parent: string;
     mbtiData: MBTIData[];
@@ -48,7 +48,7 @@ export interface userResponseProps {
   visible: boolean;
 }
 
-export interface questionText {
+export interface QuestionText {
   idx: number | string;
   subject: string;
   animate: boolean;

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import { ReactComponent as SwitchIcon } from "@/assets/img/typeSwitch_icon.svg";
@@ -7,7 +7,7 @@ import { ReactComponent as CloseIcon } from "@/assets/img/close_icon.svg";
 import { ReactComponent as CheckIcon } from "@/assets/img/check_icon.svg";
 import MbtiTypesModal, { ModalBg } from "@/components/common/MbtiTypesModal";
 import axiosRequest from "@/api";
-import { resData, boardPost } from "@/interfaces";
+import { ResData, BoardPostData } from "@/@types";
 
 // 모달 배경부분(ModalBg) 클릭하면 모달창이 꺼지고 모달컴포넌트 안에서 선택된 state값들을 부모(BoardPost)에게 보내줌
 
@@ -89,7 +89,7 @@ function AlertModal({ error }: { error: string }) {
 }
 
 // 게시글 작성
-function BoardPost({
+export default function BoardPost({
   onThisClose,
   onThisComplete,
   thisMbti,
@@ -115,7 +115,7 @@ function BoardPost({
   async function postData() {
     const { title, content } = newPost;
 
-    await axiosRequest.requestAxios<resData<boardPost>>("post", "/board", {
+    await axiosRequest.requestAxios<ResData<BoardPostData>>("post", "/board", {
       category: mbtiType.join(""),
       title: title,
       content: content,
@@ -234,8 +234,6 @@ function BoardPost({
     </Container>
   );
 }
-
-export default BoardPost;
 
 const Container = tw.main`
 h-full

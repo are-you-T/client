@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import styled from "styled-components";
 import axiosRequest from "@/api/index";
-import { resData, board } from "@/interfaces/index";
+import { ResData, Board } from "@/@types/index";
 
 import BulletinCard from "@/components/board/BulletinCard";
 import BulletinCardModal from "@/components/board/BulletinCardModal";
@@ -21,7 +21,7 @@ const Main = styled.div`
   overflow: auto;
   padding-bottom: 71px;
 `;
-const Board = tw.div`
+const BoardDiv = tw.div`
   flex flex-col
   h-screen w-[390px] bg-black
   px-[17px] mx-auto
@@ -60,7 +60,7 @@ export default function BulletinBoard() {
   const [selectedId, setSelectedId] = useState<string>("");
 
   //전체 게시글
-  const [postings, setPostings] = useState<board[]>([]);
+  const [postings, setPostings] = useState<Board[]>([]);
   //게시글 작성 모달 상태
   const [openBoardPost, setOpenBoardPost] = useState<boolean>(false);
   //게시글 작성완료시 유형별 게시판페이지로 이동
@@ -105,8 +105,8 @@ export default function BulletinBoard() {
   //게시글 get요청
   async function getPostings() {
     try {
-      const response: resData<board[]> = await axiosRequest.requestAxios<
-        resData<board[]>
+      const response: ResData<Board[]> = await axiosRequest.requestAxios<
+        ResData<Board[]>
       >("get", mbti ? `/board/${mbti}` : "/board");
       // console.log("전체게시글", response.data);
       setPostings(response.data);
@@ -200,7 +200,7 @@ export default function BulletinBoard() {
           thisMbti={mbti ? mbti : "INFP"}
         />
       ) : (
-        <Board>
+        <BoardDiv>
           {openCardModal && (
             <BulletinCardModal
               selectedId={selectedId}
@@ -235,7 +235,7 @@ export default function BulletinBoard() {
           <Footer>
             <PostBtn setOpenBoardPost={setOpenBoardPost} />
           </Footer>
-        </Board>
+        </BoardDiv>
       )}
     </>
   );

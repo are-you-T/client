@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 import tw from 'tailwind-styled-components';
 import { ApexOptions } from 'apexcharts';
 import Chart from 'react-apexcharts';
 import axiosReq from '@/api';
-import { resData } from '@/interfaces';
+import { ResData } from '@/@types';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import Character from '@/components/common/Character';
 import MbtiTypesModal from '@/components/common/MbtiTypesModal';
@@ -206,7 +206,7 @@ function StatsMbti() {
         setIsLoading(true);
 
         try {
-            const { data } = await axiosReq.requestAxios<resData<MbtiStatsByType>>(
+            const { data } = await axiosReq.requestAxios<ResData<MbtiStatsByType>>(
                 'get', 
                 `/stats/basic/${currMbti?.toUpperCase()}`
             );

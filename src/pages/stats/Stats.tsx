@@ -1,6 +1,6 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, Component } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { stats, resData } from "@/interfaces";
+import { StatsAll, ResData } from "@/@types";
 import ApexCharts from "react-apexcharts";
 import tw from "tailwind-styled-components";
 import MbtiTypesModal from "@/components/common/MbtiTypesModal";
@@ -58,7 +58,7 @@ const options: ApexCharts.ApexOptions = {
 };
 
 // 클래스 컴포넌트 생성
-class ApexChartForm extends React.Component<ApexChartFormProps> {
+class ApexChartForm extends Component<ApexChartFormProps> {
   //chart svg속성 변경
   componentDidMount(): void {
     let data = document.querySelectorAll(".apexcharts-treemap-rect");
@@ -120,12 +120,12 @@ export default function Stats() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response: resData<stats[]> = await axiosRequest.requestAxios<
-          resData<stats[]>
+        const response: ResData<StatsAll[]> = await axiosRequest.requestAxios<
+          ResData<StatsAll[]>
         >("get", "/stats");
 
         const scaledData: ChartData["data"] = response.data
-          .map((item: stats) => ({ x: item.name, y: item.count }))
+          .map((item: StatsAll) => ({ x: item.name, y: item.count }))
           .filter((item) => item.y !== 0)
           .sort((a, b) => b.y - a.y);
         // setData([]); //데이터가 빈 값일때 테스트용

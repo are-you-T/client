@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import tw from "tailwind-styled-components";
 import HashTag from "@/components/test/HashTag";
 import RelationType from "@/components/test/RelationType";
 import { Link, useLocation } from "react-router-dom";
 import axiosRequest from "@/api/index";
 import TypePercentageBars from "@/components/test/TypePercentageBars";
-import { resData, resMbti, color, resResultData } from "@/interfaces";
+import { ResData, ResMbti, Color, ResultData } from "@/@types";
 import colorData from "@/constants/bgColor";
 import Character from "@/components/common/Character";
 
 export default function TestResult() {
-  const [mbti, setMbti] = useState<resMbti>({
+  const [mbti, setMbti] = useState<ResMbti>({
     _id: "",
     name: "",
     count: 0,
@@ -33,13 +33,13 @@ export default function TestResult() {
   const location = useLocation();
   const searchParms = new URLSearchParams(location.search);
   const mbtiType: string | null = searchParms.get('mbti');
-  const colorObj: color = colorData.filter((color) => color.mbti === mbtiType)[0];
-  const resultData: resResultData | null = location.state ? location.state.resultData : null;
+  const colorObj: Color = colorData.filter((color) => color.mbti === mbtiType)[0];
+  const resultData: ResultData | null = location.state ? location.state.resultData : null;
 
   useEffect(() => {
     const getMbti = async () => {
       try {
-        const response: resData<resMbti> = await axiosRequest.requestAxios(
+        const response: ResData<ResMbti> = await axiosRequest.requestAxios(
           "get",
           `/mbti/${mbtiType}`,
           {}

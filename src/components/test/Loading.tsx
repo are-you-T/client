@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
-import { userResponseProps } from "@/interfaces/index";
+import { UserResponseProps } from "@/@types/index";
 import { useNavigate } from "react-router-dom";
 import LoadingImg from "@/components/test/LoadingImg";
 
-function Loading({ userResponse, visible }: userResponseProps) {
+function Loading({ userResponse, visible }: UserResponseProps) {
   // 애니메이션 *************************************************************
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [currentColorIndex, setCurrentColorIndex] = useState(0);
@@ -176,7 +176,7 @@ function Loading({ userResponse, visible }: userResponseProps) {
     };
 
     try {
-      const putResponse: userResponseProps = await axiosRequest.requestAxios(
+      const putResponse: UserResponseProps = await axiosRequest.requestAxios(
         "put",
         "/stats",
         updatedUserResponse

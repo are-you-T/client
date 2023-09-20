@@ -1,4 +1,4 @@
-export interface board {
+export interface Board {
   _id: string;
   category: string;
   title: string;
@@ -9,7 +9,7 @@ export interface board {
   updatedAt: Date;
 }
 
-export interface boardPost {
+export interface BoardPostData {
   category: string;
   title: string;
   content: string;

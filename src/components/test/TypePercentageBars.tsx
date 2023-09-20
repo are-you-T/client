@@ -1,10 +1,9 @@
-import React from "react";
 import TypePercentageBar from "./TypePercentageBar";
 import tw from "tailwind-styled-components";
-import { resResultData } from "@/interfaces";
+import { ResultData } from "@/@types";
 
 interface OwnProps {
-  result : Omit<resResultData,'mbtiType'>;
+  result : Omit<ResultData,'mbtiType'>;
 }
 
 export default function TypePercentageBars({result}:OwnProps) {

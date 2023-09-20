@@ -6,13 +6,13 @@ import Loading from "@/components/test/Loading";
 import LoadingIndicator from "@/components/common/LoadingIndicator";
 import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
-import { question, resData, userAnswer, MBTIData } from "@/interfaces/index";
+import { Question, ResData, UserAnswer, MBTIData } from "@/@types/index";
 
 export default function Test() {
   const [viewLoading, setViewLoading] = useState<boolean>(false);
-  const [questionList, setQuestionList] = useState<question[]>([]);
+  const [questionList, setQuestionList] = useState<Question[]>([]);
   const [userResponse, setUserResponse] = useState<MBTIData[]>([]);
-  const [currentChoiceList, setCurrentChoiceList] = useState<userAnswer[]>([]);
+  const [currentChoiceList, setCurrentChoiceList] = useState<UserAnswer[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [animate, setAnimate] = useState<boolean>(false);
 
@@ -24,8 +24,8 @@ export default function Test() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response: resData<question[]> = await axiosRequest.requestAxios<
-          resData<question[]>
+        const response: ResData<Question[]> = await axiosRequest.requestAxios<
+          ResData<Question[]>
         >("get", "/question/basic");
         setQuestionList(response.data);
       } catch (error) {

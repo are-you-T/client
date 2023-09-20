@@ -1,12 +1,11 @@
-import React from "react";
 import tw from "tailwind-styled-components";
-import { questionText } from "@/interfaces/index";
+import { QuestionText } from "@/@types/index";
 
-export default function TestQuestion({ idx, subject, animate }: questionText) {
+export default function TestQuestion({ idx, subject, animate }: QuestionText) {
   return (
     <QuestionDiv>
       <QuestionNum>{idx}</QuestionNum>
-      <QuestionText>{subject}</QuestionText>
+      <QuestionHeaderText>{subject}</QuestionHeaderText>
     </QuestionDiv>
   );
 }
@@ -29,7 +28,7 @@ mb-3
 mt-10
 `;
 
-const QuestionText = tw.h3`
+const QuestionHeaderText = tw.h3`
 text-center 
 w-80 
 text-xl 

@@ -1,5 +1,5 @@
 import tw from "tailwind-styled-components";
-import { testCardProps } from "@/interfaces/index";
+import { TestCardProps } from "@/@types/index";
 
 const TestCard = ({
   answer,
@@ -7,7 +7,7 @@ const TestCard = ({
   onClick,
   animate,
   animationStart,
-}: testCardProps) => {
+}: TestCardProps) => {
   const onClickCard = onClick(index);
   return (
     <Testcard

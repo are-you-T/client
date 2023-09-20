@@ -1,4 +1,3 @@
-import React from 'react';
 //@ts-ignore
 export default function Button({text}) {
   return (

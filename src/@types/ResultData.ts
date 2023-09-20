@@ -1,4 +1,4 @@
-export interface resResultData{
+export interface ResultData{
     awareness: {N:number, S:number},
     energy: {E:number, I:number},
     judgement: {T:number, F:number},
