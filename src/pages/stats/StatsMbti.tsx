@@ -1,14 +1,18 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { css, styled } from 'styled-components';
-import tw from 'tailwind-styled-components';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ApexOptions } from 'apexcharts';
 import Chart from 'react-apexcharts';
+
 import axiosReq from '@/api';
 import { ResData } from '@/@types';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import Character from '@/components/common/Character';
 import MbtiTypesModal from '@/components/common/MbtiTypesModal';
+import {
+    Container,
+    FooterBtn,
+    ChartList
+} from './StatsMbti.styles';
 
 interface QuestionItem {
     idx: number;
@@ -73,40 +77,6 @@ const chartOptions: ApexOptions = {
     grid: { show: false },
     legend: { show: false }
 };
-
-const Container = styled.main<{ isOpenModal?: boolean }>`
-    margin: auto;
-    padding: 20px;
-    width: 390px;
-    min-height: calc(100vh - 170px);
-    color: white;
-    background: black;
-
-    ${({ isOpenModal }) => 
-        isOpenModal && 
-        css`
-            position: relative;
-            overflow-y: hidden;
-    `}
-`;
-
-const FooterBtn = tw(Link)`
-    mb-[15px]
-    p-4
-    bg-[#FFDF3F]
-    border-solid
-    border-1
-    rounded-[50px]
-    font-bold
-    text-center
-    text-lg
-`;
-
-const ChartList = styled.ol`
-    & div[type="bar"] {
-        color: black;
-    }
-`;
 
 function ChartItem({ data }: { data: QuestionItem }) {
     const { idx, subject, answer, selection } = data;

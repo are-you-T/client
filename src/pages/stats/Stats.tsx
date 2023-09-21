@@ -1,12 +1,20 @@
 import { useState, useCallback, useRef, useEffect, Component } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { StatsAll, ResData } from "@/@types";
 import ApexCharts from "react-apexcharts";
-import tw from "tailwind-styled-components";
+
+import { StatsAll, ResData } from "@/@types";
 import MbtiTypesModal from "@/components/common/MbtiTypesModal";
 import axiosRequest from "@/api";
 import Character from "@/components/common/Character";
 import LoadingIndicator from "@/components/common/LoadingIndicator";
+import {  
+  Section,
+  StyledApexChart,
+  Title,
+  ButtonWrap,
+  Button,
+  ModalWrap
+} from './Stats.styles';
 
 interface ChartData {
   data: { x: string; y: number }[];
@@ -91,6 +99,8 @@ class ApexChartForm extends Component<ApexChartFormProps> {
 }
 
 export default function Stats() {
+  const modalRef = useRef(null);
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState("");
   const [mbtiType, setMbtiType] = useState(["I", "N", "T", "J"]);
   const [isLoading, setIsLoading] = useState(true);
@@ -102,7 +112,6 @@ export default function Stats() {
   );
 
   //모달
-  const modalRef = useRef(null);
   const handleOutsideClick = useCallback(
     (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       if (modalRef.current && modalRef.current === evt.target) {
@@ -113,7 +122,6 @@ export default function Stats() {
   );
 
   //확인버튼
-  const navigate = useNavigate();
   const mbti = mbtiType.join("");
 
   //api호출
@@ -141,7 +149,7 @@ export default function Stats() {
   }, []);
 
   return (
-    <Secton>
+    <Section>
       <h3 className="text-2xl font-bold mb-2 text-white">MBTI 통계</h3>
       <StyledApexChart>
         {isLoading && <LoadingIndicator />}
@@ -170,69 +178,6 @@ export default function Stats() {
           )}
         </ModalWrap>
       )}
-    </Secton>
+    </Section>
   );
 }
-
-//Style
-const Secton = tw.section`
-  w-[390px]
-  m-auto
-  flex
-  flex-col
-  items-center
-  bg-black
-  pt-10
-  
-`;
-
-const StyledApexChart = tw.div`
-  w-full
-  bg-black
-  rounded-2xl
-  stroke-10
-`;
-
-const Title = tw.h3`
-font-bold
-text-6xl
-text-center
-pb-[60px]
-text-[#000]
-bg-[#00B26E]
-`;
-
-const ButtonWrap = tw.div`
-  w-full
-  pb-10
-  flex
-  flex-col
-  items-center
-  justify-center
-`;
-
-const Button = tw.button`
-  w-80
-  h-16
-  bg-yellow-400
-  rounded-full
-  text-lg
-  mt-5
-  font-bold
-  text-black
-`;
-
-const ModalWrap = tw.div`
-fixed
-top-0
-left-0
-w-full
-h-full
-bg-black
-bg-black/[.3]
-backdrop-blur-sm
-z-50
-flex
-items-center
-justify-center
-`;
