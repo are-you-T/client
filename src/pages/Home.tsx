@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import tw from "tailwind-styled-components";
-
+// import tw from "tailwind-styled-components";
+import tw from "twin.macro";
 export default function Home() {
   return (
     <Background>
