@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect, Component } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ApexCharts from "react-apexcharts";
 
@@ -20,7 +20,6 @@ interface ChartData {
   data: { x: string; y: number }[];
 }
 
-// 컴포넌트 상태를 위한 인터페이스
 interface ApexChartFormProps {
   series: ChartData["data"];
   options: ApexCharts.ApexOptions;
@@ -32,7 +31,6 @@ const options: ApexCharts.ApexOptions = {
     show: false,
   },
   chart: {
-    height: 650,
     type: "treemap",
     toolbar: {
       show: false,
@@ -65,45 +63,45 @@ const options: ApexCharts.ApexOptions = {
   },
 };
 
-// 클래스 컴포넌트 생성
-class ApexChartForm extends Component<ApexChartFormProps> {
-  //chart svg속성 변경
-  componentDidMount(): void {
-    let data = document.querySelectorAll(".apexcharts-treemap-rect");
+function ApexChartForm(props: ApexChartFormProps) {
+  const { options, series, height } = props;
+
+  useEffect(() => {
+    const data = document.querySelectorAll(".apexcharts-treemap-rect");
     data?.forEach((x) => {
       x.setAttribute("stroke", "#000");
     });
-  }
-  render() {
-    const { options, series, height } = this.props;
-    if (!series.length)
-      return (
-        <>
-          <Character bgcolor={"#00B26E"} gcolor={"#FFA8DF"} />
-          <Title>No data</Title>
-        </>
-      );
-    const seriesData = [{ data: series }];
+  }, [props]);
 
-    return (
-      <div id="chart">
-        <ApexCharts
-          options={options}
-          series={seriesData}
-          type="treemap"
-          height={height}
-        />
-      </div>
-    );
-  }
+  const hasData = series && series.length > 0;
+
+  return (
+    <>
+      {hasData ? (
+          <div id="chart">
+            <ApexCharts
+              options={options}
+              series={[{ data: series }]}
+              type="treemap"
+              height={height}
+            />
+          </div>
+        ) : (
+          <>
+            <Character bgcolor={"#00B26E"} gcolor={"#FFA8DF"} />
+            <Title>No data</Title>
+          </>
+        )
+      }
+    </>
+  );
 }
 
 export default function Stats() {
-  const modalRef = useRef(null);
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState("");
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const [mbtiType, setMbtiType] = useState(["I", "N", "T", "J"]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<ChartData["data"]>([{ x: "", y: 0 }]);
 
   const handleThisMbti = useCallback(
@@ -111,71 +109,63 @@ export default function Stats() {
     []
   );
 
-  //모달
-  const handleOutsideClick = useCallback(
-    (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      if (modalRef.current && modalRef.current === evt.target) {
-        setShowModal("");
+  const handleClickModal = useCallback(
+    ({ currentTarget, target }: React.MouseEvent<HTMLDivElement>) => {
+      if (currentTarget === target) {
+        setIsOpenModal(false);
       }
     },
-    [setShowModal]
+    [setIsOpenModal]
   );
 
-  //확인버튼
   const mbti = mbtiType.join("");
 
-  //api호출
   useEffect(() => {
-    const fetchData = async () => {
+    (async () => {
       try {
-        const response: ResData<StatsAll[]> = await axiosRequest.requestAxios<
-          ResData<StatsAll[]>
-        >("get", "/stats");
+        setIsLoading(true);
+        
+        const response = await axiosRequest.requestAxios<ResData<StatsAll[]>>("get", "/stats");
 
-        const scaledData: ChartData["data"] = response.data
-          .map((item: StatsAll) => ({ x: item.name, y: item.count }))
+        const scaledData = response.data
+          .map((item) => ({ x: item.name, y: item.count }))
           .filter((item) => item.y !== 0)
           .sort((a, b) => b.y - a.y);
-        // setData([]); //데이터가 빈 값일때 테스트용
+
         setData(scaledData);
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 500);
       } catch (error) {
         alert("데이터를 받아오던 중 에러가 발생했습니다.");
+      } finally {
+        setIsLoading(false);
       }
-    };
-    fetchData();
+    })();
   }, []);
 
   return (
     <Section>
       <h3 className="text-2xl font-bold mb-2 text-white">MBTI 통계</h3>
       <StyledApexChart>
-        {isLoading && <LoadingIndicator />}
-        {!isLoading && (
-          <ApexChartForm options={options} series={data} height={650} />
-        )}
+        {isLoading ? <LoadingIndicator /> : <ApexChartForm options={options} series={data} height={650} />}
       </StyledApexChart>
       <ButtonWrap className={data.length ? "bg-[#000]" : "bg-[#00B26E]"}>
-        <Button onClick={() => setShowModal("MbtiTypesModal")}>
+        <Button onClick={() => setIsOpenModal(true)}>
           MBTI별 통계
         </Button>
-
-        <Button>
-          <Link to="/board">담벼락 바로가기</Link>
-        </Button>
+        <Link 
+          to="/board" 
+          className="flex justify-center items-center w-80 h-16 bg-yellow-400 rounded-full text-lg mt-5 font-bold text-black"
+        >
+          담벼락 바로가기
+        </Link>
       </ButtonWrap>
-      {showModal !== "" && (
-        <ModalWrap onClick={handleOutsideClick} ref={modalRef}>
-          {showModal === "MbtiTypesModal" && (
+      {isOpenModal && (
+        <ModalWrap onClick={handleClickModal}>
             <MbtiTypesModal
+              isButton
               selectMbti={mbtiType}
               onThisMbti={handleThisMbti}
-              isButton={true}
               onThisConfirm={() => navigate(`/stats/${mbti}`)}
             />
-          )}
         </ModalWrap>
       )}
     </Section>
