@@ -7,6 +7,7 @@ import MbtiTypesModal from "@/components/common/MbtiTypesModal";
 import axiosRequest from "@/api";
 import Character from "@/components/common/Character";
 import LoadingIndicator from "@/components/common/LoadingIndicator";
+import { treeOptions } from "@/constants/charts";
 import {  
   Section,
   StyledApexChart,
@@ -25,43 +26,6 @@ interface ApexChartFormProps {
   options: ApexCharts.ApexOptions;
   height: number;
 }
-
-const options: ApexCharts.ApexOptions = {
-  legend: {
-    show: false,
-  },
-  chart: {
-    type: "treemap",
-    toolbar: {
-      show: false,
-    },
-  },
-  colors: [
-    "#0272F1",
-    "#B2ACF9",
-    "#FFDF3F",
-    "#EFC7D6",
-    "#9FEEA2",
-    "#FC5013",
-    "#78D9EE",
-    "#FF9D42",
-    "#D0F102",
-    "#F9BAAC",
-    "#3FFFBA",
-    "#C7E1EF",
-    "#ECEE9F",
-    "#13FCEE",
-    "#AC78EE",
-    "#FF42B3",
-  ],
-  plotOptions: {
-    treemap: {
-      distributed: true,
-      enableShades: false,
-      useFillColorAsStroke: false,
-    },
-  },
-};
 
 function ApexChartForm(props: ApexChartFormProps) {
   const { options, series, height } = props;
@@ -118,8 +82,6 @@ export default function Stats() {
     [setIsOpenModal]
   );
 
-  const mbti = mbtiType.join("");
-
   useEffect(() => {
     (async () => {
       try {
@@ -141,11 +103,13 @@ export default function Stats() {
     })();
   }, []);
 
+  const mbti = mbtiType.join("");
+
   return (
     <Section>
       <h3 className="text-2xl font-bold mb-2 text-white">MBTI 통계</h3>
       <StyledApexChart>
-        {isLoading ? <LoadingIndicator /> : <ApexChartForm options={options} series={data} height={650} />}
+        {isLoading ? <LoadingIndicator /> : <ApexChartForm options={treeOptions} series={data} height={650} />}
       </StyledApexChart>
       <ButtonWrap className={data.length ? "bg-[#000]" : "bg-[#00B26E]"}>
         <Button onClick={() => setIsOpenModal(true)}>

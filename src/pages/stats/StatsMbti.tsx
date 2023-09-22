@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ApexOptions } from 'apexcharts';
 import Chart from 'react-apexcharts';
 
 import axiosReq from '@/api';
@@ -8,6 +7,7 @@ import { ResData } from '@/@types';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import Character from '@/components/common/Character';
 import MbtiTypesModal from '@/components/common/MbtiTypesModal';
+import { barOptions } from '@/constants/charts';
 import { ReactComponent as SwitchIcon } from "@/assets/img/typeSwitch_icon.svg";
 import {
     Container,
@@ -34,49 +34,6 @@ interface MbtiStatsByType {
     mbtiData: QuestionItem[];
 }
 
-const chartOptions: ApexOptions = {
-    chart: {
-        type: 'bar',
-        stacked: true,
-        stackType: '100%',
-        toolbar: { show: false }
-    },
-    plotOptions: {
-        bar: { horizontal: true },
-    },
-    stroke: {
-        width: 1,
-        colors: ['#fff']
-    },
-    tooltip: {
-        x: {
-            show: false
-        },
-        y: {
-            formatter: (_, { seriesIndex, w }) => {
-                const percentage = Math.round(w.globals.seriesPercent[seriesIndex]);
-                return `${percentage}%`;
-            },
-            title: {
-                formatter: (val) => `${val} : `,
-            }
-        }
-    },
-    xaxis: {
-        labels: { show: false },
-        axisBorder: { show: false },
-        axisTicks: { show: false }
-    },
-    yaxis: {
-        labels: { show: false },
-        axisBorder: { show: false },
-        axisTicks: { show: false }
-    },
-    fill: { opacity: 1 },
-    grid: { show: false },
-    legend: { show: false }
-};
-
 function ChartItem({ data }: { data: QuestionItem }) {
     const { subject, answer, selection } = data;
 
@@ -91,7 +48,7 @@ function ChartItem({ data }: { data: QuestionItem }) {
     return (
         <li className='list-inside'>
             <span>{subject}</span>
-            <Chart type='bar' options={chartOptions} series={displaySeries} width={'100%'} height={100} />
+            <Chart type='bar' options={barOptions} series={displaySeries} width={'100%'} height={100} />
             <ul className="mb-[50px] mt-[-30px] ml-[45px] list-disc">
                 <li>{leftType} : {answer[leftType]}</li>
                 <li>{rightType} : {answer[rightType]}</li>
