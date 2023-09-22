@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
+import { Question, ResData, UserAnswer, MBTIData } from "@/@types/index";
+import axiosRequest from "@/api/index";
 import TestCard from "@/components/test/TestCard";
 import TestQuestion from "@/components/test/TestQuestion";
 import ProgressBar from "@/components/test/ProgressBar";
-import Loading from "@/components/test/Loading";
+import Loading from "@/components/test/loading/Loading";
 import LoadingIndicator from "@/components/common/LoadingIndicator";
-import tw from "tailwind-styled-components";
-import axiosRequest from "@/api/index";
-import { Question, ResData, UserAnswer, MBTIData } from "@/@types/index";
+import * as S from "./Test.styles";
 
 export default function Test() {
   const [viewLoading, setViewLoading] = useState<boolean>(false);
@@ -130,7 +130,7 @@ export default function Test() {
     return <LoadingIndicator />;
   }
   return (
-    <TestPage>
+    <S.TestPage>
       <TestQuestion
         idx={String(currentIndex + 1).padStart(2, "0")}
         subject={questionList[currentIndex].subject}
@@ -156,19 +156,6 @@ export default function Test() {
         visible={viewLoading}
         userResponse={{ parent: "basic", mbtiData: userResponse }}
       />
-    </TestPage>
+    </S.TestPage>
   );
 }
-
-const TestPage = tw.section`
-flex 
-flex-col 
-items-center
-justify-center
-w-[390px] 
-h-[790.96px] 
-mx-auto 
-my-0 
-bg-black
-overflow-hidden	
-`;
