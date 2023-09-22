@@ -37,7 +37,6 @@ interface MbtiStatsByType {
 const chartOptions: ApexOptions = {
     chart: {
         type: 'bar',
-        height: "100px",
         stacked: true,
         stackType: '100%',
         toolbar: { show: false }
@@ -79,7 +78,7 @@ const chartOptions: ApexOptions = {
 };
 
 function ChartItem({ data }: { data: QuestionItem }) {
-    const { idx, subject, answer, selection } = data;
+    const { subject, answer, selection } = data;
 
     const [leftType, rightType] = Object.keys(selection);
     const [leftValue, rightValue] = Object.values(selection);
@@ -90,9 +89,9 @@ function ChartItem({ data }: { data: QuestionItem }) {
     ];
 
     return (
-        <li>
-            <p>{idx}. {subject}</p>
-            <Chart type='bar' options={chartOptions} series={displaySeries} height={100} />
+        <li className='list-inside'>
+            <span>{subject}</span>
+            <Chart type='bar' options={chartOptions} series={displaySeries} width={'100%'} height={100} />
             <ul className="mb-[50px] mt-[-30px] ml-[45px] list-disc">
                 <li>{leftType} : {answer[leftType]}</li>
                 <li>{rightType} : {answer[rightType]}</li>
@@ -196,7 +195,6 @@ function StatsMbti() {
                                 {stats.mbtiData.map((data) => <ChartItem key={data.idx} data={data} />)}
                             </ChartList>
                         </div>
-                        {/* <Footer mbtiType={currMbti} /> */}
                     </>
                 ) : <Character bgcolor="#00B26E" gcolor="#FFA8DF" />
             }

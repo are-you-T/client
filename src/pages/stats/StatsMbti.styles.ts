@@ -34,6 +34,8 @@ const Container = styled.main<{ hasData: boolean, isOpenModal: boolean }>`
 `;
 
 const ChartList = styled.ol`
+    list-style: decimal;
+    
     & div[type="bar"] {
         color: black;
     }
