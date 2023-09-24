@@ -1,18 +1,8 @@
 import { useState, useEffect } from "react";
-import tw from "tailwind-styled-components";
 import axiosRequest from "@/api/index";
 import { ResData, Board } from "@/@types/index";
 
-const Heart = tw.div`
-  flex flex-row items-center
-`;
-const HeartIcon = tw.button`
-`;
-
-const HeartCount = tw.div`
-  font-light
-  ml-[4px]
-`;
+import { Heart, HeartIcon, HeartCount } from "./HeartBtn.styles";
 
 interface HeartBtnProps {
   id: string;

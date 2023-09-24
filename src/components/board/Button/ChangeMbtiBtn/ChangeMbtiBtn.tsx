@@ -1,8 +1,4 @@
-import tw from "tailwind-styled-components";
-
-const ChangeMbti = tw.div`
-  cursor-pointer
-`;
+import { ChangeMbti } from "./ChangeMbtiBtn.styles";
 
 interface ChangeMbtiBtnProps {
   setOpenMbtiModal: (value: boolean) => void;

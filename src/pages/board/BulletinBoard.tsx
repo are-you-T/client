@@ -1,56 +1,25 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import tw from "tailwind-styled-components";
-import styled from "styled-components";
 import axiosRequest from "@/api/index";
 import { ResData, Board } from "@/@types/index";
 
-import BulletinCard from "@/components/board/BulletinCard";
-import BulletinCardModal from "@/components/board/BulletinCardModal";
-import PostBtn from "@/components/board/PostBtn";
-import ChangeMbtiBtn from "@/components/board/ChangeMbtiBtn";
+import BulletinCard from "@/components/board/BulletinCard/BulletinCard";
+import BulletinCardModal from "@/components/board/BulletinCardModal/BulletinCardModal";
+import PostBtn from "@/components/board/Button/PostBtn/PostBtn";
+import ChangeMbtiBtn from "@/components/board/Button/ChangeMbtiBtn/ChangeMbtiBtn";
 import BoardPost from "@/components/board/BoardPost";
 import MbtiTypesModal, { ModalBg } from "@/components/common/MbtiTypesModal";
-import MbtiColorChip from "@/components/board/MbtiColorChip";
+import MbtiColorChip from "@/components/board/MbtiColorChip/MbtiColorChip";
 
-const Main = styled.div`
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  width: 100%;
-  overflow: auto;
-  padding-bottom: 71px;
-`;
-const BoardDiv = tw.div`
-  flex flex-col
-  h-screen w-[390px] bg-black
-  px-[17px] mx-auto
-  relative
-`;
-const Header = tw.div`
-  flex flex-row justify-between items-center
-  mt-4 mb-7 
-`;
-const MbtiTitle = tw.div`
- flex flex-row items-center gap-3
-`;
-const Title = tw.div`
-  text-[43px] leading-[51px]  font-bold text-white
-`;
-
-const BulletinCardWrap = tw.div`
-  flex flex-wrap justify-start gap-[15px]
-  mx-auto
-`;
-
-const Footer = tw.div`
-  flex justify-center
-  w-full bg-black
-  self-end
-  pt-3 pb-3
-  absolute bottom-0 left-0 right-0
-  
-`;
+import {
+  Main,
+  BoardDiv,
+  Header,
+  MbtiTitle,
+  Title,
+  BulletinCardWrap,
+  Footer,
+} from "./BulletinBoard.styles";
 
 export default function BulletinBoard() {
   // 모달창 상태
