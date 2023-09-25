@@ -1,5 +1,4 @@
-import styled from "styled-components";
-import tw from "tailwind-styled-components";
+import tw, { styled } from "twin.macro";
 
 export const CardModalContainer = tw.div`
   h-full

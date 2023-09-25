@@ -1,4 +1,4 @@
-import tw from "tailwind-styled-components";
+import tw from "twin.macro";
 
 export const ChangeMbti = tw.div`
   cursor-pointer
