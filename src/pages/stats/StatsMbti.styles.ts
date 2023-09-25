@@ -1,5 +1,4 @@
-import styled, { css } from "styled-components";
-import tw from "tailwind-styled-components";
+import tw, { styled, css } from "twin.macro";
 
 const circularBtn = css`
     display: block;
@@ -11,50 +10,42 @@ const circularBtn = css`
 `;
 
 const Container = styled.main<{ hasData: boolean, isOpenModal: boolean }>`
-    margin: auto;
-    padding: 0;
-    width: 390px;
     min-height: calc(100vh - 170px);
-    color: white;
-    background: black;
-
-    ${({ hasData }) => 
-        !hasData &&
-        css`
-            display: flex;
-            align-items: end;
+    ${tw`
+        m-auto
+        p-0
+        w-[390px]
+        text-white
+        bg-black    
     `}
 
-    ${({ isOpenModal }) => 
-        isOpenModal && 
-        css`
-            position: relative;
-            overflow-y: hidden;
-    `}
+    ${({ hasData }) => !hasData && tw`flex items-end`}
+    ${({ isOpenModal }) => isOpenModal && tw`relative overflow-y-hidden`}
 `;
 
 const ChartList = styled.ol`
-    list-style: decimal;
+    ${tw`list-disc`}
     
     & div[type="bar"] {
-        color: black;
+        ${tw`text-black`}
     }
 `;
 
 const Footer = styled.div<{ hasData: boolean }>`
-    margin: auto;
-    padding: 20px;
-    font-size: 30px;
-    width: 100%;
-    color: black;
-    text-align: center;
-    font-weight: bold;
+    ${tw`
+        m-auto
+        p-[20px]
+        w-full
+        text-[30px]
+        text-black
+        text-center
+        font-bold
+    `}
     
-    ${({ hasData }) => !hasData && 'background-color: #00B26E;' }
+    ${({ hasData }) => !hasData && tw`bg-[#00B26E]`}
 
     > h2.no-data {
-        margin-bottom: 7.3rem;
-        font-size: 3.75rem;
+        ${tw`mb-[7.3rem] text-[3.75rem]`}
     }
 
     > a {
@@ -62,7 +53,7 @@ const Footer = styled.div<{ hasData: boolean }>`
     }
 
     > *:not(:last-child) {
-        margin-bottom: 15px;
+        ${tw`mb-[15px]`}
     }
 `;
 

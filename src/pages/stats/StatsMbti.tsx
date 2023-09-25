@@ -81,9 +81,7 @@ function StatsMbti() {
         }
     };
 
-    const filterStats = useCallback((data: MbtiStatsByType | null) => {
-        if (!data) return data;
-
+    const filterStats = useCallback((data: MbtiStatsByType) => {
         data.mbtiData.forEach((question) => {
             const { answer, selection } = question;
             const filteredData: Pick<QuestionItem, 'answer' | 'selection'> = {
@@ -107,12 +105,14 @@ function StatsMbti() {
 
     useEffect(() => {
         (async () => {
-            setIsLoading(true);
-
             try {
+                if (!currMbti) throw new Error();
+                
+                setIsLoading(true);
+
                 const { data } = await axiosReq.requestAxios<ResData<MbtiStatsByType>>(
                     'get', 
-                    `/stats/basic/${currMbti?.toUpperCase()}`
+                    `/stats/basic/${currMbti.toUpperCase()}`
                 );
     
                 const filteredStats = filterStats(data);

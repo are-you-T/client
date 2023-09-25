@@ -1,4 +1,4 @@
-import tw from "tailwind-styled-components";
+import tw from 'twin.macro';
 
 const Section = tw.section`
   w-[390px]
