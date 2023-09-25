@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 import axiosRequest from "@/api/index";
 import { ResData, Board } from "@/@types/index";
+
 import HeartBtn from "@/components/board/Button/HeartBtn/HeartBtn";
 
 import {

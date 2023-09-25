@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import axiosRequest from "@/api/index";
 import { ResData, Board } from "@/@types/index";
 
