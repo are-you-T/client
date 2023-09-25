@@ -157,8 +157,8 @@ function StatsMbti() {
             }
             <Footer hasData={!!stats}>
                 {!stats && <h2 className='no-data'>No data</h2>}
-                <Link to="/stats">MBTI 통계</Link>
-                <Link to={`/board/${currMbti}`}>담벼락 바로가기</Link>
+                <Link className='btn' to="/stats">MBTI 통계</Link>
+                <Link className='btn' to={`/board/${currMbti}`}>담벼락 바로가기</Link>
             </Footer>
             {
                 isOpenModal &&

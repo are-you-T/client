@@ -1,13 +1,4 @@
-import tw, { styled, css } from "twin.macro";
-
-const circularBtn = css`
-    display: block;
-    padding: 1rem 0;
-    background-color: #FFDF3F;
-    border: 1px solid #E5E7EB;
-    border-radius: 9999px;
-    font-size: 1.125rem;
-`;
+import tw, { styled } from "twin.macro";
 
 const Container = styled.main<{ hasData: boolean, isOpenModal: boolean }>`
     min-height: calc(100vh - 170px);
@@ -45,15 +36,22 @@ const Footer = styled.div<{ hasData: boolean }>`
     ${({ hasData }) => !hasData && tw`bg-[#00B26E]`}
 
     > h2.no-data {
-        ${tw`mb-[7.3rem] text-[3.75rem]`}
+        ${tw`mb-28 text-[3.75rem]`}
     }
 
     > a {
-        ${circularBtn}
-    }
-
-    > *:not(:last-child) {
-        ${tw`mb-[15px]`}
+        ${tw`
+            btn
+            mt-5
+            w-80
+            h-16
+            bg-yellow-400
+            border-0
+            rounded-full
+            text-lg
+            text-black
+            font-bold
+        `}
     }
 `;
 

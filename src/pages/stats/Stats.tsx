@@ -117,7 +117,7 @@ export default function Stats() {
         </Button>
         <Link 
           to="/board" 
-          className="flex justify-center items-center w-80 h-16 bg-yellow-400 rounded-full text-lg mt-5 font-bold text-black"
+          className="btn w-80 h-16 bg-yellow-400 text-lg font-bold rounded-full border-0 rounded-full mt-5 text-black"
         >
           담벼락 바로가기
         </Link>

@@ -35,12 +35,14 @@ const ButtonWrap = tw.div`
 `;
 
 const Button = tw.button`
+  btn
   w-80
   h-16
   bg-yellow-400
   rounded-full
   text-lg
   mt-5
+  border-0
   font-bold
   text-black
 `;
