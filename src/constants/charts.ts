@@ -10,6 +10,10 @@ export const treeOptions: ApexOptions = {
         show: false,
       },
     },
+    stroke: {
+      show: true,
+      colors: ['#000']
+    },
     colors: [
       "#0272F1",
       "#B2ACF9",

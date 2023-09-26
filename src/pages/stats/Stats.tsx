@@ -30,13 +30,6 @@ interface ApexChartFormProps {
 function ApexChartForm(props: ApexChartFormProps) {
   const { options, series, height } = props;
 
-  useEffect(() => {
-    const data = document.querySelectorAll(".apexcharts-treemap-rect");
-    data?.forEach((x) => {
-      x.setAttribute("stroke", "#000");
-    });
-  }, [props]);
-
   const hasData = series && series.length > 0;
 
   return (
