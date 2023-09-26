@@ -18,7 +18,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "react-jsx", // React JSX 사용 설정
   },
   "extends": "./tsconfig.paths.json"
 }

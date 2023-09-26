@@ -1,4 +1,4 @@
-import tw from "tailwind-styled-components";
+import {Container, Title, GoodType, TypeTitle, Mbti, Contents, BadType } from "./RelationType.styles";
 
 interface relation {
   good: {
@@ -28,46 +28,3 @@ export default function RelationType({ good, bad }: relation) {
     </Container>
   );
 }
-
-const Container = tw.div`
-flex
-flex-col
-items-center
-px-4
-text-black
-bg-white
-rounded-xl
-`;
-const Title = tw.h5`
-text-3xl
-font-bold
-py-6
-`;
-const GoodType = tw.div`
-mt-2
-mb-6
-bg-pink-100
-rounded-lg
-p-4
-`;
-const BadType = tw.div`
-mb-8
-bg-blue-100
-rounded-lg
-p-4
-`;
-const TypeTitle = tw.p`
-text-lg
-text-center
-font-bold
-mb-2
-`;
-const Mbti = tw.p`
-text-base
-text-center
-font-bold
-mb-2
-`;
-const Contents = tw.div`
-w-full
-`;

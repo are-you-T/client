@@ -6,4 +6,12 @@ module.exports = {
         '@': path.resolve(__dirname, 'src'),
     },
   },
+  babel: {
+    plugins: [
+      'babel-plugin-macros',
+    ],
+    presets: [
+      // Babel 프리셋
+    ],
+  },
 };
