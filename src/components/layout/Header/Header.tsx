@@ -1,14 +1,20 @@
 import { useState } from "react";
-// import tw from "tailwind-styled-components";
-import tw from "twin.macro";
-import { BsList } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Logo from "@/components/layout/Logo";
-
-const ScaledBsList = tw(BsList)`
-text-4xl
-text-black
-`;
+import {
+    Drawer,
+    DrawerButton,
+    DrawerContent,
+    DrawerOverlay,
+    DrawerSide,
+    DrawerToggle,
+    Header,
+    ScaledBsList,
+    SideBarContent,
+    SideBarFooter,
+    SideBarFooterContent,
+    SiderBarItem,
+} from "./Header.styles";
 
 export default function Head() {
     const [isChecked, setIsChecked] = useState(false);
@@ -77,89 +83,3 @@ export default function Head() {
         </Header>
     );
 }
-
-const Header = tw.header`
-  flex
-  flex-wrap
-  w-[390px]
-  m-auto
-  h-auto
-  shrink-0
-  bg-regal-purple
-  px-2.5
-  py-5
-  items-center
-  justify-between
-`;
-
-const Drawer = tw.span`
-  flex
-  w-auto
-  h-auto
-  h-9
-`;
-
-const DrawerButton = tw.label`
-  btn
-  drawer-button
-  border-none
-bg-transparent
-p-0
-min-h-0
-h-full
-`;
-
-const DrawerToggle = tw.input`
-  drawer-toggle
-  text-black
-`;
-
-const DrawerOverlay = tw.label`
-  drawer-overlay
-`;
-
-const DrawerContent = tw.div`
-  drawer-content
-  h-9
-`;
-
-const DrawerSide = tw.div`
-  drawer-side
-  z-50
-`;
-
-const SideBarContent = tw.ul`
-  menu
-  p-4
-  w-80
-  h-full
-  bg-base-200
-  text-base-content
-  bg-regal-purple
-`;
-
-const SiderBarItem = tw.li`
-  mt-9
-  btn
-  btn-wide
-  w-full
-  h-14
-  flex-shrink-0
-  rounded-full
-  shadow-lg
-  border-none
-`;
-
-const SideBarFooter = tw.li`
-  flex
-  mt-auto
-  pointer-events-none
-`;
-
-const SideBarFooterContent = tw.div`
-  self-center
-`;
-// border-radius: 100px;
-// border: 1px solid rgba(0, 0, 0, 0.00);
-// background: #000;
-// box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
