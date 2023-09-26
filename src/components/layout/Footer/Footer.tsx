@@ -1,8 +1,14 @@
-// import tw from "tailwind-styled-components";
-import tw from "twin.macro";
 import { ReactComponent as LogoSvg } from "@/assets/img/logo.svg";
 import { ReactComponent as GitHubSvg } from "@/assets/img/github.svg";
 import { ReactComponent as ShareSvg } from "@/assets/img/share.svg";
+import {
+    Footer,
+    FooterLink,
+    FooterLinkIcon,
+    FooterText,
+    FooterTextArea,
+    FooterWrap,
+} from "./Footer.styles";
 
 export default function Foot() {
     const handleShareClick = async () => {
@@ -47,50 +53,3 @@ export default function Foot() {
         </Footer>
     );
 }
-
-const Footer = tw.footer`
-  bg-regal-purple
-  w-[390px]
-  m-auto
-  p-4
-`;
-
-const FooterWrap = tw.div`
-    flex 
-    items-center
-    justify-between 
-    gap-2.5
-`;
-
-const FooterTextArea = tw.div`
-flex
-w-40
-h-12
-flex-col
-justify-center
-flex-shrink-0
-grow-[0.5]
-`;
-// flex-grow 0.8
-
-const FooterLinkIcon = tw.div`
-flex
-w-8
-flex-row
-grow-[0.5]
-gap-[0.7]
-`;
-
-// gap 0.7rem
-const FooterLink = tw.a`
-w-auto
-mr-3
-cursor-pointer
-`;
-// mrgin right
-
-const FooterText = tw.div`
-  text-xs
-  text-black
-
-`;
