@@ -7,8 +7,8 @@ import { ResData } from '@/@types';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import Character from '@/components/common/Character';
 import MbtiTypesModal from '@/components/common/MbtiTypesModal';
+import ChangeMbtiBtn from '@/components/board/ChangeMbtiBtn';
 import { barOptions } from '@/constants/charts';
-import { ReactComponent as SwitchIcon } from "@/assets/img/typeSwitch_icon.svg";
 import {
     Container,
     Footer,
@@ -140,12 +140,7 @@ function StatsMbti() {
                     <>
                         <div className="flex place-content-between items-center px-[20px] pt-[20px]">
                             <h3 className="text-5xl font-bold">{stats.mbtiType}</h3>
-                            <button 
-                                className="flex justify-center items-center bg-[#02B26E] w-14 h-14 radius rounded-full" 
-                                onClick={() => setIsOpenModal(prev => !prev)}
-                            >
-                                <SwitchIcon />
-                            </button>
+                            <ChangeMbtiBtn setOpenMbtiModal={() => setIsOpenModal(true)} />
                         </div>
                         <div className='px-[20px]'>
                             <ChartList className='mt-[40px]'>
