@@ -37,6 +37,7 @@ export default function BulletinBoard() {
   const nav = useNavigate();
   const goDetailPage = (mbti: string): void => {
     nav(`/board/${mbti}`);
+    getPostings();
   };
   const showModal = (id: string): void => {
     setSelectedId(id);
