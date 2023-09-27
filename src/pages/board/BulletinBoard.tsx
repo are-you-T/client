@@ -58,19 +58,20 @@ export default function BulletinBoard() {
     //리팩토링 시 서버에 저장되는 시간을 UTC로 바꾸면 메서드의 용도에 맞고 이해가 쉬울 듯 하다.
     const pastDate: Date = new Date(date); //local(한국표준시 +9시간)
     const currentDate: Date = new Date(); //local(한국표준시)
+    const koreaTimeDiff = 9 * 60 * 60 * 1000; //9시간
 
     //local시간 ->UTC로 바꾸는 명령어 :한국표준시 -9시간
-    const pastLocalDate = pastDate.getUTCDate(); //작성시 local(한국표준시)
-    const currentLocalDate = currentDate.getDate(); //현재 local(한국표준시)
+    const pastLocalDate = pastDate.getTime() - koreaTimeDiff; //작성시 local(한국표준시)
+    const currentLocalDate = currentDate.getTime(); //현재 local(한국표준시)
 
-    const diffInDate: number = currentLocalDate - pastLocalDate;
+    const diffDate: number = currentLocalDate - pastLocalDate;
 
-    // console.log("서버시간", date);
-    // console.log("작성날짜", pastDate, pastLocalDate);
-    // console.log("현재날짜", currentDate, currentLocalDate);
-    // console.log("날짜 차이", diffInDate);
+    console.log("서버시간", date);
+    console.log("작성날짜", pastLocalDate);
+    console.log("현재날짜", currentLocalDate);
+    console.log("날짜 차이", diffDate);
 
-    return diffInDate;
+    return Math.floor(diffDate / (1000 * 60 * 60 * 24));
   };
 
   //게시글 get요청
