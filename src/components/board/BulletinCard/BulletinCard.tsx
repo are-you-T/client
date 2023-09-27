@@ -36,8 +36,9 @@ export default function BulletinCard({
   //내용 글자수 제한
 
   const toggleEllipsis = (str: string, limit: number) => {
-    if (str.length > limit) {
-      return str.slice(0, limit) + "...";
+    const strToArr = Array.from(str);
+    if (strToArr.length > limit) {
+      return strToArr.slice(0, limit).join("") + "...";
     } else {
       return str;
     }
@@ -63,11 +64,11 @@ export default function BulletinCard({
     >
       <div>
         <Header>
-          <Title>{toggleEllipsis(title, 8)}</Title>
+          <Title>{toggleEllipsis(title, 7)}</Title>
         </Header>
 
         <Main>
-          <Content>{toggleEllipsis(content, 29)}</Content>
+          <Content>{toggleEllipsis(content, 26)}</Content>
         </Main>
       </div>
 
