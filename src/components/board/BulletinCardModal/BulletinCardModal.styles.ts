@@ -13,6 +13,7 @@ export const CardModal = tw.div`
   relative
   `;
 export const Header = tw.div`
+  h-[10%]
   flex flex-row justify-center items-center
   relative
   mb-4
@@ -28,16 +29,18 @@ export const CloseBtn = tw.button`
 export const Main = tw.div`
   flex flex-col
   px-6
+  h-[75%]
 `;
 export const Title = tw.div`
   text-xl font-medium
   mb-3.5
 `;
-export const Content = tw.div`
+export const Content = tw.pre`
+
   text-base
   overflow-auto
   flex-grow
-
+  whitespace-pre-wrap
 `;
 export const Divider = styled.div`
   height: 1px;
