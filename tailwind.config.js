@@ -27,8 +27,8 @@ module.exports = {
         "regal-purple": "#B2ACF9",
       },
       backgroundImage: {
-        main: "url('@/assets/img/main.svg')",
-        test: "url('@/assets/img/test.svg')",
+        main: `url('${process.env.REACT_APP_PUBLIC_URL}/main.svg')`,
+        test: `url('${process.env.REACT_APP_PUBLIC_URL}/test.svg')`,
       },
       fontSize: {
         vxs: "0.6rem",
