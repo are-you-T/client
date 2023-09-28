@@ -1,6 +1,8 @@
-import TypePercentageBar from "./TypePercentageBar";
-import tw from "tailwind-styled-components";
+import TypePercentageBar from "@/components/test/TestResult/TypePercentageBars/TypePercentageBar/TypePercentageBar";
+
 import { ResultData } from "@/@types";
+
+import {Container, Title} from "./TypePercentageBars.styles";
 
 interface OwnProps {
   result : Omit<ResultData,'mbtiType'>;
@@ -38,18 +40,3 @@ export default function TypePercentageBars({result}:OwnProps) {
     </Container>
   );
 }
-const Container = tw.div`
-w-full
-bg-white
-rounded-xl
-px-2
-pb-4
-mb-10
-`;
-const Title = tw.div`
-font-bold
-text-3xl
-text-black
-text-center
-py-6
-`;
