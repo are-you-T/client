@@ -1,4 +1,4 @@
-import tw from "tailwind-styled-components";
+import {Container, Title, Main, Top, BarBackground, Bottom} from "./TypePercentageBar.styles";
 
 interface testResultBar {
   title: string;
@@ -37,34 +37,3 @@ export default function TypePercentageBar({
     </Container>
   );
 }
-
-const Container = tw.div`
-text-center
-text-black
-p-2
-`;
-const Title = tw.div`
-font-bold
-text-xl
-`;
-const Main = tw.div`
-w-full
-`;
-const Top = tw.div`
-flex
-justify-between
-font-bold
-items-center
-gap-2
-`;
-const Bottom = tw.div`
-flex
-justify-between
-`;
-const BarBackground = tw.div`
-bg-gray-100
-h-3
-w-full
-rounded-3xl
-overflow-hidden
-`;

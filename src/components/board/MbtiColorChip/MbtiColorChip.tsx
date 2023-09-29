@@ -1,10 +1,6 @@
-import tw from "tailwind-styled-components";
-
 import colorData from "@/constants/bgColor";
 
-const MbtiColor = tw.div`
- flex flex-row gap-2
-`;
+import { MbtiColor } from "./MbtiColorChip.styles";
 
 interface MbtiColorChipProps {
   selectedMbti: string;

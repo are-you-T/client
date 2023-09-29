@@ -1,8 +1,4 @@
-import tw from "tailwind-styled-components";
-
-const Post = tw.div`
-  cursor-pointer
-`;
+import { Post } from "./PostBtn.styles";
 
 interface PostBtnProps {
   setOpenBoardPost: (value: boolean) => void;
