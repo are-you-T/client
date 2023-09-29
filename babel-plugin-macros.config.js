@@ -1,5 +1,3 @@
-module.exports = {
-  twin: {
-    preset: "styled-components",
-  },
+export const twin = {
+  preset: "styled-components"
 };
