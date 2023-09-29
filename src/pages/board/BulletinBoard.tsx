@@ -120,43 +120,13 @@ export default function BulletinBoard() {
       setOnDetailPage(true);
     } else {
       setOnDetailPage(false);
-    }
+    }});
+
     useEffect(() => {
         getPostings();
     }, []);
-
-    //mbti변경모달 관련
-    const [mbtiType, setMbtiType] = useState<string[]>(["I", "N", "F", "P"]);
-    const handleThisMbti = useCallback(
-        (value: string[]) => setMbtiType(value),
-        []
-    );
-    const handleThisConfirm = () => {
-        const mbti = mbtiType.reduce((acc, cur) => acc + cur);
-        setOpenMbtiModal(false);
-        setOnDetailPage(true);
-        goDetailPage(mbti);
-    };
 
     //Detail 페이지에 필요한 변수,메소드
-
-    //파라미터 :mbti 가져오기
-    const { mbti } = useParams() as { mbti: string };
-
-    //파라미터로 mbti가 전달되자마자 게시글 데이터 업데이트
-    useEffect(() => {
-        getPostings();
-    }, [mbti]);
-
-    //유형별게시판과 전체게시판 구분
-    const [onDetailPage, setOnDetailPage] = useState<boolean>(false);
-    useEffect(() => {
-        if (mbti) {
-            setOnDetailPage(true);
-        } else {
-            setOnDetailPage(false);
-        }
-    }, []);
 
     //전체 게시글
     const boardAll = postings.map((posting) => {
