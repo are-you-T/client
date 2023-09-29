@@ -10,42 +10,40 @@ import TestResult from "@/pages/test/TestResult/TestResult";
 import BulletinBoard from "@/pages/board/BulletinBoard";
 import Stats from "@/pages/stats/Stats";
 import StatsMbti from "@/pages/stats/StatsMbti";
-import BoardPost from "@/components/board/BoardPost";
+import BoardPost from "@/components/board/BoardPost/BoardPost";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    errorElement: <NotFound />,
-    children: [
-      { index: true, path: "/", element: <Home /> },
-      { path: "/test", element: <Test /> },
-      { path: "/result", element: <TestResult /> },
-      { path: "/board", element: <BulletinBoard /> },
-      { path: "/board/:mbti", element: <BulletinBoard /> },
-      { path: "/stats", element: <Stats /> },
-      { path: "/stats/:mbti", element: <StatsMbti /> },
-    ],
-  },
-  {
-    // 게시글 작성 확인용 -> 추후에 BulletinBoard page 안에서 컴포넌트로만 사용할 예정
-    path: "/post",
-    element: (
-      <BoardPost
-        thisMbti={"ESTP"}
-        onThisClose={() => console.log("닫기")}
-        onThisComplete={(value) => console.log(value)}
-      />
-    ),
-  },
+    {
+        path: "/",
+        element: <App />,
+        errorElement: <NotFound />,
+        children: [
+            { index: true, path: "/", element: <Home /> },
+            { path: "/test", element: <Test /> },
+            { path: "/result", element: <TestResult /> },
+            { path: "/board", element: <BulletinBoard /> },
+            { path: "/board/:mbti", element: <BulletinBoard /> },
+            { path: "/stats", element: <Stats /> },
+            { path: "/stats/:mbti", element: <StatsMbti /> },
+        ],
+    },
+    {
+        // 게시글 작성 확인용 -> 추후에 BulletinBoard page 안에서 컴포넌트로만 사용할 예정
+        path: "/post",
+        element: (
+            <BoardPost
+                thisMbti={"ESTP"}
+                onThisClose={() => console.log("닫기")}
+                onThisComplete={(value) => console.log(value)}
+            />
+        ),
+    },
 ]);
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+    document.getElementById("root") as HTMLElement
 );
-root.render(
-    <RouterProvider router={router} />
-);
+root.render(<RouterProvider router={router} />);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
