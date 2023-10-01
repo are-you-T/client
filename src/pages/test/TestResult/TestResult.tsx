@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import tw from "tailwind-styled-components";
-import HashTag from "@/components/test/HashTag";
-import RelationType from "@/components/test/RelationType";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
 import axiosRequest from "@/api/index";
-import TypePercentageBars from "@/components/test/TypePercentageBars";
 import { ResData, ResMbti, Color, ResultData } from "@/@types";
+
+import HashTag from "@/components/test/TestResult/HashTag/HashTag";
+import RelationType from "@/components/test/TestResult/RelationType/RelationType";
+import TypePercentageBars from "@/components/test/TestResult/TypePercentageBars/TypePercentageBars";
 import colorData from "@/constants/bgColor";
 import Character from "@/components/common/Character";
+import {Container, Header, Title, ShareButton, Main, MainTop, ContentWrapper, ContentTitle, Content, HashTags, MainBottom, Buttons, HyperText } from "./TestResult.styles";
 
 export default function TestResult() {
   const [mbti, setMbti] = useState<ResMbti>({
@@ -102,93 +104,3 @@ export default function TestResult() {
   );
 }
 
-const Container = tw.section`
-w-[390px] 
-mx-auto 
-my-0 
-`;
-const Header = tw.header`
-w-full
-flex
-justify-between
-items-center
-p-4
-pb-6
-`;
-const Title = tw.h3`
-font-bold
-text-5xl
-text-white
-`;
-const ShareButton = tw.button`
-bg-black
-text-white
-text-xl
-font-bold
-cursor-pointer
-rounded-3xl
-py-2
-px-4
-`;
-const Main = tw.section`
-w-full
-`;
-const MainTop = tw.div`
-w-full
-`;
-const CharacterImg = tw.div`
-w-[390px]
-h-[342px]
-bg-test
-`;
-const ContentWrapper = tw.div`
-bg-[#0272f1]
-py-5
-px-10
-pb-20
-text-center
-relative
-bottom-5
-text-white
-`;
-const ContentTitle = tw.h5`
-text-2xl
-font-bold
-mb-6
-`;
-const Content = tw.div`
-text-xl
-mb-6
-`;
-const HashTags = tw.ul`
-list-none
-grid
-grid-cols-2
-place-items-center
-`;
-const MainBottom = tw.section`
-w-full
-relative
-bottom-5
-bg-[#ffdf3f]
-pt-10
-px-5
-`;
-const Buttons = tw.div`
-flex
-flex-col
-pb-10
-`;
-const HyperText = tw(Link)`
-block
-text-center
-bg-black
-rounded-3xl
-text-white
-font-bold
-my-2
-mx-10
-py-2
-text-xl
-cursor-pointer
-`;

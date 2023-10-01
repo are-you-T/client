@@ -1,12 +1,46 @@
-import tw from "tailwind-styled-components";
 import { ReactComponent as LogoSvg } from "@/assets/img/logo.svg";
 import { ReactComponent as GitHubSvg } from "@/assets/img/github.svg";
 import { ReactComponent as ShareSvg } from "@/assets/img/share.svg";
+import {
+  Footer,
+  FooterLink,
+  FooterLinkIcon,
+  FooterText,
+  FooterTextArea,
+  FooterWrap
+} from "./Footer.styles";
 
 export default function Foot() {
+  // const handleShareClick = async () => {
+  //     await share(window.location.origin);
+  // };
+  // const share = async (text: string) => {
+  //     try {
+  //         await navigator.clipboard.writeText(text);
+  //         alert("링크가 복사되었습니다!");
+  //     } catch (e) {
+  //         alert("초대코드 복사에 실패했습니다ㅜㅜ");
+  //     }
+  // };
   const handleShareClick = async () => {
-    await share(window.location.origin);
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: document.title,
+          text: "링크를 공유합니다.",
+          url: window.location.href
+        });
+        console.log("링크를 공유했습니다!");
+      } catch (error) {
+        console.error("링크 공유에 실패했습니다.", error);
+      }
+    } else {
+      // Web Share API를 지원하지 않는 경우
+      // 대체 동작을 수행합니다.
+      await share(window.location.origin);
+    }
   };
+
   const share = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -42,51 +76,3 @@ export default function Foot() {
     </Footer>
   );
 }
-
-const Footer = tw.footer`
-  bg-regal-purple
-  w-[390px]
-  m-auto
-  h-22
-  p-4
-`;
-
-const FooterWrap = tw.div`
-    flex 
-    items-center
-    justify-between 
-    gap-2.5
-`;
-
-const FooterTextArea = tw.div`
-flex
-w-40
-h-12
-flex-col
-justify-center
-flex-shrink-0
-grow-[0.5]
-`;
-// flex-grow 0.8
-
-const FooterLinkIcon = tw.div`
-flex
-w-8
-flex-row
-grow-[0.5]
-gap-[0.7]
-`;
-
-// gap 0.7rem
-const FooterLink = tw.a`
-w-auto
-mr-3
-cursor-pointer
-`;
-// mrgin right
-
-const FooterText = tw.div`
-  text-xs
-  text-black
-
-`;
