@@ -5,7 +5,7 @@ import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/NotFound";
-import Test from "@/pages/test/Test";
+import Test from "./pages/test/test/Test";
 import TestResult from "@/pages/test/TestResult/TestResult";
 import BulletinBoard from "@/pages/board/BulletinBoard";
 import Stats from "@/pages/stats/Stats";
