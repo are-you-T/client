@@ -1,4 +1,3 @@
-import tw from "tailwind-styled-components";
 import { TestCardProps } from "@/@types/index";
 import * as S from "./TestCard.styles";
 

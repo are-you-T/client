@@ -1,4 +1,3 @@
-import tw from "tailwind-styled-components";
 import { QuestionText } from "@/@types/index";
 import * as S from "./TestQuestion.styles";
 
