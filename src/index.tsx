@@ -9,7 +9,7 @@ import Test from "./pages/test/test/Test";
 import TestResult from "@/pages/test/TestResult/TestResult";
 import BulletinBoard from "@/pages/board/BulletinBoard";
 import Stats from "@/pages/stats/Stats";
-import StatsMbti from "@/pages/stats/StatsMbti";
+import StatsMbti from "@/pages/stats/statsMbti/StatsMbti";
 import BoardPost from "@/components/board/BoardPost/BoardPost";
 
 const router = createBrowserRouter([
