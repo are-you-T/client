@@ -49,9 +49,8 @@ export default function BulletinBoard() {
     const pastDate: Date = new Date(date); //local(한국표준시)
     const currentDate: Date = new Date(); //local(한국표준시)
 
-    //local시간 ->UTC로 바꾸는 명령어 :한국표준시 -9시간
-    const pastLocalTime = pastDate.getTime(); //작성시 local(한국표준시)
-    const currentLocalTime = currentDate.getTime(); //현재 local(한국표준시)
+    const pastLocalTime = pastDate.getTime();
+    const currentLocalTime = currentDate.getTime();
 
     const diffDate: number = currentLocalTime - pastLocalTime;
 
