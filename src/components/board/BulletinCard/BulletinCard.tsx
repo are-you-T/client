@@ -15,7 +15,7 @@ import {
 
 interface BulletinCardProps {
   id: string;
-  showModal: (id: string) => void;
+  handleCardClick: (id: string) => void;
   title: string;
   content: string;
   category: string;
@@ -25,7 +25,7 @@ interface BulletinCardProps {
 }
 export default function BulletinCard({
   id,
-  showModal,
+  handleCardClick,
   title,
   content,
   category,
@@ -60,7 +60,7 @@ export default function BulletinCard({
     <Card
       id={id}
       style={{ backgroundColor: color }}
-      onClick={() => showModal(id)}
+      onClick={() => handleCardClick(id)}
     >
       <div>
         <Header>

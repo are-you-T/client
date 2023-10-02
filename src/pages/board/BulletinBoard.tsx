@@ -23,11 +23,7 @@ import {
 } from "./BulletinBoard.styles";
 
 export default function BulletinBoard() {
-  // 모달창 상태
-  const [openCardModal, setOpenCardModal] = useState<boolean>(false);
   const [openMbtiModal, setOpenMbtiModal] = useState<boolean>(false);
-  //선택한 카드의 id값
-  const [selectedId, setSelectedId] = useState<string>("");
 
   //전체 게시글
   const [postings, setPostings] = useState<Board[]>([]);
@@ -39,15 +35,12 @@ export default function BulletinBoard() {
     nav(`/board/${mbti}`);
     getPostings();
   };
-  const showModal = (id: string): void => {
-    setSelectedId(id);
-    setOpenCardModal(true);
-    document.body.style.overflow = "hidden";
+  //게시글 상세페이지 이동
+  const goCardDetailPage = (selectedId: string): void => {
+    nav(`/board/cardDetail/${selectedId}`);
   };
-  const closeModal = (): void => {
-    setOpenCardModal(false);
-    getPostings();
-    document.body.style.overflow = "unset";
+  const handleCardClick = (id: string): void => {
+    goCardDetailPage(id);
   };
 
   //게시글 작성 날짜 양식-> *일 전으로 변경
@@ -115,7 +108,7 @@ export default function BulletinBoard() {
       <BulletinCard
         key={posting._id}
         id={posting._id}
-        showModal={showModal}
+        handleCardClick={handleCardClick}
         title={posting.title}
         content={posting.content}
         category={posting.category}
@@ -133,7 +126,7 @@ export default function BulletinBoard() {
         <BulletinCard
           key={posting._id}
           id={posting._id}
-          showModal={showModal}
+          handleCardClick={handleCardClick}
           title={posting.title}
           content={posting.content}
           category={posting.category}
@@ -158,12 +151,6 @@ export default function BulletinBoard() {
         />
       ) : (
         <BoardDiv>
-          {openCardModal && (
-            <BulletinCardModal
-              selectedId={selectedId}
-              closeModal={closeModal}
-            />
-          )}
           {openMbtiModal && (
             <div>
               <ModalBg onClick={() => setOpenMbtiModal(false)} />

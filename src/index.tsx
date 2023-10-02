@@ -8,6 +8,7 @@ import NotFound from "@/pages/NotFound";
 import Test from "@/pages/test/Test";
 import TestResult from "@/pages/test/TestResult";
 import BulletinBoard from "@/pages/board/BulletinBoard";
+import CardDetail from "@/pages/board/card/CardDetail";
 import Stats from "@/pages/stats/Stats";
 import StatsMbti from "@/pages/stats/StatsMbti";
 import BoardPost from "@/components/board/BoardPost";
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
       { path: "/result", element: <TestResult /> },
       { path: "/board", element: <BulletinBoard /> },
       { path: "/board/:mbti", element: <BulletinBoard /> },
+      { path: "/board/cardDetail/:selectedId", element: <CardDetail /> },
       { path: "/stats", element: <Stats /> },
       { path: "/stats/:mbti", element: <StatsMbti /> },
     ],
@@ -43,9 +45,7 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-root.render(
-    <RouterProvider router={router} />
-);
+root.render(<RouterProvider router={router} />);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
