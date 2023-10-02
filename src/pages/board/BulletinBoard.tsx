@@ -5,7 +5,6 @@ import axiosRequest from "@/api/index";
 import { ResData, Board } from "@/@types/index";
 
 import BulletinCard from "@/components/board/BulletinCard/BulletinCard";
-import BulletinCardModal from "@/components/board/BulletinCardModal/BulletinCardModal";
 import PostBtn from "@/components/board/Button/PostBtn/PostBtn";
 import ChangeMbtiBtn from "@/components/board/Button/ChangeMbtiBtn/ChangeMbtiBtn";
 import BoardPost from "@/components/board/BoardPost";
