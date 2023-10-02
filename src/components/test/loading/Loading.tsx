@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import tw from "tailwind-styled-components";
-import axiosRequest from "@/api/index";
 import { UserResponseProps } from "@/@types/index";
 import { useNavigate } from "react-router-dom";
+import axiosRequest from "@/api/index";
 import LoadingImg from "@/components/test/LoadingImg";
+import * as S from "./Loading.styles";
 
 function Loading({ userResponse, visible }: UserResponseProps) {
   // 애니메이션 *************************************************************
@@ -201,37 +201,14 @@ function Loading({ userResponse, visible }: UserResponseProps) {
   };
 
   return visible ? (
-    <LoadingSection>
-      <TextTop>너 {texts[currentTextIndex]}야?</TextTop>
+    <S.LoadingSection>
+      <S.TextTop>너 {texts[currentTextIndex]}야?</S.TextTop>
       <LoadingImg color={colors[currentColorIndex]} />
-      <TextBottom>분석중...</TextBottom>
-    </LoadingSection>
+      <S.TextBottom>분석중...</S.TextBottom>
+    </S.LoadingSection>
   ) : (
     <div />
   );
 }
 
 export default Loading;
-
-const LoadingSection = tw.div`
-w-[390px]
-h-[790.96px] 
-flex
-flex-col	
-items-center
-justify-center	
-absolute
-bg-black
-`;
-
-const TextTop = tw.p`
-text-white
-py-3
-text-xl	
-`;
-
-const TextBottom = tw.p`
-text-white
-py-3
-text-lg
-`;

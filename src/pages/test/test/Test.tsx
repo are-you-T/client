@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
-import TestCard from "@/components/test/TestCard";
-import TestQuestion from "@/components/test/TestQuestion";
-import ProgressBar from "@/components/test/ProgressBar";
-import Loading from "@/components/test/Loading";
-import LoadingIndicator from "@/components/common/LoadingIndicator";
-import tw from "tailwind-styled-components";
-import axiosRequest from "@/api/index";
 import { Question, ResData, UserAnswer, MBTIData } from "@/@types/index";
+import axiosRequest from "@/api/index";
+import TestCard from "@/components/test/TestCard/TestCard";
+import TestQuestion from "@/components/test/TestQuestion/TestQuestion";
+import ProgressBar from "@/components/test/ProgressBar/ProgressBar";
+import Loading from "@/components/test/loading/Loading";
+import LoadingIndicator from "@/components/common/LoadingIndicator";
+import * as S from "./Test.styles";
 
 export default function Test() {
   const [viewLoading, setViewLoading] = useState<boolean>(false);
@@ -52,14 +52,14 @@ export default function Test() {
             subject,
             answer,
             mbtiType,
-            proportion,
+            proportion
             // text,
           };
 
           setUserResponse((prevResponse) => {
             const updatedResponse = {
               ...currentAnswer,
-              selected: currentChoiceList[choiceIndex].mbtiType,
+              selected: currentChoiceList[choiceIndex].mbtiType
             } as unknown as MBTIData; // 형식 변환
             return [...prevResponse, updatedResponse];
           });
@@ -81,45 +81,45 @@ export default function Test() {
         setCurrentChoiceList([
           {
             mbtiType: "E",
-            text: questionList[currentIndex].answer.E,
+            text: questionList[currentIndex].answer.E
           },
           {
             mbtiType: "I",
-            text: questionList[currentIndex].answer.I,
-          },
+            text: questionList[currentIndex].answer.I
+          }
         ]);
       } else if (currentIndex <= 7) {
         setCurrentChoiceList([
           {
             mbtiType: "N",
-            text: questionList[currentIndex].answer.N,
+            text: questionList[currentIndex].answer.N
           },
           {
             mbtiType: "S",
-            text: questionList[currentIndex].answer.S,
-          },
+            text: questionList[currentIndex].answer.S
+          }
         ]);
       } else if (currentIndex <= 11) {
         setCurrentChoiceList([
           {
             mbtiType: "T",
-            text: questionList[currentIndex].answer.T,
+            text: questionList[currentIndex].answer.T
           },
           {
             mbtiType: "F",
-            text: questionList[currentIndex].answer.F,
-          },
+            text: questionList[currentIndex].answer.F
+          }
         ]);
       } else {
         setCurrentChoiceList([
           {
             mbtiType: "J",
-            text: questionList[currentIndex].answer.J,
+            text: questionList[currentIndex].answer.J
           },
           {
             mbtiType: "P",
-            text: questionList[currentIndex].answer.P,
-          },
+            text: questionList[currentIndex].answer.P
+          }
         ]);
       }
     }
@@ -130,7 +130,7 @@ export default function Test() {
     return <LoadingIndicator />;
   }
   return (
-    <TestPage>
+    <S.TestPage>
       <TestQuestion
         idx={String(currentIndex + 1).padStart(2, "0")}
         subject={questionList[currentIndex].subject}
@@ -156,19 +156,6 @@ export default function Test() {
         visible={viewLoading}
         userResponse={{ parent: "basic", mbtiData: userResponse }}
       />
-    </TestPage>
+    </S.TestPage>
   );
 }
-
-const TestPage = tw.section`
-flex 
-flex-col 
-items-center
-justify-center
-w-[390px] 
-h-[790.96px] 
-mx-auto 
-my-0 
-bg-black
-overflow-hidden	
-`;
