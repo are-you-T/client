@@ -16,6 +16,7 @@ import {
   Main,
   BoardDiv,
   Header,
+  HeaderBtns,
   MbtiTitle,
   Title,
   BulletinCardWrap,
@@ -196,14 +197,14 @@ export default function BulletinBoard() {
             ) : (
               <Title>MBTI 담벼락</Title>
             )}
-            <ChangeMbtiBtn setOpenMbtiModal={setOpenMbtiModal} />
+            <HeaderBtns>
+              <PostBtn setOpenBoardPost={setOpenBoardPost} />
+              <ChangeMbtiBtn setOpenMbtiModal={setOpenMbtiModal} />
+            </HeaderBtns>
           </Header>
           <Main>
             <BulletinCardWrap>{mbti ? boardDetail : boardAll}</BulletinCardWrap>
           </Main>
-          <Footer>
-            <PostBtn setOpenBoardPost={setOpenBoardPost} />
-          </Footer>
         </BoardDiv>
       )}
     </>
