@@ -28,10 +28,10 @@ text-5xl font-black
 `;
 
 export const ButtonColor = styled.button<{ bg: string }>`
-    background-color: ${({ bg }) => bg};
+  background-color: ${({ bg }) => bg};
 `;
 export const SpanColor = styled.span<{ bg: string }>`
-    background-color: ${({ bg }) => bg};
+  background-color: ${({ bg }) => bg};
 `;
 
 export const CircleButton = tw(ButtonColor)`
@@ -49,4 +49,28 @@ bg-white rounded-3xl p-8 text-black fixed left-1/2 top-1/2 -translate-x-1/2 w-[3
 
 export const SelectColors = tw(SpanColor)`
 w-12 h-12 rounded-full border-black border-4 inline-block
+`;
+
+export const Button = tw.button`
+  btn
+  w-80
+  h-16
+  bg-yellow-400
+  rounded-full
+  text-lg
+  mt-5
+  border-0
+  font-bold
+  text-black
+`;
+
+export const BorderButton = tw.button`
+  text-lg
+  w-80
+  h-16
+  border 
+  rounded-full 
+  flex 
+  justify-center 
+  items-center 
 `;
