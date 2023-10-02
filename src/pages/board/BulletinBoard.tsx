@@ -1,56 +1,26 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import tw from "tailwind-styled-components";
-import styled from "styled-components";
+
 import axiosRequest from "@/api/index";
-import { resData, board } from "@/interfaces/index";
+import { ResData, Board } from "@/@types/index";
 
-import BulletinCard from "@/components/board/BulletinCard";
-import BulletinCardModal from "@/components/board/BulletinCardModal";
-import PostBtn from "@/components/board/PostBtn";
-import ChangeMbtiBtn from "@/components/board/ChangeMbtiBtn";
-import BoardPost from "@/components/board/BoardPost";
+import BulletinCard from "@/components/board/BulletinCard/BulletinCard";
+import BulletinCardModal from "@/components/board/BulletinCardModal/BulletinCardModal";
+import PostBtn from "@/components/board/Button/PostBtn/PostBtn";
+import ChangeMbtiBtn from "@/components/board/Button/ChangeMbtiBtn/ChangeMbtiBtn";
+import BoardPost from "@/components/board/BoardPost/BoardPost";
 import MbtiTypesModal, { ModalBg } from "@/components/common/MbtiTypesModal";
-import MbtiColorChip from "@/components/board/MbtiColorChip";
+import MbtiColorChip from "@/components/board/MbtiColorChip/MbtiColorChip";
 
-const Main = styled.div`
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  width: 100%;
-  overflow: auto;
-  padding-bottom: 71px;
-`;
-const Board = tw.div`
-  flex flex-col
-  h-screen w-[390px] bg-black
-  px-[17px] mx-auto
-  relative
-`;
-const Header = tw.div`
-  flex flex-row justify-between items-center
-  mt-4 mb-7 
-`;
-const MbtiTitle = tw.div`
- flex flex-row items-center gap-3
-`;
-const Title = tw.div`
-  text-[43px] leading-[51px]  font-bold text-white
-`;
-
-const BulletinCardWrap = tw.div`
-  flex flex-wrap justify-start gap-[15px]
-  mx-auto
-`;
-
-const Footer = tw.div`
-  flex justify-center
-  w-full bg-black
-  self-end
-  pt-3 pb-3
-  absolute bottom-0 left-0 right-0
-  
-`;
+import {
+  Main,
+  BoardDiv,
+  Header,
+  MbtiTitle,
+  Title,
+  BulletinCardWrap,
+  Footer,
+} from "./BulletinBoard.styles";
 
 export default function BulletinBoard() {
   // 모달창 상태
@@ -60,13 +30,14 @@ export default function BulletinBoard() {
   const [selectedId, setSelectedId] = useState<string>("");
 
   //전체 게시글
-  const [postings, setPostings] = useState<board[]>([]);
+  const [postings, setPostings] = useState<Board[]>([]);
   //게시글 작성 모달 상태
   const [openBoardPost, setOpenBoardPost] = useState<boolean>(false);
   //게시글 작성완료시 유형별 게시판페이지로 이동
   const nav = useNavigate();
   const goDetailPage = (mbti: string): void => {
     nav(`/board/${mbti}`);
+    getPostings();
   };
   const showModal = (id: string): void => {
     setSelectedId(id);
@@ -87,26 +58,27 @@ export default function BulletinBoard() {
     //리팩토링 시 서버에 저장되는 시간을 UTC로 바꾸면 메서드의 용도에 맞고 이해가 쉬울 듯 하다.
     const pastDate: Date = new Date(date); //local(한국표준시 +9시간)
     const currentDate: Date = new Date(); //local(한국표준시)
+    const koreaTimeDiff = 9 * 60 * 60 * 1000; //9시간
 
     //local시간 ->UTC로 바꾸는 명령어 :한국표준시 -9시간
-    const pastLocalDate = pastDate.getUTCDate(); //작성시 local(한국표준시)
-    const currentLocalDate = currentDate.getDate(); //현재 local(한국표준시)
+    const pastLocalDate = pastDate.getTime() - koreaTimeDiff; //작성시 local(한국표준시)
+    const currentLocalDate = currentDate.getTime(); //현재 local(한국표준시)
 
-    const diffInDate: number = currentLocalDate - pastLocalDate;
+    const diffDate: number = currentLocalDate - pastLocalDate;
 
-    // console.log("서버시간", date);
-    // console.log("작성날짜", pastDate, pastLocalDate);
-    // console.log("현재날짜", currentDate, currentLocalDate);
-    // console.log("날짜 차이", diffInDate);
+    console.log("서버시간", date);
+    console.log("작성날짜", pastLocalDate);
+    console.log("현재날짜", currentLocalDate);
+    console.log("날짜 차이", diffDate);
 
-    return diffInDate;
+    return Math.floor(diffDate / (1000 * 60 * 60 * 24));
   };
 
   //게시글 get요청
   async function getPostings() {
     try {
-      const response: resData<board[]> = await axiosRequest.requestAxios<
-        resData<board[]>
+      const response: ResData<Board[]> = await axiosRequest.requestAxios<
+        ResData<Board[]>
       >("get", mbti ? `/board/${mbti}` : "/board");
       // console.log("전체게시글", response.data);
       setPostings(response.data);
@@ -148,95 +120,102 @@ export default function BulletinBoard() {
       setOnDetailPage(true);
     } else {
       setOnDetailPage(false);
-    }
-  }, []);
+    }});
 
-  //전체 게시글
-  const boardAll = postings.map((posting) => {
-    return (
-      <BulletinCard
-        key={posting._id}
-        id={posting._id}
-        showModal={showModal}
-        title={posting.title}
-        content={posting.content}
-        category={posting.category}
-        color={posting.color}
-        like={posting.like}
-        createdAt={calculateDaysDiff(posting.createdAt)}
-      />
-    );
-  });
-  //유형별 게시글
-  const boardDetail = postings
-    .filter((posting) => posting.category === mbti)
-    .map((posting) => {
-      return (
-        <BulletinCard
-          key={posting._id}
-          id={posting._id}
-          showModal={showModal}
-          title={posting.title}
-          content={posting.content}
-          category={posting.category}
-          color={posting.color}
-          like={posting.like}
-          createdAt={calculateDaysDiff(posting.createdAt)}
-        />
-      );
-    });
+    useEffect(() => {
+        getPostings();
+    }, []);
 
-  return (
-    <>
-      {openBoardPost ? (
-        <BoardPost
-          onThisClose={() => setOpenBoardPost(false)}
-          onThisComplete={(mbti) => {
-            getPostings();
-            setOpenBoardPost(false);
-            setOnDetailPage(true);
-            goDetailPage(mbti);
-          }}
-          thisMbti={mbti ? mbti : "INFP"}
-        />
-      ) : (
-        <Board>
-          {openCardModal && (
-            <BulletinCardModal
-              selectedId={selectedId}
-              closeModal={closeModal}
+    //Detail 페이지에 필요한 변수,메소드
+
+    //전체 게시글
+    const boardAll = postings.map((posting) => {
+        return (
+            <BulletinCard
+                key={posting._id}
+                id={posting._id}
+                showModal={showModal}
+                title={posting.title}
+                content={posting.content}
+                category={posting.category}
+                color={posting.color}
+                like={posting.like}
+                createdAt={calculateDaysDiff(posting.createdAt)}
             />
-          )}
-          {openMbtiModal && (
-            <div>
-              <ModalBg onClick={() => setOpenMbtiModal(false)} />
-              <MbtiTypesModal
-                selectMbti={mbtiType}
-                onThisMbti={handleThisMbti}
-                isButton={true}
-                onThisConfirm={handleThisConfirm}
-              />
-            </div>
-          )}
-          <Header>
-            {mbti ? (
-              <MbtiTitle>
-                <Title>{mbti}</Title>
-                <MbtiColorChip selectedMbti={mbti} />
-              </MbtiTitle>
+        );
+    });
+    //유형별 게시글
+    const boardDetail = postings
+        .filter((posting) => posting.category === mbti)
+        .map((posting) => {
+            return (
+                <BulletinCard
+                    key={posting._id}
+                    id={posting._id}
+                    showModal={showModal}
+                    title={posting.title}
+                    content={posting.content}
+                    category={posting.category}
+                    color={posting.color}
+                    like={posting.like}
+                    createdAt={calculateDaysDiff(posting.createdAt)}
+                />
+            );
+        });
+
+    return (
+        <>
+            {openBoardPost ? (
+                <BoardPost
+                    onThisClose={() => setOpenBoardPost(false)}
+                    onThisComplete={(mbti) => {
+                        getPostings();
+                        setOpenBoardPost(false);
+                        setOnDetailPage(true);
+                        goDetailPage(mbti);
+                    }}
+                    thisMbti={mbti ? mbti : "INFP"}
+                />
             ) : (
-              <Title>MBTI 담벼락</Title>
+                <BoardDiv>
+                    {openCardModal && (
+                        <BulletinCardModal
+                            selectedId={selectedId}
+                            closeModal={closeModal}
+                        />
+                    )}
+                    {openMbtiModal && (
+                        <div>
+                            <ModalBg onClick={() => setOpenMbtiModal(false)} />
+                            <MbtiTypesModal
+                                selectMbti={mbtiType}
+                                onThisMbti={handleThisMbti}
+                                isButton={true}
+                                onThisConfirm={handleThisConfirm}
+                            />
+                        </div>
+                    )}
+                    <Header>
+                        {mbti ? (
+                            <MbtiTitle>
+                                <Title>{mbti}</Title>
+                                <MbtiColorChip selectedMbti={mbti} />
+                            </MbtiTitle>
+                        ) : (
+                            <Title>MBTI 담벼락</Title>
+                        )}
+                        <ChangeMbtiBtn setOpenMbtiModal={setOpenMbtiModal} />
+                    </Header>
+                    <Main>
+                        <BulletinCardWrap>
+                            {mbti ? boardDetail : boardAll}
+                        </BulletinCardWrap>
+                    </Main>
+                    <Footer>
+                        <PostBtn setOpenBoardPost={setOpenBoardPost} />
+                    </Footer>
+                </BoardDiv>
             )}
-            <ChangeMbtiBtn setOpenMbtiModal={setOpenMbtiModal} />
-          </Header>
-          <Main>
-            <BulletinCardWrap>{mbti ? boardDetail : boardAll}</BulletinCardWrap>
-          </Main>
-          <Footer>
-            <PostBtn setOpenBoardPost={setOpenBoardPost} />
-          </Footer>
-        </Board>
-      )}
-    </>
-  );
+        </>
+    );
 }

@@ -1,0 +1,19 @@
+export interface ResMbti {
+  _id:string,
+  name:string,
+  count:number,
+  tag:Array<string>,
+  summary:string,
+  content:{
+    description:string,
+    good:{
+      name:string,
+      description:string
+    },
+    bad:{
+      name:string,
+      description:string
+    },
+    __v:number
+  }
+}
