@@ -20,7 +20,6 @@ import {
   MbtiTitle,
   Title,
   BulletinCardWrap,
-  Footer,
 } from "./BulletinBoard.styles";
 
 export default function BulletinBoard() {
@@ -97,7 +96,6 @@ export default function BulletinBoard() {
   const handleThisConfirm = () => {
     const mbti = mbtiType.reduce((acc, cur) => acc + cur);
     setOpenMbtiModal(false);
-    setOnDetailPage(true);
     goDetailPage(mbti);
   };
 
@@ -110,16 +108,6 @@ export default function BulletinBoard() {
   useEffect(() => {
     getPostings();
   }, [mbti]);
-
-  //유형별게시판과 전체게시판 구분
-  const [onDetailPage, setOnDetailPage] = useState<boolean>(false);
-  useEffect(() => {
-    if (mbti) {
-      setOnDetailPage(true);
-    } else {
-      setOnDetailPage(false);
-    }
-  }, []);
 
   //전체 게시글
   const boardAll = postings.map((posting) => {
@@ -164,7 +152,6 @@ export default function BulletinBoard() {
           onThisComplete={(mbti) => {
             getPostings();
             setOpenBoardPost(false);
-            setOnDetailPage(true);
             goDetailPage(mbti);
           }}
           thisMbti={mbti ? mbti : "INFP"}
