@@ -52,24 +52,21 @@ export default function BulletinBoard() {
 
   //게시글 작성 날짜 양식-> *일 전으로 변경
   const calculateDaysDiff = (date: Date): number => {
-    //서버 저장되는 시간이 (한국표준시Z)의 형태임
-    //Date()를 거치면 원래는 UTC -> local시간으로 되는 건데
-    //한국표준시를 인자로 넣었기 때문에 한국표준시보다 +9시간 차이가 나게 된다.
-    //리팩토링 시 서버에 저장되는 시간을 UTC로 바꾸면 메서드의 용도에 맞고 이해가 쉬울 듯 하다.
-    const pastDate: Date = new Date(date); //local(한국표준시 +9시간)
+    //서버 저장되는 시간이 UTC
+    //Date(UTC) -> local시간
+    const pastDate: Date = new Date(date); //local(한국표준시)
     const currentDate: Date = new Date(); //local(한국표준시)
-    const koreaTimeDiff = 9 * 60 * 60 * 1000; //9시간
 
     //local시간 ->UTC로 바꾸는 명령어 :한국표준시 -9시간
-    const pastLocalDate = pastDate.getTime() - koreaTimeDiff; //작성시 local(한국표준시)
-    const currentLocalDate = currentDate.getTime(); //현재 local(한국표준시)
+    const pastLocalTime = pastDate.getTime(); //작성시 local(한국표준시)
+    const currentLocalTime = currentDate.getTime(); //현재 local(한국표준시)
 
-    const diffDate: number = currentLocalDate - pastLocalDate;
+    const diffDate: number = currentLocalTime - pastLocalTime;
 
-    console.log("서버시간", date);
-    console.log("작성날짜", pastLocalDate);
-    console.log("현재날짜", currentLocalDate);
-    console.log("날짜 차이", diffDate);
+    // console.log("서버시간", date);
+    // console.log("작성날짜", pastLocalTime);
+    // console.log("현재날짜", currentLocalTime);
+    // console.log("날짜 차이", diffDate);
 
     return Math.floor(diffDate / (1000 * 60 * 60 * 24));
   };
