@@ -1,11 +1,10 @@
 import tw, { styled } from "twin.macro";
 
-export const CardModalContainer = tw.div`
-  h-full
-  fixed z-10 inset-0
-  bg-black-semi-transparent
-  flex justify-center items-center
-  `;
+export const CardModalContainer = styled.div<{ bgColor: string }>`
+  ${tw`h-full
+  flex justify-center items-center`}
+  background: ${(props) => props.bgColor}
+`;
 export const CardModal = tw.div`
   w-80 h-3/4 rounded-3xl
   bg-white opacity-100

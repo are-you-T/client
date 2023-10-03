@@ -56,7 +56,7 @@ export default function CardDetail() {
     e.stopPropagation();
   };
   return (
-    <CardModalContainer>
+    <CardModalContainer bgColor={posting.color}>
       <CardModal onClick={handleClick}>
         <Header>
           <Category>{posting.category}</Category>
