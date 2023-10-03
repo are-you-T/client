@@ -51,7 +51,9 @@ export default function Foot() {
   //     alert("초대코드 복사에 실패했습니다ㅜㅜ");
   //   }
   // };
-  handleShareClick();
+  const handleShareButtonClick = () => {
+    handleShareClick();
+  };
 
   return (
     <Footer>
@@ -71,7 +73,7 @@ export default function Foot() {
           >
             <GitHubSvg />
           </FooterLink>
-          <FooterLink onClick={handleShareClick}>
+          <FooterLink onClick={handleShareButtonClick}>
             <ShareSvg />
           </FooterLink>
         </FooterLinkIcon>

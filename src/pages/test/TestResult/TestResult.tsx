@@ -85,14 +85,18 @@ export default function TestResult() {
   //     alert("초대코드 복사에 실패했습니다ㅜㅜ");
   //   }
   // };
-  handleShareClick();
+  const handleShareButtonClick = () => {
+    handleShareClick();
+  };
 
   const { name, summary, content, tag } = mbti;
   return (
     <Container style={{ backgroundColor: colorObj.out }}>
       <Header>
         <Title>{name}</Title>
-        <ShareButton onClick={handleShareClick}>결과 공유하기</ShareButton>
+        <ShareButton onClick={handleShareButtonClick}>
+          결과 공유하기
+        </ShareButton>
       </Header>
       <Main>
         <MainTop>
