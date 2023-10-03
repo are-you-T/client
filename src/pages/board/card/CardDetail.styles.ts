@@ -1,51 +1,55 @@
 import tw, { styled } from "twin.macro";
 
-export const CardModalContainer = styled.div<{ bgColor: string }>`
-  ${tw`h-full
-  flex justify-center items-center`}
+export const Container = styled.div<{ bgColor: string }>`
+  ${tw`w-[390px] h-[754px] mx-auto
+  flex flex-col items-center
+  relative`}
   background: ${(props) => props.bgColor}
 `;
-export const CardModal = tw.div`
-  w-80 h-3/4 rounded-3xl
-  bg-white opacity-100
-  flex flex-col
-  relative
-  `;
 export const Header = tw.div`
-  h-[10%]
+  h-[76px]
   flex flex-row justify-center items-center
-  relative
-  mb-4
-  
   `;
 export const Category = tw.div`
   text-2xl font-bold
   my-3.5
   `;
-export const CloseBtn = tw.button`
-  absolute top-3.5 right-3.5
-  `;
-export const Main = tw.div`
-  flex flex-col
-  px-6
-  h-[75%]
+export const Main = styled.div`
+  ${tw`w-[330px] h-3/4 rounded-3xl
+    bg-white opacity-100
+    flex flex-col`}
+  filter: drop-shadow(5px 5px 4px rgba(0, 0, 0, 0.25));
 `;
+
 export const Title = tw.div`
   text-xl font-medium
-  mb-3.5
-`;
-export const Content = tw.pre`
+  my-[16px]
+  px-[18px]
 
+`;
+export const Content = styled.pre`
+  ${tw`
+  px-[18px] mb-[18px]
   text-base
   overflow-auto
   flex-grow
-  whitespace-pre-wrap
+  whitespace-pre-wrap`}
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #eaeaea;
+    border-radius: 5px;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
 `;
 export const Divider = styled.div`
-  height: 1px;
+  height: 0.5px;
   width: 90%;
   margin: 0 auto;
-  background-color: #e1e1e1;
+  background-color: black;
 `;
 export const FooterWrap = styled.div`
   display: flex;

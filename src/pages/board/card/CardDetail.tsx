@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import axiosRequest from "@/api/index";
 import { ResData, Board } from "@/@types/index";
@@ -7,8 +7,7 @@ import { ResData, Board } from "@/@types/index";
 import HeartBtn from "@/components/board/Button/HeartBtn/HeartBtn";
 
 import {
-  CardModalContainer,
-  CardModal,
+  Container,
   Header,
   Category,
   Main,
@@ -51,29 +50,23 @@ export default function CardDetail() {
     }
     return "";
   };
-  // 이벤트 버블링을 막음
-  const handleClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-  };
-  return (
-    <CardModalContainer bgColor={posting.color}>
-      <CardModal onClick={handleClick}>
-        <Header>
-          <Category>{posting.category}</Category>
-        </Header>
 
-        <Main>
-          <Title>{posting.title}</Title>
-          <Content>{posting.content}</Content>
-        </Main>
-        <FooterWrap>
-          <Divider />
-          <Footer>
-            <HeartBtn id={selectedId} like={posting.like} />
-            <Date>{changeDateFormat(posting.createdAt)}</Date>
-          </Footer>
-        </FooterWrap>
-      </CardModal>
-    </CardModalContainer>
+  return (
+    <Container bgColor={posting.color}>
+      <Header>
+        <Category>{posting.category}</Category>
+      </Header>
+      <Main>
+        <Title>{posting.title}</Title>
+        <Content>{posting.content}</Content>
+      </Main>
+      <FooterWrap>
+        <Divider />
+        <Footer>
+          <HeartBtn id={selectedId} like={posting.like} />
+          <Date>{changeDateFormat(posting.createdAt)}</Date>
+        </Footer>
+      </FooterWrap>
+    </Container>
   );
 }
