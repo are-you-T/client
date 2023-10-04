@@ -8,6 +8,7 @@ import LoadingIndicator from "@/components/common/LoadingIndicator";
 import Character from "@/components/common/Character";
 import MbtiTypesModal from "@/components/common/MbtiTypesModal";
 import ChangeMbtiBtn from "@/components/board/Button/ChangeMbtiBtn/ChangeMbtiBtn";
+import Pagination from "@/components/pagination/Pagination";
 import { barOptions } from "@/constants/charts";
 import { Container, Footer, ChartList, ModalWrapper } from "./StatsMbti.styles";
 
@@ -37,7 +38,7 @@ function ChartItem({ data }: { data: QuestionItem }) {
 
   const displaySeries: ApexAxisChartSeries = [
     { name: leftType, data: [leftValue] },
-    { name: rightType, data: [rightValue] },
+    { name: rightType, data: [rightValue] }
   ];
 
   return (
@@ -67,6 +68,7 @@ function StatsMbti() {
   const { mbti: currMbti } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [stats, setStats] = useState<MbtiStatsByType | null>(null);
+  const [visibleStats, setVisibleStats] = useState<QuestionItem[]>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [mbtiType, setMbtiType] = useState(currMbti?.toUpperCase().split(""));
 
@@ -77,7 +79,7 @@ function StatsMbti() {
 
   const handleModal = ({
     currentTarget,
-    target,
+    target
   }: React.MouseEvent<HTMLDivElement>) => {
     if (currentTarget === target) {
       setIsOpenModal(false);
@@ -92,11 +94,18 @@ function StatsMbti() {
     }
   };
 
+  const changeVisibleStats = (pageNum: number) => {
+    if (!stats?.mbtiData) return;
+
+    const visibleData = stats.mbtiData.slice((pageNum - 1) * 10, pageNum * 10);
+    setVisibleStats(visibleData);
+  };
+
   const filterValidData = useCallback((data: MbtiStatsByType) => {
     data.mbtiData.forEach((question) => {
       const filteredData: Pick<QuestionItem, "answer" | "selection"> = {
         answer: {},
-        selection: {},
+        selection: {}
       };
 
       Object.entries(question.answer).forEach(([type, val]) => {
@@ -127,6 +136,7 @@ function StatsMbti() {
 
         const filteredStats = filterValidData(data);
         setStats(filteredStats);
+        setVisibleStats(filteredStats.mbtiData.slice(0, 11));
       } catch (error) {
         alert("데이터를 받아오던 중 에러가 발생했습니다.");
       } finally {
@@ -153,21 +163,25 @@ function StatsMbti() {
             </div>
             <div className="px-[20px]">
               <ChartList className="mt-[40px]">
-                {stats.mbtiData.map((data) => (
+                {visibleStats.map((data) => (
                   <ChartItem key={data.idx} data={data} />
                 ))}
               </ChartList>
             </div>
+            <Pagination
+              maxPage={Math.ceil(stats.mbtiData.length / 10)}
+              onChangePage={changeVisibleStats}
+            />
           </>
         ) : (
           <Character bgcolor="#00B26E" gcolor="#FFA8DF" />
         )}
         <Footer hasData={!!stats}>
           {!stats && <h2 className="no-data">No data</h2>}
-          <Link className="btn" to="/stats">
+          <Link to="/stats" className="btn">
             MBTI 통계
           </Link>
-          <Link className="btn" to={`/board/${currMbti}`}>
+          <Link to={`/board/${currMbti}`} className="btn">
             담벼락 바로가기
           </Link>
         </Footer>
