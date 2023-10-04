@@ -53,7 +53,7 @@ w-12 h-12 rounded-full border-black border-4 inline-block
 
 export const Button = tw.button`
   btn
-  w-80
+  w-full
   h-16
   bg-yellow-400
   rounded-full
@@ -66,11 +66,26 @@ export const Button = tw.button`
 
 export const BorderButton = tw.button`
   text-lg
-  w-80
+  w-full
   h-16
   border 
   rounded-full 
   flex 
   justify-center 
   items-center 
+`;
+// 댓글모달작업
+export const CommentModalWrap = tw.div`
+  bg-black
+  rounded-t-3xl 
+  p-[20px] 
+  text-white 
+  fixed 
+  bottom-0 
+  left-1/2 -translate-x-1/2 
+  w-[390px]
+  h-[640px] 
+  flex
+  flex-col
+  justify-between
 `;

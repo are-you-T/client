@@ -3,6 +3,8 @@ import { ReactComponent as SwitchIcon } from "@/assets/img/typeSwitch_icon.svg";
 import { ReactComponent as AlertIcon } from "@/assets/img/alert_icon.svg";
 import { ReactComponent as CloseIcon } from "@/assets/img/close_icon.svg";
 import { ReactComponent as CheckIcon } from "@/assets/img/check_icon.svg";
+import { ReactComponent as Comment } from "@/assets/img/comment.svg";
+
 import MbtiTypesModal, { ModalBg } from "@/components/common/MbtiTypesModal";
 import axiosRequest from "@/api";
 import { ResData, BoardPostData } from "@/@types";
@@ -16,8 +18,11 @@ import {
   CircleButton,
   MbtiType,
   Button,
-  BorderButton
+  BorderButton,
+  CommentModalWrap
 } from "./BoardPost.styles";
+import { CommentContent } from "@/components/comment/CommentContent";
+import { CommentPostContent } from "@/components/comment/CommentPost";
 
 // 모달 배경부분(ModalBg) 클릭하면 모달창이 꺼지고 모달컴포넌트 안에서 선택된 state값들을 부모(BoardPost)에게 보내줌
 
@@ -98,6 +103,19 @@ function AlertModal({ error }: { error: string }) {
   );
 }
 
+//댓글 모달 임시
+function CommentModal() {
+  return (
+    <CommentModalWrap>
+      {/* 모달 내용 */}
+      {/* 댓글내용 컴포넌트 */}
+      <CommentContent />
+      {/* 댓글등록 컴포넌트 */}
+      <CommentPostContent />
+    </CommentModalWrap>
+  );
+}
+
 // 게시글 작성
 export default function BoardPost({
   onThisClose,
@@ -160,6 +178,10 @@ export default function BoardPost({
     onThisComplete(mbtiType.join(""));
   };
 
+  //댓글 모달 임시
+  const handleCommentClick = () => {
+    setShowModal("CommentModal");
+  };
   return (
     <Container>
       <PostWrap>
@@ -218,7 +240,7 @@ export default function BoardPost({
           <Button
             type="submit"
             onClick={handleSubmit}
-            className="block text-2xl font-black w-full bg-[#FEDF40] text-black py-3 rounded-full"
+            className="block font-black "
           >
             작성 완료
           </Button>
@@ -243,8 +265,11 @@ export default function BoardPost({
             />
           )}
           {showModal === "AlertModal" && <AlertModal error={errorType} />}
+          {/* 댓글 모달 임시 */}
+          {showModal === "CommentModal" && <CommentModal />}
         </>
       )}
+      <Comment onClick={handleCommentClick} />
     </Container>
   );
 }
