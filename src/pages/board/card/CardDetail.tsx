@@ -44,8 +44,10 @@ export default function CardDetail() {
 
   //날짜 양식 맞추기
   const changeDateFormat = (date: Date): string => {
-    // console.log(date);
+    // const localDate: Date = new Date(date);
     if (date) {
+      console.log("작성날짜", date);
+
       return date.toString().substring(0, 10).replace(/-/g, ".");
     }
     return "";
