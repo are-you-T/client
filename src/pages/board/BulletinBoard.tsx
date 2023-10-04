@@ -7,7 +7,7 @@ import { ResData, Board } from "@/@types/index";
 import BulletinCard from "@/components/board/BulletinCard/BulletinCard";
 import PostBtn from "@/components/board/Button/PostBtn/PostBtn";
 import ChangeMbtiBtn from "@/components/board/Button/ChangeMbtiBtn/ChangeMbtiBtn";
-import BoardPost from "@/components/board/BoardPost";
+import BoardPost from "@/components/board/BoardPost/BoardPost";
 import MbtiTypesModal, { ModalBg } from "@/components/common/MbtiTypesModal";
 import MbtiColorChip from "@/components/board/MbtiColorChip/MbtiColorChip";
 
