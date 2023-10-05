@@ -16,7 +16,7 @@ import {
   Divider,
   FooterWrap,
   Footer,
-  CreateDate,
+  CreateDate
 } from "./CardDetail.styles";
 
 export default function CardDetail() {
@@ -45,9 +45,9 @@ export default function CardDetail() {
   //날짜 양식 맞추기
   const changeDateFormat = (date: Date): string => {
     if (date) {
-      console.log("작성날짜", date);
       const localDate: Date = new Date(date);
-      return date.toString().substring(0, 10).replace(/-/g, ".");
+      // console.log("작성날짜", localDate);
+      return localDate.toISOString().substring(0, 10).replace(/-/g, ".");
     }
     return "";
   };
