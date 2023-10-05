@@ -16,7 +16,7 @@ import {
   Divider,
   FooterWrap,
   Footer,
-  Date,
+  CreateDate,
 } from "./CardDetail.styles";
 
 export default function CardDetail() {
@@ -44,10 +44,9 @@ export default function CardDetail() {
 
   //날짜 양식 맞추기
   const changeDateFormat = (date: Date): string => {
-    // const localDate: Date = new Date(date);
     if (date) {
       console.log("작성날짜", date);
-
+      const localDate: Date = new Date(date);
       return date.toString().substring(0, 10).replace(/-/g, ".");
     }
     return "";
@@ -66,7 +65,7 @@ export default function CardDetail() {
         <Divider />
         <Footer>
           <HeartBtn id={selectedId} like={posting.like} />
-          <Date>{changeDateFormat(posting.createdAt)}</Date>
+          <CreateDate>{changeDateFormat(posting.createdAt)}</CreateDate>
         </Footer>
       </FooterWrap>
     </Container>

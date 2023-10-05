@@ -65,6 +65,6 @@ export const Footer = tw.div`
   w-full
   px-6 pt-[10px]
 `;
-export const Date = tw.div`
+export const CreateDate = tw.div`
   font-extralight
 `;
