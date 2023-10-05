@@ -9,6 +9,7 @@ import Character from "@/components/common/Character";
 import MbtiTypesModal from "@/components/common/MbtiTypesModal";
 import ChangeMbtiBtn from "@/components/board/Button/ChangeMbtiBtn/ChangeMbtiBtn";
 import Pagination from "@/components/pagination/Pagination";
+import StatsMbtiButtons from "@/components/stats/StatsMbtiButtons/StatsMbtiButtons";
 import { barOptions } from "@/constants/charts";
 import { Container, Footer, ChartList, ModalWrapper } from "./StatsMbti.styles";
 
@@ -29,6 +30,8 @@ interface MbtiStatsByType {
   totalResponse: number;
   mbtiData: QuestionItem[];
 }
+
+const MBTI_STATS_PATH = ["energy", "awareness", "judgement", "life"];
 
 function ChartItem({ data }: { data: QuestionItem }) {
   const { subject, answer, selection } = data;
@@ -71,6 +74,7 @@ function StatsMbti() {
   const [visibleStats, setVisibleStats] = useState<QuestionItem[]>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [mbtiType, setMbtiType] = useState(currMbti?.toUpperCase().split(""));
+  const [visibleChar, setVisibleChar] = useState(mbtiType ? mbtiType[0] : null);
 
   const handleMbtiType = useCallback(
     (value: string[]) => setMbtiType(value),
@@ -122,27 +126,33 @@ function StatsMbti() {
     return data;
   }, []);
 
+  const getMbtiStats = async (mbtiCharIdx: number) => {
+    const targetPath = MBTI_STATS_PATH[mbtiCharIdx];
+
+    if (!targetPath || !currMbti || !mbtiType) return;
+
+    try {
+      setIsLoading(true);
+
+      const { data } = await axiosReq.requestAxios<ResData<MbtiStatsByType>>(
+        "get",
+        `/stats/basic/${currMbti.toUpperCase()}/${targetPath}`
+      );
+
+      const filteredStats = filterValidData(data);
+
+      setVisibleChar(mbtiType[mbtiCharIdx]);
+      setStats(filteredStats);
+      setVisibleStats(filteredStats.mbtiData.slice(0, 11)); // 변수로 수정 필요
+    } catch (error) {
+      alert("데이터를 받아오던 중 에러가 발생했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        if (!currMbti) throw new Error();
-
-        setIsLoading(true);
-
-        const { data } = await axiosReq.requestAxios<ResData<MbtiStatsByType>>(
-          "get",
-          `/stats/basic/${currMbti.toUpperCase()}`
-        );
-
-        const filteredStats = filterValidData(data);
-        setStats(filteredStats);
-        setVisibleStats(filteredStats.mbtiData.slice(0, 11));
-      } catch (error) {
-        alert("데이터를 받아오던 중 에러가 발생했습니다.");
-      } finally {
-        setIsLoading(false);
-      }
-    })();
+    getMbtiStats(0);
   }, [currMbti]);
 
   if (!currMbti) {
@@ -161,6 +171,11 @@ function StatsMbti() {
               <h3 className="text-5xl font-bold">{stats.mbtiType}</h3>
               <ChangeMbtiBtn setOpenMbtiModal={() => setIsOpenModal(true)} />
             </div>
+            <StatsMbtiButtons
+              targetChar={visibleChar || ""}
+              mbtiType={stats.mbtiType}
+              onClickType={getMbtiStats}
+            />
             <div className="px-[20px]">
               <ChartList className="mt-[40px]">
                 {visibleStats.map((data) => (
