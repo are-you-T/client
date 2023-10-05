@@ -8,6 +8,8 @@ import LoadingIndicator from "@/components/common/LoadingIndicator";
 import Character from "@/components/common/Character";
 import MbtiTypesModal from "@/components/common/MbtiTypesModal";
 import ChangeMbtiBtn from "@/components/board/Button/ChangeMbtiBtn/ChangeMbtiBtn";
+import Pagination from "@/components/pagination/Pagination";
+import StatsMbtiButtons from "@/components/stats/StatsMbtiButtons/StatsMbtiButtons";
 import { barOptions } from "@/constants/charts";
 import { Container, Footer, ChartList, ModalWrapper } from "./StatsMbti.styles";
 
@@ -29,6 +31,9 @@ interface MbtiStatsByType {
   mbtiData: QuestionItem[];
 }
 
+const MBTI_STATS_PATH = ["energy", "awareness", "judgement", "life"];
+const LIST_SIZE = 10;
+
 function ChartItem({ data }: { data: QuestionItem }) {
   const { subject, answer, selection } = data;
 
@@ -37,7 +42,7 @@ function ChartItem({ data }: { data: QuestionItem }) {
 
   const displaySeries: ApexAxisChartSeries = [
     { name: leftType, data: [leftValue] },
-    { name: rightType, data: [rightValue] },
+    { name: rightType, data: [rightValue] }
   ];
 
   return (
@@ -67,17 +72,14 @@ function StatsMbti() {
   const { mbti: currMbti } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [stats, setStats] = useState<MbtiStatsByType | null>(null);
+  const [visibleStats, setVisibleStats] = useState<QuestionItem[]>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [mbtiType, setMbtiType] = useState(currMbti?.toUpperCase().split(""));
-
-  const handleMbtiType = useCallback(
-    (value: string[]) => setMbtiType(value),
-    []
-  );
+  const [visibleChar, setVisibleChar] = useState(mbtiType ? mbtiType[0] : null);
 
   const handleModal = ({
     currentTarget,
-    target,
+    target
   }: React.MouseEvent<HTMLDivElement>) => {
     if (currentTarget === target) {
       setIsOpenModal(false);
@@ -92,11 +94,21 @@ function StatsMbti() {
     }
   };
 
+  const changeVisibleStats = (pageNum: number) => {
+    if (!stats?.mbtiData) return;
+
+    const visibleData = stats.mbtiData.slice(
+      (pageNum - 1) * LIST_SIZE,
+      pageNum * LIST_SIZE
+    );
+    setVisibleStats(visibleData);
+  };
+
   const filterValidData = useCallback((data: MbtiStatsByType) => {
     data.mbtiData.forEach((question) => {
       const filteredData: Pick<QuestionItem, "answer" | "selection"> = {
         answer: {},
-        selection: {},
+        selection: {}
       };
 
       Object.entries(question.answer).forEach(([type, val]) => {
@@ -113,26 +125,33 @@ function StatsMbti() {
     return data;
   }, []);
 
+  const getMbtiStats = async (mbtiCharIdx: number) => {
+    const targetPath = MBTI_STATS_PATH[mbtiCharIdx];
+
+    if (!targetPath || !currMbti || !mbtiType) return;
+
+    try {
+      setIsLoading(true);
+
+      const { data } = await axiosReq.requestAxios<ResData<MbtiStatsByType>>(
+        "get",
+        `/stats/basic/${currMbti.toUpperCase()}/${targetPath}`
+      );
+
+      const filteredStats = filterValidData(data);
+
+      setStats(filteredStats);
+      setVisibleChar(mbtiType[mbtiCharIdx]);
+      setVisibleStats(filteredStats.mbtiData.slice(0, LIST_SIZE + 1));
+    } catch (error) {
+      alert("데이터를 받아오던 중 에러가 발생했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        if (!currMbti) throw new Error();
-
-        setIsLoading(true);
-
-        const { data } = await axiosReq.requestAxios<ResData<MbtiStatsByType>>(
-          "get",
-          `/stats/basic/${currMbti.toUpperCase()}`
-        );
-
-        const filteredStats = filterValidData(data);
-        setStats(filteredStats);
-      } catch (error) {
-        alert("데이터를 받아오던 중 에러가 발생했습니다.");
-      } finally {
-        setIsLoading(false);
-      }
-    })();
+    getMbtiStats(0);
   }, [currMbti]);
 
   if (!currMbti) {
@@ -147,27 +166,34 @@ function StatsMbti() {
       <section>
         {stats ? (
           <>
-            <div className="flex place-content-between items-center px-[20px] pt-[20px]">
+            <div className="flex place-content-between items-center py-[20px]">
               <h3 className="text-5xl font-bold">{stats.mbtiType}</h3>
               <ChangeMbtiBtn setOpenMbtiModal={() => setIsOpenModal(true)} />
             </div>
-            <div className="px-[20px]">
-              <ChartList className="mt-[40px]">
-                {stats.mbtiData.map((data) => (
-                  <ChartItem key={data.idx} data={data} />
-                ))}
-              </ChartList>
-            </div>
+            <StatsMbtiButtons
+              targetChar={visibleChar || ""}
+              mbtiType={stats.mbtiType}
+              onClickType={getMbtiStats}
+            />
+            <ChartList className="mt-[40px]">
+              {visibleStats.map((data) => (
+                <ChartItem key={data.idx} data={data} />
+              ))}
+            </ChartList>
+            <Pagination
+              maxPage={Math.ceil(stats.mbtiData.length / LIST_SIZE)}
+              onChangePage={changeVisibleStats}
+            />
           </>
         ) : (
           <Character bgcolor="#00B26E" gcolor="#FFA8DF" />
         )}
         <Footer hasData={!!stats}>
           {!stats && <h2 className="no-data">No data</h2>}
-          <Link className="btn" to="/stats">
+          <Link to="/stats" className="btn">
             MBTI 통계
           </Link>
-          <Link className="btn" to={`/board/${currMbti}`}>
+          <Link to={`/board/${currMbti}`} className="btn">
             담벼락 바로가기
           </Link>
         </Footer>
@@ -176,7 +202,7 @@ function StatsMbti() {
             <MbtiTypesModal
               isButton
               selectMbti={mbtiType || []}
-              onThisMbti={handleMbtiType}
+              onThisMbti={(value) => setMbtiType(value)}
               onThisConfirm={onChangeMbtiType}
             />
           </ModalWrapper>
