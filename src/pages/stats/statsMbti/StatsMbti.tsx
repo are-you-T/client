@@ -166,7 +166,7 @@ function StatsMbti() {
       <section>
         {stats ? (
           <>
-            <div className="flex place-content-between items-center px-[20px] pt-[20px]">
+            <div className="flex place-content-between items-center py-[20px]">
               <h3 className="text-5xl font-bold">{stats.mbtiType}</h3>
               <ChangeMbtiBtn setOpenMbtiModal={() => setIsOpenModal(true)} />
             </div>
@@ -175,13 +175,11 @@ function StatsMbti() {
               mbtiType={stats.mbtiType}
               onClickType={getMbtiStats}
             />
-            <div className="px-[20px]">
-              <ChartList className="mt-[40px]">
-                {visibleStats.map((data) => (
-                  <ChartItem key={data.idx} data={data} />
-                ))}
-              </ChartList>
-            </div>
+            <ChartList className="mt-[40px]">
+              {visibleStats.map((data) => (
+                <ChartItem key={data.idx} data={data} />
+              ))}
+            </ChartList>
             <Pagination
               maxPage={Math.ceil(stats.mbtiData.length / LIST_SIZE)}
               onChangePage={changeVisibleStats}

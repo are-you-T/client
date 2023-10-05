@@ -1,46 +1,46 @@
 import tw, { styled } from "twin.macro";
 
-const Container = styled.main<{ hasData: boolean, isOpenModal: boolean }>`
-    min-height: calc(100vh - 170px);
-    ${tw`
+const Container = styled.main<{ hasData: boolean; isOpenModal: boolean }>`
+  min-height: calc(100vh - 170px);
+  ${tw`
         m-auto
-        p-0
+        px-[20px]
         w-[390px]
         text-white
         bg-black    
     `}
 
-    ${({ hasData }) => !hasData && tw`flex items-end`}
+  ${({ hasData }) => !hasData && tw`flex items-end px-0`}
     ${({ isOpenModal }) => isOpenModal && tw`relative overflow-y-hidden`}
 `;
 
 const ChartList = styled.ol`
-    ${tw`list-disc`}
-    
-    & div[type="bar"] {
-        ${tw`text-black`}
-    }
+  ${tw`list-disc`}
+
+  & div[type="bar"] {
+    ${tw`text-black`}
+  }
 `;
 
 const Footer = styled.div<{ hasData: boolean }>`
-    ${tw`
+  ${tw`
         m-auto
-        p-[20px]
+        py-[20px]
         w-full
         text-[30px]
         text-black
         text-center
         font-bold
     `}
-    
-    ${({ hasData }) => !hasData && tw`bg-[#00B26E]`}
+
+  ${({ hasData }) => !hasData && tw`bg-[#00B26E]`}
 
     > h2.no-data {
-        ${tw`mb-28 text-[3.75rem]`}
-    }
+    ${tw`mb-28 text-[3.75rem]`}
+  }
 
-    > a {
-        ${tw`
+  > a {
+    ${tw`
             btn
             mt-5
             w-80
@@ -52,7 +52,7 @@ const Footer = styled.div<{ hasData: boolean }>`
             text-black
             font-bold
         `}
-    }
+  }
 `;
 
 const ModalWrapper = tw.div`
@@ -70,9 +70,4 @@ const ModalWrapper = tw.div`
     z-50
 `;
 
-export {
-    Container,
-    Footer,
-    ChartList,
-    ModalWrapper
-};
+export { Container, Footer, ChartList, ModalWrapper };
