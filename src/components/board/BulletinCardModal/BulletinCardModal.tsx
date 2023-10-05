@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 import axiosRequest from "@/api/index";
 import { ResData, Board } from "@/@types/index";
+import { ReactComponent as CloseIcon } from "@/assets/img/board_close_icon.svg";
 
 import HeartBtn from "@/components/board/Button/HeartBtn/HeartBtn";
 
@@ -17,7 +18,7 @@ import {
   Divider,
   FooterWrap,
   Footer,
-  Date,
+  Date
 } from "./BulletinCardModal.styles";
 
 interface BulletinCardModalProps {
@@ -26,7 +27,7 @@ interface BulletinCardModalProps {
 }
 export default function BulletinCardModal({
   closeModal,
-  selectedId,
+  selectedId
 }: BulletinCardModalProps) {
   //게시글 상태
   const [posting, setPosting] = useState<Board>({} as Board);
@@ -66,19 +67,7 @@ export default function BulletinCardModal({
           <Category>{posting.category}</Category>
 
           <CloseBtn onClick={closeModal}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="27"
-              height="27"
-              fill="none"
-            >
-              <circle cx="13.5" cy="13.5" r="13.5" fill="#000" />
-              <path
-                stroke="#fff"
-                strokeWidth="2"
-                d="m9.233 9.233 8.394 8.394M17.627 9.233l-8.394 8.394"
-              />
-            </svg>
+            <CloseIcon />
           </CloseBtn>
         </Header>
 
