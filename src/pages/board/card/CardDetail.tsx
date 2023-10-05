@@ -43,11 +43,20 @@ export default function CardDetail() {
   }, []);
 
   //날짜 양식 맞추기
+  const twoStringFormat = (date: number): string => {
+    return date < 10 ? "0" + date.toString() : date.toString();
+  };
   const changeDateFormat = (date: Date): string => {
     if (date) {
-      const localDate: Date = new Date(date);
-      // console.log("작성날짜", localDate);
-      return localDate.toISOString().substring(0, 10).replace(/-/g, ".");
+      const localDate = new Date(date);
+      // console.log("연도", localDate.getFullYear());
+      // console.log("월", localDate.getMonth() + 1);
+      // console.log("일", localDate.getDate());
+      const year = localDate.getFullYear().toString();
+      const month = twoStringFormat(localDate.getMonth() + 1);
+      const day = twoStringFormat(localDate.getDate());
+
+      return `${year}.${month}.${day}`;
     }
     return "";
   };
