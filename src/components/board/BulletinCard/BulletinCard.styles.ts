@@ -14,7 +14,7 @@ export const Header = tw.div`
   
 `;
 export const Title = tw.div`
-  text-[18px] font-medium
+  text-[15px] font-medium
   
 `;
 
@@ -23,7 +23,7 @@ export const Main = tw.div`
 
 export const Content = tw.div`
   overflow-hidden
-  text-[15px]
+  text-[13px]
   mx-[14px]
   
 `;

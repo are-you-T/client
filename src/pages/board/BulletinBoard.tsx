@@ -5,7 +5,6 @@ import axiosRequest from "@/api/index";
 import { ResData, Board } from "@/@types/index";
 
 import BulletinCard from "@/components/board/BulletinCard/BulletinCard";
-import BulletinCardModal from "@/components/board/BulletinCardModal/BulletinCardModal";
 import PostBtn from "@/components/board/Button/PostBtn/PostBtn";
 import ChangeMbtiBtn from "@/components/board/Button/ChangeMbtiBtn/ChangeMbtiBtn";
 import BoardPost from "@/components/board/BoardPost/BoardPost";
@@ -16,18 +15,14 @@ import {
   Main,
   BoardDiv,
   Header,
+  HeaderBtns,
   MbtiTitle,
   Title,
   BulletinCardWrap,
-  Footer,
 } from "./BulletinBoard.styles";
 
 export default function BulletinBoard() {
-  // 모달창 상태
-  const [openCardModal, setOpenCardModal] = useState<boolean>(false);
   const [openMbtiModal, setOpenMbtiModal] = useState<boolean>(false);
-  //선택한 카드의 id값
-  const [selectedId, setSelectedId] = useState<string>("");
 
   //전체 게시글
   const [postings, setPostings] = useState<Board[]>([]);
@@ -39,37 +34,30 @@ export default function BulletinBoard() {
     nav(`/board/${mbti}`);
     getPostings();
   };
-  const showModal = (id: string): void => {
-    setSelectedId(id);
-    setOpenCardModal(true);
-    document.body.style.overflow = "hidden";
+  //게시글 상세페이지 이동
+  const goCardDetailPage = (selectedId: string): void => {
+    nav(`/board/cardDetail/${selectedId}`);
   };
-  const closeModal = (): void => {
-    setOpenCardModal(false);
-    getPostings();
-    document.body.style.overflow = "unset";
+  const handleCardClick = (id: string): void => {
+    goCardDetailPage(id);
   };
 
   //게시글 작성 날짜 양식-> *일 전으로 변경
   const calculateDaysDiff = (date: Date): number => {
-    //서버 저장되는 시간이 (한국표준시Z)의 형태임
-    //Date()를 거치면 원래는 UTC -> local시간으로 되는 건데
-    //한국표준시를 인자로 넣었기 때문에 한국표준시보다 +9시간 차이가 나게 된다.
-    //리팩토링 시 서버에 저장되는 시간을 UTC로 바꾸면 메서드의 용도에 맞고 이해가 쉬울 듯 하다.
-    const pastDate: Date = new Date(date); //local(한국표준시 +9시간)
+    //서버 저장되는 시간이 UTC
+    //Date(UTC) -> local시간
+    const pastDate: Date = new Date(date); //local(한국표준시)
     const currentDate: Date = new Date(); //local(한국표준시)
-    const koreaTimeDiff = 9 * 60 * 60 * 1000; //9시간
 
-    //local시간 ->UTC로 바꾸는 명령어 :한국표준시 -9시간
-    const pastLocalDate = pastDate.getTime() - koreaTimeDiff; //작성시 local(한국표준시)
-    const currentLocalDate = currentDate.getTime(); //현재 local(한국표준시)
+    const pastLocalTime = pastDate.getTime();
+    const currentLocalTime = currentDate.getTime();
 
-    const diffDate: number = currentLocalDate - pastLocalDate;
+    const diffDate: number = currentLocalTime - pastLocalTime;
 
-    console.log("서버시간", date);
-    console.log("작성날짜", pastLocalDate);
-    console.log("현재날짜", currentLocalDate);
-    console.log("날짜 차이", diffDate);
+    // console.log("서버시간", date);
+    // console.log("작성날짜", pastLocalTime);
+    // console.log("현재날짜", currentLocalTime);
+    // console.log("날짜 차이", diffDate);
 
     return Math.floor(diffDate / (1000 * 60 * 60 * 24));
   };
@@ -99,7 +87,6 @@ export default function BulletinBoard() {
   const handleThisConfirm = () => {
     const mbti = mbtiType.reduce((acc, cur) => acc + cur);
     setOpenMbtiModal(false);
-    setOnDetailPage(true);
     goDetailPage(mbti);
   };
 
@@ -113,109 +100,85 @@ export default function BulletinBoard() {
     getPostings();
   }, [mbti]);
 
-  //유형별게시판과 전체게시판 구분
-  const [onDetailPage, setOnDetailPage] = useState<boolean>(false);
-  useEffect(() => {
-    if (mbti) {
-      setOnDetailPage(true);
-    } else {
-      setOnDetailPage(false);
-    }});
-
-    useEffect(() => {
-        getPostings();
-    }, []);
-
-    //Detail 페이지에 필요한 변수,메소드
-
-    //전체 게시글
-    const boardAll = postings.map((posting) => {
-        return (
-            <BulletinCard
-                key={posting._id}
-                id={posting._id}
-                showModal={showModal}
-                title={posting.title}
-                content={posting.content}
-                category={posting.category}
-                color={posting.color}
-                like={posting.like}
-                createdAt={calculateDaysDiff(posting.createdAt)}
-            />
-        );
-    });
-    //유형별 게시글
-    const boardDetail = postings
-        .filter((posting) => posting.category === mbti)
-        .map((posting) => {
-            return (
-                <BulletinCard
-                    key={posting._id}
-                    id={posting._id}
-                    showModal={showModal}
-                    title={posting.title}
-                    content={posting.content}
-                    category={posting.category}
-                    color={posting.color}
-                    like={posting.like}
-                    createdAt={calculateDaysDiff(posting.createdAt)}
-                />
-            );
-        });
-
+  //전체 게시글
+  const boardAll = postings.map((posting) => {
     return (
-        <>
-            {openBoardPost ? (
-                <BoardPost
-                    onThisClose={() => setOpenBoardPost(false)}
-                    onThisComplete={(mbti) => {
-                        getPostings();
-                        setOpenBoardPost(false);
-                        setOnDetailPage(true);
-                        goDetailPage(mbti);
-                    }}
-                    thisMbti={mbti ? mbti : "INFP"}
-                />
-            ) : (
-                <BoardDiv>
-                    {openCardModal && (
-                        <BulletinCardModal
-                            selectedId={selectedId}
-                            closeModal={closeModal}
-                        />
-                    )}
-                    {openMbtiModal && (
-                        <div>
-                            <ModalBg onClick={() => setOpenMbtiModal(false)} />
-                            <MbtiTypesModal
-                                selectMbti={mbtiType}
-                                onThisMbti={handleThisMbti}
-                                isButton={true}
-                                onThisConfirm={handleThisConfirm}
-                            />
-                        </div>
-                    )}
-                    <Header>
-                        {mbti ? (
-                            <MbtiTitle>
-                                <Title>{mbti}</Title>
-                                <MbtiColorChip selectedMbti={mbti} />
-                            </MbtiTitle>
-                        ) : (
-                            <Title>MBTI 담벼락</Title>
-                        )}
-                        <ChangeMbtiBtn setOpenMbtiModal={setOpenMbtiModal} />
-                    </Header>
-                    <Main>
-                        <BulletinCardWrap>
-                            {mbti ? boardDetail : boardAll}
-                        </BulletinCardWrap>
-                    </Main>
-                    <Footer>
-                        <PostBtn setOpenBoardPost={setOpenBoardPost} />
-                    </Footer>
-                </BoardDiv>
-            )}
-        </>
+      <BulletinCard
+        key={posting._id}
+        id={posting._id}
+        handleCardClick={handleCardClick}
+        title={posting.title}
+        content={posting.content}
+        category={posting.category}
+        color={posting.color}
+        like={posting.like}
+        createdAt={calculateDaysDiff(posting.createdAt)}
+      />
     );
+  });
+  //유형별 게시글
+  const boardDetail = postings
+    .filter((posting) => posting.category === mbti)
+    .map((posting) => {
+      return (
+        <BulletinCard
+          key={posting._id}
+          id={posting._id}
+          handleCardClick={handleCardClick}
+          title={posting.title}
+          content={posting.content}
+          category={posting.category}
+          color={posting.color}
+          like={posting.like}
+          createdAt={calculateDaysDiff(posting.createdAt)}
+        />
+      );
+    });
+
+  return (
+    <>
+      {openBoardPost ? (
+        <BoardPost
+          onThisClose={() => setOpenBoardPost(false)}
+          onThisComplete={(mbti) => {
+            getPostings();
+            setOpenBoardPost(false);
+            goDetailPage(mbti);
+          }}
+          thisMbti={mbti ? mbti : "INFP"}
+        />
+      ) : (
+        <BoardDiv>
+          {openMbtiModal && (
+            <div>
+              <ModalBg onClick={() => setOpenMbtiModal(false)} />
+              <MbtiTypesModal
+                selectMbti={mbtiType}
+                onThisMbti={handleThisMbti}
+                isButton={true}
+                onThisConfirm={handleThisConfirm}
+              />
+            </div>
+          )}
+          <Header>
+            {mbti ? (
+              <MbtiTitle>
+                <Title>{mbti}</Title>
+                <MbtiColorChip selectedMbti={mbti} />
+              </MbtiTitle>
+            ) : (
+              <Title>MBTI 담벼락</Title>
+            )}
+            <HeaderBtns>
+              <PostBtn setOpenBoardPost={setOpenBoardPost} />
+              <ChangeMbtiBtn setOpenMbtiModal={setOpenMbtiModal} />
+            </HeaderBtns>
+          </Header>
+          <Main>
+            <BulletinCardWrap>{mbti ? boardDetail : boardAll}</BulletinCardWrap>
+          </Main>
+        </BoardDiv>
+      )}
+    </>
+  );
 }

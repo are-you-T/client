@@ -18,6 +18,10 @@ export const Header = tw.div`
   flex flex-row justify-between items-center
   mt-4 mb-7 
 `;
+export const HeaderBtns = tw.div`
+flex flex-row items-center
+gap-2
+`;
 export const MbtiTitle = tw.div`
  flex flex-row items-center gap-3
 `;
@@ -28,13 +32,4 @@ export const Title = tw.div`
 export const BulletinCardWrap = tw.div`
   flex flex-wrap justify-start gap-[15px]
   mx-auto
-`;
-
-export const Footer = tw.div`
-  flex justify-center
-  w-full bg-black
-  self-end
-  pt-3 pb-3
-  absolute bottom-0 left-0 right-0
-  
 `;
