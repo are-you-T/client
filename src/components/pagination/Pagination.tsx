@@ -1,13 +1,18 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Container, PageItem } from "./Pagination.style";
 
 interface PaginationProps {
+  pageBtnCount?: number;
   maxPage: number;
   onChangePage: (pageNum: number) => void;
 }
 
-const Pagination = ({ maxPage, onChangePage }: PaginationProps) => {
-  const paginationSize = useMemo(() => Math.min(maxPage, 5), [maxPage]);
+const Pagination = ({
+  pageBtnCount = 5,
+  maxPage,
+  onChangePage
+}: PaginationProps) => {
+  const paginationSize = Math.min(maxPage, pageBtnCount);
   const [currentPage, setCurrentPage] = useState(1);
   const [visiblePages, setVisiblePages] = useState<number[]>(() =>
     Array.from({ length: paginationSize }, (_, i) => i + 1)

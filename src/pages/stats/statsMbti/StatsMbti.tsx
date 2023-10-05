@@ -32,6 +32,7 @@ interface MbtiStatsByType {
 }
 
 const MBTI_STATS_PATH = ["energy", "awareness", "judgement", "life"];
+const LIST_SIZE = 10;
 
 function ChartItem({ data }: { data: QuestionItem }) {
   const { subject, answer, selection } = data;
@@ -76,11 +77,6 @@ function StatsMbti() {
   const [mbtiType, setMbtiType] = useState(currMbti?.toUpperCase().split(""));
   const [visibleChar, setVisibleChar] = useState(mbtiType ? mbtiType[0] : null);
 
-  const handleMbtiType = useCallback(
-    (value: string[]) => setMbtiType(value),
-    []
-  );
-
   const handleModal = ({
     currentTarget,
     target
@@ -101,7 +97,10 @@ function StatsMbti() {
   const changeVisibleStats = (pageNum: number) => {
     if (!stats?.mbtiData) return;
 
-    const visibleData = stats.mbtiData.slice((pageNum - 1) * 10, pageNum * 10);
+    const visibleData = stats.mbtiData.slice(
+      (pageNum - 1) * LIST_SIZE,
+      pageNum * LIST_SIZE
+    );
     setVisibleStats(visibleData);
   };
 
@@ -141,9 +140,9 @@ function StatsMbti() {
 
       const filteredStats = filterValidData(data);
 
-      setVisibleChar(mbtiType[mbtiCharIdx]);
       setStats(filteredStats);
-      setVisibleStats(filteredStats.mbtiData.slice(0, 11)); // 변수로 수정 필요
+      setVisibleChar(mbtiType[mbtiCharIdx]);
+      setVisibleStats(filteredStats.mbtiData.slice(0, LIST_SIZE + 1));
     } catch (error) {
       alert("데이터를 받아오던 중 에러가 발생했습니다.");
     } finally {
@@ -184,7 +183,7 @@ function StatsMbti() {
               </ChartList>
             </div>
             <Pagination
-              maxPage={Math.ceil(stats.mbtiData.length / 10)}
+              maxPage={Math.ceil(stats.mbtiData.length / LIST_SIZE)}
               onChangePage={changeVisibleStats}
             />
           </>
@@ -205,7 +204,7 @@ function StatsMbti() {
             <MbtiTypesModal
               isButton
               selectMbti={mbtiType || []}
-              onThisMbti={handleMbtiType}
+              onThisMbti={(value) => setMbtiType(value)}
               onThisConfirm={onChangeMbtiType}
             />
           </ModalWrapper>
