@@ -73,7 +73,7 @@ export default function CardDetail() {
           <BackIcon />
         </BackBtn>
         <Category>{posting.category}</Category>
-        <OptionBtn />
+        <OptionBtn selectedId={selectedId} />
       </Header>
       <Main>
         <Title>{posting.title}</Title>
