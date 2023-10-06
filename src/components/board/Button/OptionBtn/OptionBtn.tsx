@@ -1,22 +1,20 @@
 import { ReactComponent as OptionIcon } from "@/assets/img/option_button.svg";
+import { DropdownWrap, ButtonWrap, MenuList, MenuEl } from "./OptionBtn.styles";
 
 export default function OptionBtn() {
   return (
-    <div className="dropdown dropdown-end">
-      <label tabIndex={0} className="btn btn-ghost">
+    <DropdownWrap>
+      <ButtonWrap tabIndex={0}>
         <OptionIcon />
-      </label>
-      <ul
-        tabIndex={0}
-        className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-      >
+      </ButtonWrap>
+      <MenuList tabIndex={0} className="dropdown-content">
         <li>
-          <a>Item 1</a>
+          <MenuEl>수정</MenuEl>
         </li>
         <li>
-          <a>Item 2</a>
+          <MenuEl>삭제</MenuEl>
         </li>
-      </ul>
-    </div>
+      </MenuList>
+    </DropdownWrap>
   );
 }
