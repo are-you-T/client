@@ -5,7 +5,7 @@ import TestCard from "@/components/test/TestCard/TestCard";
 import TestQuestion from "@/components/test/TestQuestion/TestQuestion";
 import ProgressBar from "@/components/test/ProgressBar/ProgressBar";
 import Loading from "@/components/test/loading/Loading";
-import LoadingIndicator from "@/components/common/LoadingIndicator";
+import LoadingIndicator from "@/components/common/LoadingIndicator/LoadingIndicator";
 import * as S from "./Test.styles";
 
 export default function Test() {

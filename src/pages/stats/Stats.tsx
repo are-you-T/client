@@ -3,10 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import ApexCharts from "react-apexcharts";
 
 import { StatsAll, ResData } from "@/@types";
-import MbtiTypesModal from "@/components/common/MbtiTypesModal";
+import MbtiTypesModal from "@/components/common/MbtiTypesModal/MbtiTypesModal";
 import axiosRequest from "@/api";
 import Character from "@/components/common/Character";
-import LoadingIndicator from "@/components/common/LoadingIndicator";
+import LoadingIndicator from "@/components/common/LoadingIndicator/LoadingIndicator";
 import { treeOptions } from "@/constants/charts";
 import {  
   Section,

@@ -1,15 +1,8 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
-import tw from "tailwind-styled-components";
-
-const ModalBg = tw.div`
-w-[390px] fixed top-0 left-1/2 -translate-x-1/2 h-full backdrop-blur-sm bg-black/[.3]
-`;
-
-export { ModalBg };
+import { ModalBg, ModalWrap, MbtiButton, MbtiLabel, MbtiList, Toggle } from "./MbtiTypesModal.styles";
 
 // MBTI 선택 모달
-function MbtiTypesModal({
+const MbtiTypesModal = ({
   selectMbti,
   onThisMbti,
   isButton,
@@ -19,7 +12,7 @@ function MbtiTypesModal({
   onThisMbti: (value: string[]) => void;
   isButton: boolean;
   onThisConfirm?: () => void;
-}) {
+}) => {
   const [mbti_IE, setMbti_IE] = useState(selectMbti[0]);
   const [mbti_NS, setMbti_NS] = useState(selectMbti[1]);
   const [mbti_FT, setMbti_FT] = useState(selectMbti[2]);
@@ -161,50 +154,6 @@ function MbtiTypesModal({
   );
 }
 
+export { ModalBg };
 export default MbtiTypesModal;
 
-const ModalWrap = tw.div`
-bg-white rounded-t-3xl p-8 text-black fixed bottom-0 left-1/2 -translate-x-1/2 w-[390px] m-auto z-10
-`;
-
-const ActiveList = styled.li`
-  position: relative;
-  & > div {
-    z-index: 1;
-    & label {
-      &.active {
-        color: black;
-      }
-    }
-  }
-`;
-
-const MbtiButton = tw.button`
-block text-2xl font-black w-full bg-[#FEDF40] text-black py-3 rounded-full mt-5
-`;
-
-const MbtiLabel = tw.label`
-  block w-full cursor-pointer p-2
-`;
-
-const MbtiList = tw(ActiveList)`
-bg-black 
-w-full text-white flex items-center p-4 rounded-full text-5xl font-black mt-5
-`;
-
-const Toggle = styled.div`
-  position: absolute;
-  z-index: -1;
-  background-color: #b2acf9;
-  display: block;
-  width: 50%;
-  height: calc(100% - 20px);
-  transition: all 0.2s;
-  border-radius: 9999px;
-  &.left {
-    left: calc(0% + 10px);
-  }
-  &.right {
-    left: calc(50% - 10px);
-  }
-`;
