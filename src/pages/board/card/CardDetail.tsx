@@ -6,6 +6,7 @@ import { ResData, Board } from "@/@types/index";
 
 import HeartBtn from "@/components/board/Button/HeartBtn/HeartBtn";
 import { ReactComponent as BackIcon } from "@/assets/img/left_line.svg";
+import OptionBtn from "@/components/board/Button/OptionBtn/OptionBtn";
 
 import {
   Container,
@@ -72,6 +73,7 @@ export default function CardDetail() {
           <BackIcon />
         </BackBtn>
         <Category>{posting.category}</Category>
+        <OptionBtn />
       </Header>
       <Main>
         <Title>{posting.title}</Title>

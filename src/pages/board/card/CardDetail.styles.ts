@@ -7,7 +7,7 @@ export const Container = styled.div<{ bgColor: string }>`
   background: ${(props) => props.bgColor}
 `;
 export const Header = tw.div`
-  h-[76px]
+  h-[76px] w-full px-[24px]
   flex flex-row justify-between items-center
   `;
 export const BackBtn = tw.div`
