@@ -58,7 +58,6 @@ export const Button = tw.button`
   bg-yellow-400
   rounded-full
   text-lg
-  mt-5
   border-0
   font-bold
   text-black
@@ -88,4 +87,14 @@ export const CommentModalWrap = tw.div`
   flex
   flex-col
   justify-between
+`;
+
+// 비밀번호
+export const PassWordWrap = tw.div`
+  flex
+  items-center
+  justify-between
+  w-full
+  h-[46px]
+ 
 `;
