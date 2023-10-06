@@ -27,6 +27,7 @@ export default function Test() {
         const response: ResData<Question[]> = await axiosRequest.requestAxios<
           ResData<Question[]>
         >("get", "/question/basic");
+        
         setQuestionList(response.data);
       } catch (error) {
         console.error(error);
@@ -74,11 +75,19 @@ export default function Test() {
     [currentChoiceList, questionList]
   );
 
+  // 문항 답변 위치 랜덤 배치
+  const shuffleArray = (array: object[]) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]]; // 요소를 교환합니다.
+    }
+  }
+
   // 각 문항에 대한 선택지 표시
   useEffect(() => {
     if (questionList.length) {
-      if (currentIndex <= 3) {
-        setCurrentChoiceList([
+      if (["E", "I"].includes(questionList[currentIndex].mbtiType)) {
+        const questionArray = [
           {
             mbtiType: "E",
             text: questionList[currentIndex].answer.E
@@ -87,9 +96,12 @@ export default function Test() {
             mbtiType: "I",
             text: questionList[currentIndex].answer.I
           }
-        ]);
-      } else if (currentIndex <= 7) {
-        setCurrentChoiceList([
+        ]
+
+        shuffleArray(questionArray);
+        setCurrentChoiceList(questionArray);
+      } else if (["N", "S"].includes(questionList[currentIndex].mbtiType)) {
+        const questionArray = [
           {
             mbtiType: "N",
             text: questionList[currentIndex].answer.N
@@ -98,9 +110,12 @@ export default function Test() {
             mbtiType: "S",
             text: questionList[currentIndex].answer.S
           }
-        ]);
-      } else if (currentIndex <= 11) {
-        setCurrentChoiceList([
+        ]
+
+        shuffleArray(questionArray);
+        setCurrentChoiceList(questionArray);
+      } else if (["T", "F"].includes(questionList[currentIndex].mbtiType)) {
+        const questionArray = [
           {
             mbtiType: "T",
             text: questionList[currentIndex].answer.T
@@ -109,9 +124,12 @@ export default function Test() {
             mbtiType: "F",
             text: questionList[currentIndex].answer.F
           }
-        ]);
+        ]
+
+        shuffleArray(questionArray);
+        setCurrentChoiceList(questionArray);
       } else {
-        setCurrentChoiceList([
+        const questionArray = [
           {
             mbtiType: "J",
             text: questionList[currentIndex].answer.J
@@ -120,10 +138,63 @@ export default function Test() {
             mbtiType: "P",
             text: questionList[currentIndex].answer.P
           }
-        ]);
+        ]
+
+        shuffleArray(questionArray);
+        setCurrentChoiceList(questionArray);
       }
     }
   }, [currentIndex, questionList]);
+
+  // useEffect(() => {
+  //   if (questionList.length) {
+  //     if (currentIndex <= 3) {
+  //       setCurrentChoiceList([
+  //         {
+  //           mbtiType: "E",
+  //           text: questionList[currentIndex].answer.E
+  //         },
+  //         {
+  //           mbtiType: "I",
+  //           text: questionList[currentIndex].answer.I
+  //         }
+  //       ]);
+  //     } else if (currentIndex <= 7) {
+  //       setCurrentChoiceList([
+  //         {
+  //           mbtiType: "N",
+  //           text: questionList[currentIndex].answer.N
+  //         },
+  //         {
+  //           mbtiType: "S",
+  //           text: questionList[currentIndex].answer.S
+  //         }
+  //       ]);
+  //     } else if (currentIndex <= 11) {
+  //       setCurrentChoiceList([
+  //         {
+  //           mbtiType: "T",
+  //           text: questionList[currentIndex].answer.T
+  //         },
+  //         {
+  //           mbtiType: "F",
+  //           text: questionList[currentIndex].answer.F
+  //         }
+  //       ]);
+  //     } else {
+  //       setCurrentChoiceList([
+  //         {
+  //           mbtiType: "J",
+  //           text: questionList[currentIndex].answer.J
+  //         },
+  //         {
+  //           mbtiType: "P",
+  //           text: questionList[currentIndex].answer.P
+  //         }
+  //       ]);
+  //     }
+  //   }
+  // }, [currentIndex, questionList]);
 
   // 테스트 페이지 UI
   if (questionList.length === 0 || currentChoiceList.length === 0) {
