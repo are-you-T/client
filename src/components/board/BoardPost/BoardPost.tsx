@@ -5,7 +5,9 @@ import { ReactComponent as CloseIcon } from "@/assets/img/close_icon.svg";
 import { ReactComponent as CheckIcon } from "@/assets/img/check_icon.svg";
 import { ReactComponent as Comment } from "@/assets/img/comment.svg";
 
-import MbtiTypesModal, { ModalBg } from "@/components/common/MbtiTypesModal";
+import MbtiTypesModal, {
+  ModalBg
+} from "@/components/common/MbtiTypesModal/MbtiTypesModal";
 import axiosRequest from "@/api";
 import { ResData, BoardPostData } from "@/@types";
 import {
@@ -19,7 +21,8 @@ import {
   MbtiType,
   Button,
   BorderButton,
-  CommentModalWrap
+  CommentModalWrap,
+  PassWordWrap
 } from "./BoardPost.styles";
 import { CommentContent } from "@/components/comment/CommentContent";
 import { CommentPostContent } from "@/components/comment/CommentPost";
@@ -128,9 +131,14 @@ export default function BoardPost({
 }) {
   const [bgColor, setBgColor] = useState<string>("white");
   const [mbtiType, setMbtiType] = useState<string[]>(Array.from(thisMbti));
-  const [newPost, setNewPost] = useState<{ title: string; content: string }>({
+  const [newPost, setNewPost] = useState<{
+    title: string;
+    content: string;
+    password: string;
+  }>({
     title: "",
-    content: ""
+    content: "",
+    password: ""
   });
   const [showModal, setShowModal] = useState<string>("");
   const [errorType, setErrorType] = useState<string>("");
@@ -141,13 +149,14 @@ export default function BoardPost({
   const mbtiColor_2 = "#FFA8DF";
 
   async function postData() {
-    const { title, content } = newPost;
+    const { title, content, password } = newPost;
 
     await axiosRequest.requestAxios<ResData<BoardPostData>>("post", "/board", {
       category: mbtiType.join(""),
       title: title,
       content: content,
-      color: bgColor
+      color: bgColor,
+      password: password
     });
   }
 
@@ -156,11 +165,12 @@ export default function BoardPost({
     []
   );
 
+  //유효성 검사
   const handleSubmit = () => {
     // 유효성 정상이면 api요청 보내고,
     // 현재 mbti유형을 부모컴포넌트에게 전달해주고,
     // 부모컴포넌트가 이 컴포넌트를 사라지게하고 스크롤이 올라가도록
-    const { title, content } = newPost;
+    const { title, content, password } = newPost;
 
     if (title === "") {
       setErrorType("제목을 입력해주세요!");
@@ -168,6 +178,17 @@ export default function BoardPost({
       return;
     } else if (content === "") {
       setErrorType("내용을 입력해주세요!");
+      setShowModal("AlertModal");
+      return;
+    } else if (password === "") {
+      setErrorType("비밀번호를 입력해주세요!");
+      setShowModal("AlertModal");
+      return;
+    }
+
+    const passwordPattern = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[\W_]).{8,}$/;
+    if (!passwordPattern.test(password)) {
+      setErrorType("숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요!");
       setShowModal("AlertModal");
       return;
     }
@@ -182,6 +203,7 @@ export default function BoardPost({
   const handleCommentClick = () => {
     setShowModal("CommentModal");
   };
+
   return (
     <Container>
       <PostWrap>
@@ -220,6 +242,20 @@ export default function BoardPost({
             }
           />
         </form>
+        <PassWordWrap>
+          <div className="text-2xl">비밀번호</div>
+          <input
+            type="password"
+            placeholder="비밀번호 입력"
+            className=" outline-0 border bg-inherit p-[10px]"
+            onChange={(evt) =>
+              setNewPost((post) => {
+                return { ...post, password: evt.target.value };
+              })
+            }
+          />
+        </PassWordWrap>
+
         <div>
           <BorderButton
             onClick={() => setShowModal("BgColorsModal")}

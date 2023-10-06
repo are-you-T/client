@@ -14,7 +14,7 @@ export async function handleShareClick() {
   } else {
     // Web Share API를 지원하지 않는 경우
     // 대체 동작을 수행합니다.
-    await share(window.location.origin);
+    await share(window.location.href);
   }
 }
 
