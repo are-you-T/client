@@ -8,7 +8,9 @@ import BulletinCard from "@/components/board/BulletinCard/BulletinCard";
 import PostBtn from "@/components/board/Button/PostBtn/PostBtn";
 import ChangeMbtiBtn from "@/components/board/Button/ChangeMbtiBtn/ChangeMbtiBtn";
 import BoardPost from "@/components/board/BoardPost/BoardPost";
-import MbtiTypesModal, { ModalBg } from "@/components/common/MbtiTypesModal";
+import MbtiTypesModal, {
+  ModalBg
+} from "@/components/common/MbtiTypesModal/MbtiTypesModal";
 import MbtiColorChip from "@/components/board/MbtiColorChip/MbtiColorChip";
 
 import {
@@ -18,7 +20,7 @@ import {
   HeaderBtns,
   MbtiTitle,
   Title,
-  BulletinCardWrap,
+  BulletinCardWrap
 } from "./BulletinBoard.styles";
 
 export default function BulletinBoard() {
