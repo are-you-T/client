@@ -17,7 +17,8 @@ import {
   Divider,
   FooterWrap,
   Footer,
-  CreateDate
+  CreateDate,
+  BackBtn
 } from "./CardDetail.styles";
 
 export default function CardDetail() {
@@ -61,11 +62,15 @@ export default function CardDetail() {
     }
     return "";
   };
-
+  const handleBackBtnClick = () => {
+    window.history.back();
+  };
   return (
     <Container bgColor={posting.color}>
       <Header>
-        <BackIcon />
+        <BackBtn onClick={handleBackBtnClick}>
+          <BackIcon />
+        </BackBtn>
         <Category>{posting.category}</Category>
       </Header>
       <Main>

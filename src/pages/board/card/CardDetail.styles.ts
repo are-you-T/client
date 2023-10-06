@@ -10,6 +10,9 @@ export const Header = tw.div`
   h-[76px]
   flex flex-row justify-between items-center
   `;
+export const BackBtn = tw.div`
+cursor-pointer
+  `;
 export const Category = tw.div`
   text-2xl font-bold
   my-3.5
