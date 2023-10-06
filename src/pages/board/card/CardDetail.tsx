@@ -5,6 +5,7 @@ import axiosRequest from "@/api/index";
 import { ResData, Board } from "@/@types/index";
 
 import HeartBtn from "@/components/board/Button/HeartBtn/HeartBtn";
+import { ReactComponent as BackIcon } from "@/assets/img/left_line.svg";
 
 import {
   Container,
@@ -64,6 +65,7 @@ export default function CardDetail() {
   return (
     <Container bgColor={posting.color}>
       <Header>
+        <BackIcon />
         <Category>{posting.category}</Category>
       </Header>
       <Main>

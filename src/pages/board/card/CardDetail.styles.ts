@@ -8,7 +8,7 @@ export const Container = styled.div<{ bgColor: string }>`
 `;
 export const Header = tw.div`
   h-[76px]
-  flex flex-row justify-center items-center
+  flex flex-row justify-between items-center
   `;
 export const Category = tw.div`
   text-2xl font-bold
