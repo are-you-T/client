@@ -55,14 +55,8 @@ function ApexChartForm(props: ApexChartFormProps) {
 export default function Stats() {
   const navigate = useNavigate();
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [mbtiType, setMbtiType] = useState(["I", "N", "T", "J"]);
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<ChartData["data"]>([{ x: "", y: 0 }]);
-
-  const handleThisMbti = useCallback(
-    (value: string[]) => setMbtiType(value),
-    []
-  );
 
   const handleClickModal = useCallback(
     ({ currentTarget, target }: React.MouseEvent<HTMLDivElement>) => {
@@ -97,8 +91,6 @@ export default function Stats() {
     })();
   }, []);
 
-  const mbti = mbtiType.join("");
-
   return (
     <Section>
       <h3 className="text-2xl font-bold mb-2 text-white">MBTI 통계</h3>
@@ -121,10 +113,9 @@ export default function Stats() {
       {isOpenModal && (
         <MbtiTypesModal
           isButton
-          selectMbti={mbtiType}
-          onThisMbti={handleThisMbti}
-          onThisConfirm={() => navigate(`/stats/${mbti}`)}
+          defaultMbti={["I", "N", "T", "J"]}
           onCloseModal={handleClickModal}
+          onSelectMbti={(selectedMbti) => navigate(`/stats/${selectedMbti}`)}
         />
       )}
     </Section>

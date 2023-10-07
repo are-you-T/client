@@ -69,13 +69,12 @@ function ChartItem({ data }: { data: QuestionItem }) {
 
 function StatsMbti() {
   const navigate = useNavigate();
-  const { mbti: currMbti } = useParams();
+  const { mbti: mbtiType } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [stats, setStats] = useState<MbtiStatsByType | null>(null);
   const [visibleStats, setVisibleStats] = useState<QuestionItem[]>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [mbtiType, setMbtiType] = useState(currMbti?.toUpperCase().split(""));
-  const [visibleChar, setVisibleChar] = useState(mbtiType ? mbtiType[0] : null);
+  const [visibleChar, setVisibleChar] = useState(mbtiType);
 
   const handleModal = ({
     currentTarget,
@@ -86,12 +85,9 @@ function StatsMbti() {
     }
   };
 
-  const onChangeMbtiType = () => {
+  const onChangeMbtiType = (selectedMbti: string[]) => {
     setIsOpenModal(false);
-
-    if (mbtiType) {
-      navigate(`/stats/${mbtiType.join("")}`);
-    }
+    navigate(`/stats/${selectedMbti.join("")}`);
   };
 
   const changeVisibleStats = (pageNum: number) => {
@@ -128,14 +124,14 @@ function StatsMbti() {
   const getMbtiStats = async (mbtiCharIdx: number) => {
     const targetPath = MBTI_STATS_PATH[mbtiCharIdx];
 
-    if (!targetPath || !currMbti || !mbtiType) return;
+    if (!targetPath || !mbtiType) return;
 
     try {
       setIsLoading(true);
 
       const { data } = await axiosReq.requestAxios<ResData<MbtiStatsByType>>(
         "get",
-        `/stats/basic/${currMbti.toUpperCase()}/${targetPath}`
+        `/stats/basic/${mbtiType.toUpperCase()}/${targetPath}`
       );
 
       const filteredStats = filterValidData(data);
@@ -152,9 +148,9 @@ function StatsMbti() {
 
   useEffect(() => {
     getMbtiStats(0);
-  }, [currMbti]);
+  }, [mbtiType]);
 
-  if (!currMbti) {
+  if (!mbtiType) {
     navigate("/");
     return null;
   }
@@ -193,17 +189,16 @@ function StatsMbti() {
           <Link to="/stats" className="btn">
             MBTI 통계
           </Link>
-          <Link to={`/board/${currMbti}`} className="btn">
+          <Link to={`/board/${mbtiType}`} className="btn">
             담벼락 바로가기
           </Link>
         </Footer>
-        {isOpenModal && (
+        {isOpenModal && mbtiType && (
           <MbtiTypesModal
             isButton
-            selectMbti={mbtiType || []}
-            onThisMbti={(value) => setMbtiType(value)}
-            onThisConfirm={onChangeMbtiType}
+            defaultMbti={mbtiType.toUpperCase().split("")}
             onCloseModal={handleModal}
+            onSelectMbti={onChangeMbtiType}
           />
         )}
       </section>
