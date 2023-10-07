@@ -1,4 +1,4 @@
-import tw, { styled } from "twin.macro";
+import tw from "twin.macro";
 
 export const ModalBg = tw.div`
 w-[390px] 
@@ -10,7 +10,7 @@ left-1/2 -translate-x-1/2
  bg-black/[.3]
  z-1
 `;
-export const ModalWrap = tw.div`
+export const ModalWrap = tw.form`
   fixed
   top-[40%]
   bg-white
@@ -29,7 +29,7 @@ export const ModalDetail = tw.div`
   flex
   justify-between
 `;
-export const Title = tw.div`
+export const Title = tw.label`
 text-[24px] font-semibold`;
 export const InputForm = tw.input`
 w-[230px]  h-[30px] rounded-[10px] bg-black p-[16px] text-[12px] text-white

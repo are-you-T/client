@@ -39,21 +39,21 @@ const PwCheckModal = ({
       const response: ResData<BoardPassword> = await axiosRequest.requestAxios<
         ResData<BoardPassword>
       >("post", `/board/${selectedId}`, { pw: password });
-      console.log("비밀번호검증", response.data);
-      // setPosting(response.data);
+      // console.log("비밀번호검증", response.data);
       response && checkCorrectPw(true);
     } catch (error) {
       console.error(error);
     }
   }
-  const handleClick = () => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     postPassword();
   };
   return (
     <>
       <ModalBg onClick={handleClickBg} />
 
-      <ModalWrap>
+      <ModalWrap onSubmit={handleSubmit}>
         <Title>비밀번호를 입력하세요</Title>
         <ModalDetail>
           <InputForm
@@ -62,7 +62,7 @@ const PwCheckModal = ({
             value={password}
             onChange={handleChange}
           />
-          <ConfirmBtn onClick={handleClick}>확인</ConfirmBtn>
+          <ConfirmBtn type="submit">확인</ConfirmBtn>
         </ModalDetail>
       </ModalWrap>
     </>
