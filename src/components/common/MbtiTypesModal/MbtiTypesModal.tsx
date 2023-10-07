@@ -47,11 +47,13 @@ const MbtiTypesModal = ({
         <h3 className="text-2xl font-black text-center">MBTI 선택</h3>
         <ul>
           {selectedMbti.map((_, idx) => {
-            const leftType = mbtiTypes[idx * 2],
-              rightType = mbtiTypes[idx * 2 + 1];
+            const leftIdx = idx * 2,
+              rightIdx = idx * 2 + 1;
+            const leftType = mbtiTypes[leftIdx],
+              rightType = mbtiTypes[rightIdx];
 
             return (
-              <MbtiList>
+              <MbtiList key={idx}>
                 <Toggle
                   className={selectedMbti.includes(leftType) ? "left" : "right"}
                 />
@@ -60,6 +62,7 @@ const MbtiTypesModal = ({
                     type="radio"
                     id={leftType}
                     className="hidden"
+                    checked={selectedMbti.includes(leftType)}
                     onChange={() => handleChangeMbti(idx, leftType)}
                   />
                   <MbtiLabel
@@ -74,6 +77,7 @@ const MbtiTypesModal = ({
                     type="radio"
                     id={rightType}
                     className="hidden"
+                    checked={selectedMbti.includes(rightType)}
                     onChange={() => handleChangeMbti(idx, rightType)}
                   />
                   <MbtiLabel
