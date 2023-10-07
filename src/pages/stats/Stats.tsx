@@ -8,14 +8,13 @@ import axiosRequest from "@/api";
 import Character from "@/components/common/Character";
 import LoadingIndicator from "@/components/common/LoadingIndicator/LoadingIndicator";
 import { treeOptions } from "@/constants/charts";
-import {  
+import {
   Section,
   StyledApexChart,
   Title,
   ButtonWrap,
-  Button,
-  ModalWrap
-} from './Stats.styles';
+  Button
+} from "./Stats.styles";
 
 interface ChartData {
   data: { x: string; y: number }[];
@@ -35,21 +34,20 @@ function ApexChartForm(props: ApexChartFormProps) {
   return (
     <>
       {hasData ? (
-          <div id="chart">
-            <ApexCharts
-              options={options}
-              series={[{ data: series }]}
-              type="treemap"
-              height={height}
-            />
-          </div>
-        ) : (
-          <>
-            <Character bgcolor={"#00B26E"} gcolor={"#FFA8DF"} />
-            <Title>No data</Title>
-          </>
-        )
-      }
+        <div id="chart">
+          <ApexCharts
+            options={options}
+            series={[{ data: series }]}
+            type="treemap"
+            height={height}
+          />
+        </div>
+      ) : (
+        <>
+          <Character bgcolor={"#00B26E"} gcolor={"#FFA8DF"} />
+          <Title>No data</Title>
+        </>
+      )}
     </>
   );
 }
@@ -79,8 +77,11 @@ export default function Stats() {
     (async () => {
       try {
         setIsLoading(true);
-        
-        const response = await axiosRequest.requestAxios<ResData<StatsAll[]>>("get", "/stats");
+
+        const response = await axiosRequest.requestAxios<ResData<StatsAll[]>>(
+          "get",
+          "/stats"
+        );
 
         const scaledData = response.data
           .map((item) => ({ x: item.name, y: item.count }))
@@ -102,28 +103,29 @@ export default function Stats() {
     <Section>
       <h3 className="text-2xl font-bold mb-2 text-white">MBTI 통계</h3>
       <StyledApexChart>
-        {isLoading ? <LoadingIndicator /> : <ApexChartForm options={treeOptions} series={data} height={650} />}
+        {isLoading ? (
+          <LoadingIndicator />
+        ) : (
+          <ApexChartForm options={treeOptions} series={data} height={650} />
+        )}
       </StyledApexChart>
       <ButtonWrap className={data.length ? "bg-[#000]" : "bg-[#00B26E]"}>
-        <Button onClick={() => setIsOpenModal(true)}>
-          MBTI별 통계
-        </Button>
-        <Link 
-          to="/board" 
+        <Button onClick={() => setIsOpenModal(true)}>MBTI별 통계</Button>
+        <Link
+          to="/board"
           className="btn w-80 h-16 bg-yellow-400 text-lg font-bold rounded-full border-0 rounded-full mt-5 text-black"
         >
           담벼락 바로가기
         </Link>
       </ButtonWrap>
       {isOpenModal && (
-        <ModalWrap onClick={handleClickModal}>
-            <MbtiTypesModal
-              isButton
-              selectMbti={mbtiType}
-              onThisMbti={handleThisMbti}
-              onThisConfirm={() => navigate(`/stats/${mbti}`)}
-            />
-        </ModalWrap>
+        <MbtiTypesModal
+          isButton
+          selectMbti={mbtiType}
+          onThisMbti={handleThisMbti}
+          onThisConfirm={() => navigate(`/stats/${mbti}`)}
+          onCloseModal={handleClickModal}
+        />
       )}
     </Section>
   );

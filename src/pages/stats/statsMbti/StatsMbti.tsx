@@ -11,7 +11,7 @@ import ChangeMbtiBtn from "@/components/board/Button/ChangeMbtiBtn/ChangeMbtiBtn
 import Pagination from "@/components/pagination/Pagination";
 import StatsMbtiButtons from "@/components/stats/StatsMbtiButtons/StatsMbtiButtons";
 import { barOptions } from "@/constants/charts";
-import { Container, Footer, ChartList, ModalWrapper } from "./StatsMbti.styles";
+import { Container, Footer, ChartList } from "./StatsMbti.styles";
 
 interface QuestionItem {
   idx: number;
@@ -198,14 +198,13 @@ function StatsMbti() {
           </Link>
         </Footer>
         {isOpenModal && (
-          <ModalWrapper onClick={handleModal}>
-            <MbtiTypesModal
-              isButton
-              selectMbti={mbtiType || []}
-              onThisMbti={(value) => setMbtiType(value)}
-              onThisConfirm={onChangeMbtiType}
-            />
-          </ModalWrapper>
+          <MbtiTypesModal
+            isButton
+            selectMbti={mbtiType || []}
+            onThisMbti={(value) => setMbtiType(value)}
+            onThisConfirm={onChangeMbtiType}
+            onCloseModal={handleModal}
+          />
         )}
       </section>
     </Container>
