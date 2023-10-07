@@ -7,6 +7,8 @@ import { ResData, Board } from "@/@types/index";
 import HeartBtn from "@/components/board/Button/HeartBtn/HeartBtn";
 import { ReactComponent as BackIcon } from "@/assets/img/left_line.svg";
 import OptionBtn from "@/components/board/Button/OptionBtn/OptionBtn";
+import PwCheckModal from "@/components/common/PwCheckModal/PwCheckModal";
+import BoardPost from "@/components/board/BoardPost/BoardPost";
 
 import {
   Container,
@@ -63,29 +65,66 @@ export default function CardDetail() {
     }
     return "";
   };
+  //뒤로가기
   const handleBackBtnClick = () => {
     window.history.back();
   };
+  //비밀번호 확인 모달
+  const [isPwCheckModalOpen, setIsPwCheckModalOpen] = useState<boolean>(false);
+  const showModal = async () => {
+    setIsPwCheckModalOpen(!isPwCheckModalOpen);
+    // await getPosting();
+  };
+
+  //게시글 수정 모달
+  const [openBoardEdit, setOpenBoardEdit] = useState<boolean>(false);
+
+  const checkCorrectPw = (openBoardEdit: boolean) => {
+    setOpenBoardEdit(openBoardEdit);
+  };
+
   return (
-    <Container bgColor={posting.color}>
-      <Header>
-        <BackBtn onClick={handleBackBtnClick}>
-          <BackIcon />
-        </BackBtn>
-        <Category>{posting.category}</Category>
-        <OptionBtn selectedId={selectedId} />
-      </Header>
-      <Main>
-        <Title>{posting.title}</Title>
-        <Content>{posting.content}</Content>
-      </Main>
-      <FooterWrap>
-        <Divider />
-        <Footer>
-          <HeartBtn id={selectedId} like={posting.like} />
-          <CreateDate>{changeDateFormat(posting.createdAt)}</CreateDate>
-        </Footer>
-      </FooterWrap>
-    </Container>
+    <>
+      {openBoardEdit ? (
+        <BoardPost
+          onThisClose={() => setOpenBoardEdit(false)}
+          onThisComplete={() => {
+            //patch요청
+            //모달닫기
+            //수정한 카드 상세페이지이동
+          }}
+          thisMbti={posting.category}
+          existingPost={posting}
+        />
+      ) : (
+        <Container bgColor={posting.color}>
+          {isPwCheckModalOpen && (
+            <PwCheckModal
+              onClose={showModal}
+              selectedId={selectedId}
+              checkCorrectPw={checkCorrectPw}
+            />
+          )}
+          <Header>
+            <BackBtn onClick={handleBackBtnClick}>
+              <BackIcon />
+            </BackBtn>
+            <Category>{posting.category}</Category>
+            <OptionBtn selectedId={selectedId} showModal={showModal} />
+          </Header>
+          <Main>
+            <Title>{posting.title}</Title>
+            <Content>{posting.content}</Content>
+          </Main>
+          <FooterWrap>
+            <Divider />
+            <Footer>
+              <HeartBtn id={selectedId} like={posting.like} />
+              <CreateDate>{changeDateFormat(posting.createdAt)}</CreateDate>
+            </Footer>
+          </FooterWrap>
+        </Container>
+      )}
+    </>
   );
 }
