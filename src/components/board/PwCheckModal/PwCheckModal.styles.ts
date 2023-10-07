@@ -12,10 +12,10 @@ left-1/2 -translate-x-1/2
  absolute
 `;
 export const ModalWrap = tw.form`
-w-[320px] h-[200px] p-[28px] mt-[50%]
+w-[320px] h-[200px] p-[28px] top-[40%]
 bg-white rounded-xl
 flex flex-col justify-between
-z-20 absolute
+z-20 fixed
 `;
 export const Title = tw.div`
 font-bold text-[20px]
