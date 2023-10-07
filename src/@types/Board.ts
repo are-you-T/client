@@ -16,10 +16,6 @@ export interface BoardPostData {
   color: string;
 }
 
-export interface BoardPassword {
+export interface BoardPassword extends Board {
   password: string;
-  category: string;
-  title: string;
-  content: string;
-  color: string;
 }
