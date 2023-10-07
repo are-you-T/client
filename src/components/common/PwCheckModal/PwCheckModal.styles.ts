@@ -29,6 +29,8 @@ export const ModalDetail = tw.div`
   flex
   justify-between
 `;
+export const Title = tw.div`
+text-[24px] font-semibold`;
 export const InputForm = tw.input`
 w-[230px]  h-[30px] rounded-[10px] bg-black p-[16px] text-[12px] text-white
 `;
