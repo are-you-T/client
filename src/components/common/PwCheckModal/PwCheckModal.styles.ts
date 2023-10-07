@@ -12,8 +12,7 @@ left-1/2 -translate-x-1/2
 `;
 export const ModalWrap = tw.div`
   fixed
-  top-0
-  left-0
+  top-[40%]
   bg-white
   rounded-3xl 
   p-[20px]
