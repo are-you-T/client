@@ -47,10 +47,8 @@ const MbtiTypesModal = ({
         <h3 className="text-2xl font-black text-center">MBTI 선택</h3>
         <ul>
           {selectedMbti.map((_, idx) => {
-            const leftIdx = idx * 2,
-              rightIdx = idx * 2 + 1;
-            const leftType = mbtiTypes[leftIdx],
-              rightType = mbtiTypes[rightIdx];
+            const leftType = mbtiTypes[idx * 2],
+              rightType = mbtiTypes[idx * 2 + 1];
 
             return (
               <MbtiList key={idx}>

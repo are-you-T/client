@@ -115,7 +115,9 @@ export default function Stats() {
           isButton
           defaultMbti={["I", "N", "T", "J"]}
           onCloseModal={handleClickModal}
-          onSelectMbti={(selectedMbti) => navigate(`/stats/${selectedMbti}`)}
+          onSelectMbti={(selectedMbti) =>
+            navigate(`/stats/${selectedMbti.join("")}`)
+          }
         />
       )}
     </Section>
