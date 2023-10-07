@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   ModalBg,
   ModalWrap,
@@ -6,13 +7,20 @@ import {
   ConfirmBtn
 } from "./PwCheckModal.styles";
 
-interface PwCheckModalProps {}
+interface PwCheckModalProps {
+  onClose: () => void;
+}
 
 //비밀번호 확인 모달
-const PwCheckModal = ({}: PwCheckModalProps) => {
+const PwCheckModal = ({ onClose }: PwCheckModalProps) => {
+  //모달 외부영역 클릭시 모달 닫힘
+  const handleClickBg = () => {
+    onClose();
+  };
+
   return (
     <>
-      <ModalBg />
+      <ModalBg onClick={handleClickBg} />
 
       <ModalWrap>
         <h2 className="text-[24px] font-semibold">비밀번호를 입력하세요</h2>
