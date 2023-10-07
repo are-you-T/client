@@ -15,3 +15,11 @@ export interface BoardPostData {
   content: string;
   color: string;
 }
+
+export interface BoardPassword {
+  password: string;
+  category: string;
+  title: string;
+  content: string;
+  color: string;
+}
