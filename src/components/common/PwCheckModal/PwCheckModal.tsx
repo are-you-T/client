@@ -58,6 +58,7 @@ const PwCheckModal = ({
         <ModalDetail>
           <InputForm
             type="password"
+            autoComplete="off"
             placeholder="비밀번호 입력"
             value={password}
             onChange={handleChange}
