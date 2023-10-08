@@ -8,19 +8,19 @@ import {
 } from "./OptionBtn.styles";
 
 interface OptionBtnProps {
-  showModal: () => void;
+  selectModal: (modal: string) => void;
   selectMode: (mode: string) => void;
 }
-export default function OptionBtn({ showModal, selectMode }: OptionBtnProps) {
+export default function OptionBtn({ selectModal, selectMode }: OptionBtnProps) {
   //게시글 수정
   const handleClickEditBtn = () => {
     selectMode("edit");
-    showModal(); //비밀번호 확인모달 open
+    selectModal("pwCheckModal"); //비밀번호 확인모달 open
   };
   //게시글 삭제
   const handleClickDeleteBtn = () => {
     selectMode("delete");
-    showModal(); //비밀번호 확인모달 open
+    selectModal("pwCheckModal"); //비밀번호 확인모달 open
   };
 
   return (

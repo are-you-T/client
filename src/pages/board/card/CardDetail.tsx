@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import axiosRequest from "@/api/index";
-import { ResData, Board } from "@/@types/index";
+import { ResData, Board, BoardPassword } from "@/@types/index";
 
 import HeartBtn from "@/components/board/Button/HeartBtn/HeartBtn";
 import { ReactComponent as BackIcon } from "@/assets/img/left_line.svg";
@@ -68,11 +68,12 @@ export default function CardDetail() {
     window.history.back();
   };
 
-  //비밀번호 확인 모달
-  const [isPwCheckModalOpen, setIsPwCheckModalOpen] = useState<boolean>(false);
-  const showModal = async () => {
-    setIsPwCheckModalOpen(!isPwCheckModalOpen);
-    // await getPosting();
+  //모달 관리
+  const [showModal, setShowModal] = useState<string>("");
+
+  //모달 선택
+  const selectModal = (modal: string) => {
+    setShowModal(modal);
   };
 
   //게시글 수정 모달
@@ -83,10 +84,9 @@ export default function CardDetail() {
     getSelectedPosting();
   }, [openBoardEdit]);
 
-  //게시글 모달, 비밀번호 확인모달 닫기
   const handleClose = () => {
-    setOpenBoardEdit(false);
-    setIsPwCheckModalOpen(false);
+    setOpenBoardEdit(false); //게시글 수정 모달 닫기
+    setShowModal(""); //비밀번호 확인모달 닫기
   };
 
   //수정 또는 삭제 모드 관리
@@ -96,6 +96,7 @@ export default function CardDetail() {
     // console.log("mode", mode);
     setMode(mode);
   };
+  //비밀번호 일치여부 확인 -> 수정 또는 삭제모드 활성화
   const checkCorrectPw = (active: boolean) => {
     // console.log("active", active);
     setActiveMode(active);
@@ -113,8 +114,8 @@ export default function CardDetail() {
   //게시글 delete요청
   async function deletePosting() {
     try {
-      const response: ResData<any> = await axiosRequest.requestAxios<
-        ResData<any>
+      const response: ResData<BoardPassword> = await axiosRequest.requestAxios<
+        ResData<BoardPassword>
       >("delete", `/board/${selectedId}`);
       // console.log("게시글삭제", response.data);
     } catch (error) {
@@ -132,19 +133,20 @@ export default function CardDetail() {
         />
       ) : (
         <Container bgColor={posting.color}>
-          {isPwCheckModalOpen && (
+          {showModal === "pwCheckModal" && (
             <PwCheckModal
-              onClose={showModal}
+              selectModal={selectModal}
               selectedId={selectedId}
               checkCorrectPw={checkCorrectPw}
             />
           )}
+
           <Header>
             <BackBtn onClick={handleBackBtnClick}>
               <BackIcon />
             </BackBtn>
             <Category>{posting.category}</Category>
-            <OptionBtn showModal={showModal} selectMode={selectMode} />
+            <OptionBtn selectModal={selectModal} selectMode={selectMode} />
           </Header>
           <Main>
             <Title>{posting.title}</Title>
