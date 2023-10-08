@@ -19,3 +19,6 @@ export interface BoardPostData {
 export interface BoardPassword extends Board {
   password: string;
 }
+export interface BoardPatchMsg {
+  msg: string;
+}
