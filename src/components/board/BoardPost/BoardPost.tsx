@@ -218,7 +218,7 @@ export default function BoardPost({
       return;
     }
 
-    console.log("작성완료");
+    // console.log("작성완료");
     setErrorType("");
     existingPost ? await patchPostData() : await postData();
     onThisComplete(mbtiType.join(""));

@@ -116,7 +116,7 @@ export default function CardDetail() {
       const response: ResData<any> = await axiosRequest.requestAxios<
         ResData<any>
       >("delete", `/board/${selectedId}`);
-      console.log("게시글삭제", response.data);
+      // console.log("게시글삭제", response.data);
     } catch (error) {
       console.error(error);
     }
