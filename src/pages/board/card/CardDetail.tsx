@@ -37,7 +37,7 @@ export default function CardDetail() {
       const response: ResData<Board> = await axiosRequest.requestAxios<
         ResData<Board>
       >("get", `/board/post/${selectedId}`);
-      console.log("게시글get", response.data);
+      // console.log("게시글get", response.data);
       setPosting(response.data);
     } catch (error) {
       console.error(error);
@@ -82,14 +82,41 @@ export default function CardDetail() {
     getSelectedPosting();
   }, [openBoardEdit]);
 
-  const checkCorrectPw = (openBoardEdit: boolean) => {
-    setOpenBoardEdit(openBoardEdit);
-  };
   //게시글 모달, 비밀번호 확인모달 닫기
   const handleClose = () => {
     setOpenBoardEdit(false);
     setIsPwCheckModalOpen(false);
   };
+
+  //수정 또는 삭제 모드 관리
+  const [activeMode, setActiveMode] = useState(false); //비밀번호가 일치했을 때 true
+  const [mode, setMode] = useState<string>(""); //수정 또는 삭제
+  const selectMode = (mode: string) => {
+    console.log("mode", mode);
+    setMode(mode);
+  };
+  const checkCorrectPw = (active: boolean) => {
+    // console.log("active", active);
+    setActiveMode(active);
+  };
+  useEffect(() => {
+    if (activeMode && mode === "edit") setOpenBoardEdit(openBoardEdit);
+    else if (activeMode && mode === "delete") {
+      deletePosting();
+      window.history.back();
+    }
+  }, [activeMode]);
+  //게시글 delete요청
+  async function deletePosting() {
+    try {
+      const response: ResData<any> = await axiosRequest.requestAxios<
+        ResData<any>
+      >("delete", `/board/${selectedId}`);
+      console.log("게시글삭제", response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   return (
     <>
       {openBoardEdit ? (
@@ -113,7 +140,7 @@ export default function CardDetail() {
               <BackIcon />
             </BackBtn>
             <Category>{posting.category}</Category>
-            <OptionBtn selectedId={selectedId} showModal={showModal} />
+            <OptionBtn showModal={showModal} selectMode={selectMode} />
           </Header>
           <Main>
             <Title>{posting.title}</Title>

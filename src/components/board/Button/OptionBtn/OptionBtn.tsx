@@ -10,26 +10,16 @@ import axiosRequest from "@/api/index";
 import { ResData, Board } from "@/@types/index";
 
 interface OptionBtnProps {
-  selectedId: string;
+  showModal: () => void;
+  selectMode: (mode: string) => void;
 }
-export default function OptionBtn({ selectedId }: OptionBtnProps) {
-  //게시글 delete요청
-  async function deletePosting() {
-    try {
-      const response: ResData<Board[]> = await axiosRequest.requestAxios<
-        ResData<Board[]>
-      >("delete", `/board/${selectedId}`);
-      // console.log("게시글삭제", response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
+export default function OptionBtn({ showModal, selectMode }: OptionBtnProps) {
   const handleClickEditBtn = () => {};
   const handleClickDeleteBtn = () => {
-    deletePosting();
-    window.history.back();
+    selectMode("delete");
+    showModal(); //비밀번호 확인모달 open
   };
+
   return (
     <DropdownWrap>
       <ButtonWrap tabIndex={0}>
