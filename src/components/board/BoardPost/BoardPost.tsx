@@ -9,7 +9,7 @@ import MbtiTypesModal, {
   ModalBg
 } from "@/components/common/MbtiTypesModal/MbtiTypesModal";
 import axiosRequest from "@/api";
-import { ResData, BoardPostData } from "@/@types";
+import { ResData, BoardPostData, Board, BoardPatchMsg } from "@/@types";
 import {
   ModalWrap,
   SelectColors,
@@ -134,8 +134,6 @@ export default function BoardPost({
   const [bgColor, setBgColor] = useState<string>("white");
   const [mbtiType, setMbtiType] = useState<string[]>(Array.from(thisMbti));
 
-  // const { title, content, color, category, createdAt, like, updatedAt, _id } =
-  //   existingPost;
   const [newPost, setNewPost] = useState<{
     title: string;
     content: string;
@@ -145,6 +143,7 @@ export default function BoardPost({
     content: existingPost?.content || "",
     password: existingPost?.password || ""
   });
+
   const [showModal, setShowModal] = useState<string>("");
   const [errorType, setErrorType] = useState<string>("");
 
@@ -165,22 +164,25 @@ export default function BoardPost({
       password: password
     });
   }
-  //게시글 patch요청
+
+  //게시글 수정(patch)요청
   async function patchPostData() {
     const { title, content, password } = newPost;
     const { category, _id } = existingPost;
-
-    await axiosRequest.requestAxios<ResData<BoardPostData>>(
-      "patch",
-      `/board/${_id}`,
-      {
+    try {
+      const response: ResData<BoardPatchMsg> = await axiosRequest.requestAxios<
+        ResData<BoardPatchMsg>
+      >("patch", `/board/${_id}`, {
         category: category,
         title: title,
         content: content,
         color: bgColor,
         password: password
-      }
-    );
+      });
+      // console.log("게시글patch", response.data);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const handleThisMbti = useCallback(
@@ -189,7 +191,7 @@ export default function BoardPost({
   );
 
   //유효성 검사
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // 유효성 정상이면 api요청 보내고,
     // 현재 mbti유형을 부모컴포넌트에게 전달해주고,
     // 부모컴포넌트가 이 컴포넌트를 사라지게하고 스크롤이 올라가도록
@@ -218,7 +220,7 @@ export default function BoardPost({
 
     console.log("작성완료");
     setErrorType("");
-    existingPost ? patchPostData() : postData();
+    existingPost ? await patchPostData() : await postData();
     onThisComplete(mbtiType.join(""));
   };
 
