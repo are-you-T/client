@@ -37,8 +37,9 @@ export default function CardDetail() {
       const response: ResData<Board> = await axiosRequest.requestAxios<
         ResData<Board>
       >("get", `/board/post/${selectedId}`);
-      // console.log("게시글", response.data);
+      console.log("게시글get", response.data);
       setPosting(response.data);
+      // console.log("posting", posting);
     } catch (error) {
       console.error(error);
     }
@@ -65,10 +66,12 @@ export default function CardDetail() {
     }
     return "";
   };
+
   //뒤로가기
   const handleBackBtnClick = () => {
     window.history.back();
   };
+
   //비밀번호 확인 모달
   const [isPwCheckModalOpen, setIsPwCheckModalOpen] = useState<boolean>(false);
   const showModal = async () => {
@@ -78,21 +81,25 @@ export default function CardDetail() {
 
   //게시글 수정 모달
   const [openBoardEdit, setOpenBoardEdit] = useState<boolean>(false);
+  //게시글 수정 모달 닫히면 새로 불러오기
+  useEffect(() => {
+    getSelectedPosting();
+  }, [openBoardEdit]);
 
   const checkCorrectPw = (openBoardEdit: boolean) => {
     setOpenBoardEdit(openBoardEdit);
   };
-
+  //게시글 모달, 비밀번호 확인모달 닫기
+  const handleClose = () => {
+    setOpenBoardEdit(false);
+    setIsPwCheckModalOpen(false);
+  };
   return (
     <>
       {openBoardEdit ? (
         <BoardPost
-          onThisClose={() => setOpenBoardEdit(false)}
-          onThisComplete={() => {
-            //patch요청
-            //모달닫기
-            //수정한 카드 상세페이지이동
-          }}
+          onThisClose={handleClose}
+          onThisComplete={handleClose}
           thisMbti={posting.category}
           existingPost={posting}
         />
