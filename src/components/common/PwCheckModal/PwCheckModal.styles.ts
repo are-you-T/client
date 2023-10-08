@@ -12,13 +12,13 @@ left-1/2 -translate-x-1/2
 `;
 export const ModalWrap = tw.form`
   fixed
-  top-[40%]
+  top-[50%]
   bg-white
   rounded-3xl 
   p-[20px]
   text-black 
-  w-[360px]
-  h-[125px] 
+  w-[370px]
+  h-[114px] 
   flex
   flex-col
   justify-between
