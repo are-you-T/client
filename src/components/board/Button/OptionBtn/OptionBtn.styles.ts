@@ -10,7 +10,10 @@ btn btn-ghost
 export const MenuList = tw.ul`
  z-[1] menu p-2 shadow bg-base-100 rounded-box w-[100px]
 `;
+export const EditBtn = tw.a`
+mx-auto
 
-export const MenuEl = tw.a`
+`;
+export const DeleteBtn = tw.a`
 mx-auto
 `;

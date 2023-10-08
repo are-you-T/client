@@ -8,7 +8,7 @@ left-1/2 -translate-x-1/2
  h-full 
  backdrop-blur-sm 
  bg-black/[.3]
- z-1
+ z-[2]
 `;
 export const ModalWrap = tw.form`
   fixed
