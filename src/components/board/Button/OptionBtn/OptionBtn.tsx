@@ -6,15 +6,18 @@ import {
   EditBtn,
   DeleteBtn
 } from "./OptionBtn.styles";
-import axiosRequest from "@/api/index";
-import { ResData, Board } from "@/@types/index";
 
 interface OptionBtnProps {
   showModal: () => void;
   selectMode: (mode: string) => void;
 }
 export default function OptionBtn({ showModal, selectMode }: OptionBtnProps) {
-  const handleClickEditBtn = () => {};
+  //게시글 수정
+  const handleClickEditBtn = () => {
+    selectMode("edit");
+    showModal(); //비밀번호 확인모달 open
+  };
+  //게시글 삭제
   const handleClickDeleteBtn = () => {
     selectMode("delete");
     showModal(); //비밀번호 확인모달 open

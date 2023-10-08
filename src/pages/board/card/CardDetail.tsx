@@ -77,6 +77,7 @@ export default function CardDetail() {
 
   //게시글 수정 모달
   const [openBoardEdit, setOpenBoardEdit] = useState<boolean>(false);
+
   //게시글 수정 모달 닫히면 새로 불러오기
   useEffect(() => {
     getSelectedPosting();
@@ -92,20 +93,23 @@ export default function CardDetail() {
   const [activeMode, setActiveMode] = useState(false); //비밀번호가 일치했을 때 true
   const [mode, setMode] = useState<string>(""); //수정 또는 삭제
   const selectMode = (mode: string) => {
-    console.log("mode", mode);
+    // console.log("mode", mode);
     setMode(mode);
   };
   const checkCorrectPw = (active: boolean) => {
     // console.log("active", active);
     setActiveMode(active);
   };
+
+  //수정 또는 삭제 기능
   useEffect(() => {
-    if (activeMode && mode === "edit") setOpenBoardEdit(openBoardEdit);
+    if (activeMode && mode === "edit") setOpenBoardEdit(true);
     else if (activeMode && mode === "delete") {
       deletePosting();
       window.history.back();
     }
   }, [activeMode]);
+
   //게시글 delete요청
   async function deletePosting() {
     try {
