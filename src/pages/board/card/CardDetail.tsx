@@ -39,14 +39,10 @@ export default function CardDetail() {
       >("get", `/board/post/${selectedId}`);
       console.log("게시글get", response.data);
       setPosting(response.data);
-      // console.log("posting", posting);
     } catch (error) {
       console.error(error);
     }
   }
-  useEffect(() => {
-    getSelectedPosting();
-  }, []);
 
   //날짜 양식 맞추기
   const twoStringFormat = (date: number): string => {
