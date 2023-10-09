@@ -1,0 +1,60 @@
+export default function CommentCharacter({ bgColor }: { bgColor: string }) {
+  return (
+    <svg
+      width="42"
+      height="55"
+      viewBox="0 0 42 55"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M0 45.0428C0.737001 33.7481 9.85454 24.822 20.9937 24.822C32.2011 24.822 41.362 33.8578 42 45.2506C36.6575 51.2727 29.2624 55.0001 21.0914 55.0001C12.8268 55.0001 5.35599 51.1868 0 45.0428Z"
+        fill={bgColor}
+      />
+      <ellipse
+        cx="20.9496"
+        cy="15.4778"
+        rx="15.0236"
+        ry="15.4778"
+        fill={bgColor}
+      />
+      <ellipse
+        cx="25.123"
+        cy="10.8936"
+        rx="4.08536"
+        ry="4.38702"
+        fill="white"
+      />
+      <ellipse
+        cx="25.1669"
+        cy="10.9429"
+        rx="1.58143"
+        ry="1.87311"
+        fill="black"
+      />
+      <ellipse
+        cx="15.8981"
+        cy="10.992"
+        rx="4.08536"
+        ry="4.38702"
+        fill="white"
+      />
+      <ellipse
+        cx="15.9418"
+        cy="11.0413"
+        rx="1.58143"
+        ry="1.87311"
+        fill="black"
+      />
+      <ellipse
+        cx="20.8619"
+        cy="20.0619"
+        rx="3.51429"
+        ry="1.82382"
+        fill="white"
+      />
+    </svg>
+  );
+}
