@@ -1,4 +1,4 @@
-import tw from 'twin.macro';
+import tw from "twin.macro";
 
 const Section = tw.section`
   w-[390px]
@@ -47,26 +47,4 @@ const Button = tw.button`
   text-black
 `;
 
-const ModalWrap = tw.div`
-  fixed
-  top-0
-  left-0
-  w-full
-  h-full
-  bg-black
-  bg-black/[.3]
-  backdrop-blur-sm
-  z-50
-  flex
-  items-center
-  justify-center
-`;
-
-export {
-  Section,
-  StyledApexChart,
-  Title,
-  ButtonWrap,
-  Button,
-  ModalWrap
-}
+export { Section, StyledApexChart, Title, ButtonWrap, Button };
