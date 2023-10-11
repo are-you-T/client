@@ -15,3 +15,10 @@ export interface BoardPostData {
   content: string;
   color: string;
 }
+
+export interface BoardPassword extends Board {
+  password: string;
+}
+export interface BoardPatchMsg {
+  msg: string;
+}

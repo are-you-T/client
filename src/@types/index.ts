@@ -4,9 +4,9 @@ import {
   UserAnswer,
   MBTIData,
   UserResponseProps,
-  QuestionText,
+  QuestionText
 } from "./Question";
-import { Board, BoardPostData } from "./Board";
+import { Board, BoardPostData, BoardPassword, BoardPatchMsg } from "./Board";
 import { Color } from "./Color";
 import { ResMbti } from "./ResMbti";
 import { StatsAll } from "./Stats";
@@ -26,8 +26,10 @@ export type {
   QuestionText,
   Board,
   BoardPostData,
+  BoardPassword,
+  BoardPatchMsg,
   Color,
   ResMbti,
   StatsAll,
-  ResultData,
+  ResultData
 };

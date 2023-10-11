@@ -9,7 +9,7 @@ import MbtiTypesModal, {
   ModalBg
 } from "@/components/common/MbtiTypesModal/MbtiTypesModal";
 import axiosRequest from "@/api";
-import { ResData, BoardPostData } from "@/@types";
+import { ResData, BoardPostData, Board, BoardPatchMsg } from "@/@types";
 import {
   ModalWrap,
   SelectColors,
@@ -123,23 +123,27 @@ function CommentModal() {
 export default function BoardPost({
   onThisClose,
   onThisComplete,
-  thisMbti
+  thisMbti,
+  existingPost
 }: {
   onThisClose: () => void;
   onThisComplete: (value: string) => void;
   thisMbti: string;
+  existingPost?: any;
 }) {
   const [bgColor, setBgColor] = useState<string>("white");
   const [mbtiType, setMbtiType] = useState<string[]>(Array.from(thisMbti));
+
   const [newPost, setNewPost] = useState<{
     title: string;
     content: string;
     password: string;
   }>({
-    title: "",
-    content: "",
-    password: ""
+    title: existingPost?.title || "",
+    content: existingPost?.content || "",
+    password: existingPost?.password || ""
   });
+
   const [showModal, setShowModal] = useState<string>("");
   const [errorType, setErrorType] = useState<string>("");
 
@@ -148,6 +152,7 @@ export default function BoardPost({
   const mbtiColor_1 = "#02B26E";
   const mbtiColor_2 = "#FFA8DF";
 
+  //게시글 post요청
   async function postData() {
     const { title, content, password } = newPost;
 
@@ -160,13 +165,33 @@ export default function BoardPost({
     });
   }
 
+  //게시글 수정(patch)요청
+  async function patchPostData() {
+    const { title, content, password } = newPost;
+    const { category, _id } = existingPost;
+    try {
+      const response: ResData<BoardPatchMsg> = await axiosRequest.requestAxios<
+        ResData<BoardPatchMsg>
+      >("patch", `/board/${_id}`, {
+        category: category,
+        title: title,
+        content: content,
+        color: bgColor,
+        password: password
+      });
+      // console.log("게시글patch", response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const handleThisMbti = useCallback(
     (value: string[]) => setMbtiType(value),
     []
   );
 
   //유효성 검사
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // 유효성 정상이면 api요청 보내고,
     // 현재 mbti유형을 부모컴포넌트에게 전달해주고,
     // 부모컴포넌트가 이 컴포넌트를 사라지게하고 스크롤이 올라가도록
@@ -193,9 +218,9 @@ export default function BoardPost({
       return;
     }
 
-    console.log("작성완료");
+    // console.log("작성완료");
     setErrorType("");
-    postData();
+    existingPost ? await patchPostData() : await postData();
     onThisComplete(mbtiType.join(""));
   };
 
@@ -223,6 +248,7 @@ export default function BoardPost({
           <input
             type="text"
             name="title"
+            value={newPost.title}
             placeholder="제목"
             className="text-white bg-black outline-0 border-b w-full py-3 mb-6"
             onChange={(evt) =>
@@ -233,6 +259,7 @@ export default function BoardPost({
           />
           <textarea
             name="contents"
+            value={newPost.content}
             placeholder="내용 입력"
             className="text-white bg-black outline-0 border w-full p-3 resize-none h-5/6"
             onChange={(evt) =>
@@ -278,7 +305,7 @@ export default function BoardPost({
             onClick={handleSubmit}
             className="block font-black "
           >
-            작성 완료
+            {existingPost ? "수정 완료" : "작성 완료"}
           </Button>
         </div>
       </PostWrap>

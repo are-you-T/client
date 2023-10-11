@@ -34,7 +34,6 @@ export default function BulletinBoard() {
   const nav = useNavigate();
   const goDetailPage = (mbti: string): void => {
     nav(`/board/${mbti}`);
-    getPostings();
   };
   //게시글 상세페이지 이동
   const goCardDetailPage = (selectedId: string): void => {
