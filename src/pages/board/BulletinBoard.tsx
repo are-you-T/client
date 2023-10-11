@@ -9,9 +9,7 @@ import BulletinCard from "@/components/board/BulletinCard/BulletinCard";
 import PostBtn from "@/components/board/Button/PostBtn/PostBtn";
 import ChangeMbtiBtn from "@/components/board/Button/ChangeMbtiBtn/ChangeMbtiBtn";
 import BoardPost from "@/components/board/BoardPost/BoardPost";
-import MbtiTypesModal, {
-  ModalBg
-} from "@/components/common/MbtiTypesModal/MbtiTypesModal";
+import MbtiTypesModal from "@/components/common/MbtiTypesModal/MbtiTypesModal";
 import MbtiColorChip from "@/components/board/MbtiColorChip/MbtiColorChip";
 
 import {
@@ -93,14 +91,18 @@ export default function BulletinBoard() {
   }
 
   //mbti변경모달 관련
-  const [mbtiType, setMbtiType] = useState<string[]>(["I", "N", "F", "P"]);
-  const handleThisMbti = useCallback(
-    (value: string[]) => setMbtiType(value),
-    []
+
+  const handleClickModal = useCallback(
+    ({ currentTarget, target }: React.MouseEvent<HTMLDivElement>) => {
+      if (currentTarget === target) {
+        setOpenMbtiModal(false);
+      }
+    },
+    [setOpenMbtiModal]
   );
-  const handleThisConfirm = () => {
-    const mbti = mbtiType.reduce((acc, cur) => acc + cur);
+  const handleThisConfirm = (selectedMbti: string[]) => {
     setOpenMbtiModal(false);
+    const mbti = selectedMbti.join("");
     goDetailPage(mbti);
   };
 
@@ -181,17 +183,17 @@ export default function BulletinBoard() {
         />
       ) : (
         <BoardDiv>
-          {openMbtiModal && (
-            <div>
-              <ModalBg onClick={() => setOpenMbtiModal(false)} />
+          <div>
+            {openMbtiModal && (
               <MbtiTypesModal
-                selectMbti={mbtiType}
-                onThisMbti={handleThisMbti}
-                isButton={true}
-                onThisConfirm={handleThisConfirm}
+                isButton
+                defaultMbti={["I", "N", "F", "P"]}
+                onCloseModal={handleClickModal}
+                onSelectMbti={handleThisConfirm}
               />
-            </div>
-          )}
+            )}
+          </div>
+
           <Header>
             {mbti ? (
               <MbtiTitle>
