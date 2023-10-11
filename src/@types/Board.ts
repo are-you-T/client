@@ -14,6 +14,7 @@ export interface BoardPostData {
   title: string;
   content: string;
   color: string;
+  password: string;
 }
 
 export interface BoardPassword extends Board {

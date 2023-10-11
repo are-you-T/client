@@ -11,6 +11,7 @@ import { Color } from "./Color";
 import { ResMbti } from "./ResMbti";
 import { StatsAll } from "./Stats";
 import { ResultData } from "./ResultData";
+import { Comment, CommentPostData } from "./Comment";
 interface ResData<D> {
   error: string | null;
   data: D;
@@ -31,5 +32,7 @@ export type {
   Color,
   ResMbti,
   StatsAll,
-  ResultData
+  ResultData,
+  Comment,
+  CommentPostData
 };
