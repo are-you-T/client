@@ -40,7 +40,9 @@ const MbtiTypesModal = ({
     changedMbti[idx] = mbtiType;
     setSelectedMbti(changedMbti);
   };
-
+  const handleMbtiButton = () => {
+    onSelectMbti(selectedMbti);
+  };
   return (
     <ModalBg onClick={onCloseModal}>
       <ModalWrap>
@@ -89,11 +91,7 @@ const MbtiTypesModal = ({
             );
           })}
         </ul>
-        {isButton && (
-          <MbtiButton onClick={() => onSelectMbti(selectedMbti)}>
-            확인
-          </MbtiButton>
-        )}
+        {isButton && <MbtiButton onClick={handleMbtiButton}>확인</MbtiButton>}
       </ModalWrap>
     </ModalBg>
   );
