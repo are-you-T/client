@@ -6,9 +6,8 @@ import {
   CommentContenDetail
 } from "@/components/comment/CommentContent.styles";
 import { CommentEdit } from "@/components/comment/CommentEdit";
-import { ReactComponent as Profile } from "@/assets/img/profile.svg";
 import { ReactComponent as Setting } from "@/assets/img/comment_setting.svg";
-
+import CommentCharacter from "@/components/common/CommentCharacter";
 export function CommentContent() {
   const [showModal, setShowModal] = useState<string>("");
 
@@ -21,9 +20,7 @@ export function CommentContent() {
     <>
       <CommentContentWrap>
         <CommentContenBox>
-          <div>
-            <Profile />
-          </div>
+          <CommentCharacter bgColor={"#B2ACF9"} />
           <div>
             <div>요즘 악뮤 노래 너무 좋은 것 같아</div>
             <CommentContenDetail>
