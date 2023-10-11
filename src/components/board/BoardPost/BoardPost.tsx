@@ -1,13 +1,12 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, ReactNode } from "react";
 import { ReactComponent as SwitchIcon } from "@/assets/img/typeSwitch_icon.svg";
 import { ReactComponent as AlertIcon } from "@/assets/img/alert_icon.svg";
 import { ReactComponent as CloseIcon } from "@/assets/img/close_icon.svg";
 import { ReactComponent as CheckIcon } from "@/assets/img/check_icon.svg";
 import { ReactComponent as Comment } from "@/assets/img/comment.svg";
 
-import MbtiTypesModal, {
-  ModalBg
-} from "@/components/common/MbtiTypesModal/MbtiTypesModal";
+import MbtiTypesModal from "@/components/common/MbtiTypesModal/MbtiTypesModal";
+import { ModalBg } from "@/components/common/MbtiTypesModal/MbtiTypesModal.styles";
 import axiosRequest from "@/api";
 import { ResData, BoardPostData, Board, BoardPatchMsg } from "@/@types";
 import {
@@ -40,82 +39,114 @@ const colors = [
   { name: "오렌지", color: "#FF9D42" }
 ];
 
+// 모달 배경 닫기(MbtiTypesModal은 제외)
+function ModalClose({
+  children,
+  onClose
+}: {
+  children: ReactNode;
+  onClose: () => void;
+}) {
+  const handleModalBgClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.currentTarget === e.target) {
+      onClose();
+    }
+  };
+
+  return <ModalBg onClick={handleModalBgClick}>{children}</ModalBg>;
+}
+
 // 배경 색상 선택 모달
 function BgColorsModal({
   colors,
   onThisColor,
-  selectBgColor
+  selectBgColor,
+  onClose
 }: {
   colors: { name: string; color: string }[];
   onThisColor: (value: string) => void;
   selectBgColor: String;
+  onClose: () => void;
 }) {
   const [thisColor, setThisColor] = useState(selectBgColor);
+
   return (
-    <ModalWrap>
-      <h3 className="text-2xl font-black text-center">배경 색상 선택</h3>
-      <ul>
-        {colors.map((color) => {
-          return (
-            <li key={color.color} className="flex items-center mt-5">
-              <input
-                type="radio"
-                name="colors"
-                id={color.color}
-                value={color.color}
-                checked={thisColor === color.color}
-                className="hidden"
-                onChange={(evt) => {
-                  setThisColor(evt.target.value);
-                  onThisColor(evt.target.value);
-                }}
-              />
-              <label
-                htmlFor={color.color}
-                className="flex items-center cursor-pointer flex-1 gap-4"
-              >
-                <SelectColors bg={color.color} />
-                <span
-                  className={`flex-1 text-xl ${
-                    thisColor === color.color
-                      ? "font-black opacity-100"
-                      : "opacity-30"
-                  }`}
+    <ModalClose onClose={onClose}>
+      <ModalWrap>
+        <h3 className="text-2xl font-black text-center">배경 색상 선택</h3>
+        <ul>
+          {colors.map((color) => {
+            return (
+              <li key={color.color} className="flex items-center mt-5">
+                <input
+                  type="radio"
+                  name="colors"
+                  id={color.color}
+                  value={color.color}
+                  checked={thisColor === color.color}
+                  className="hidden"
+                  onChange={(evt) => {
+                    setThisColor(evt.target.value);
+                    onThisColor(evt.target.value);
+                  }}
+                />
+                <label
+                  htmlFor={color.color}
+                  className="flex items-center cursor-pointer flex-1 gap-4"
                 >
-                  {color.name}
-                </span>
-                {thisColor === color.color && <CheckIcon />}
-              </label>
-            </li>
-          );
-        })}
-      </ul>
-    </ModalWrap>
+                  <SelectColors bg={color.color} />
+                  <span
+                    className={`flex-1 text-xl ${
+                      thisColor === color.color
+                        ? "font-black opacity-100"
+                        : "opacity-30"
+                    }`}
+                  >
+                    {color.name}
+                  </span>
+                  {thisColor === color.color && <CheckIcon />}
+                </label>
+              </li>
+            );
+          })}
+        </ul>
+      </ModalWrap>
+    </ModalClose>
   );
 }
 
 // 유효성 결과 모달
-function AlertModal({ error }: { error: string }) {
+function AlertModal({
+  error,
+  onClose
+}: {
+  error: string;
+  onClose: () => void;
+}) {
   return (
-    <ModalWrapCenter>
-      <h3 className="text-xl font-black text-center flex items-center justify-center">
-        <AlertIcon className="w-4 mr-1" />
-        <span>{error}</span>
-      </h3>
-    </ModalWrapCenter>
+    <ModalClose onClose={onClose}>
+      <ModalWrapCenter>
+        <h3 className="text-xl font-black text-center flex items-center justify-center">
+          <AlertIcon className="w-4 mr-1" />
+          <span>{error}</span>
+        </h3>
+      </ModalWrapCenter>
+    </ModalClose>
   );
 }
 
 //댓글 모달 임시
-function CommentModal() {
+function CommentModal({ onClose }: { onClose: () => void }) {
   return (
-    <CommentModalWrap>
-      {/* 모달 내용 */}
-      {/* 댓글내용 컴포넌트 */}
-      <CommentContent />
-      {/* 댓글등록 컴포넌트 */}
-      <CommentPostContent />
-    </CommentModalWrap>
+    <ModalClose onClose={onClose}>
+      <CommentModalWrap>
+        {/* 모달 내용 */}
+        {/* 댓글내용 컴포넌트 */}
+        <CommentContent />
+        {/* 댓글등록 컴포넌트 */}
+        <CommentPostContent />
+      </CommentModalWrap>
+    </ModalClose>
   );
 }
 
@@ -165,6 +196,21 @@ export default function BoardPost({
     });
   }
 
+
+  const handleClickModal = useCallback(
+    ({ currentTarget, target }: React.MouseEvent<HTMLDivElement>) => {
+      if (currentTarget === target) {
+        setShowModal("");
+      }
+    },
+    [setShowModal]
+  );
+
+  // 모달 닫기
+  const handleCloseModal = useCallback(() => {
+    setShowModal("");
+  }, []);
+
   //게시글 수정(patch)요청
   async function patchPostData() {
     const { title, content, password } = newPost;
@@ -186,8 +232,11 @@ export default function BoardPost({
   }
 
   const handleThisMbti = useCallback(
-    (value: string[]) => setMbtiType(value),
-    []
+    (value: string[]) => {
+      setMbtiType(value); // MBTI 유형 설정
+      handleCloseModal();
+    },
+    [handleCloseModal] // handleCloseModal에 의존
   );
 
   //유효성 검사
@@ -312,12 +361,12 @@ export default function BoardPost({
 
       {showModal !== "" && (
         <>
-          <ModalBg onClick={() => setShowModal("")} />
           {showModal === "MbtiTypesModal" && (
             <MbtiTypesModal
-              selectMbti={mbtiType}
-              onThisMbti={handleThisMbti}
-              isButton={false}
+              isButton
+              defaultMbti={mbtiType}
+              onCloseModal={handleClickModal}
+              onSelectMbti={handleThisMbti}
             />
           )}
           {showModal === "BgColorsModal" && (
@@ -325,11 +374,16 @@ export default function BoardPost({
               colors={colors}
               onThisColor={(value) => setBgColor(value)}
               selectBgColor={bgColor}
+              onClose={() => setShowModal("")}
             />
           )}
-          {showModal === "AlertModal" && <AlertModal error={errorType} />}
+          {showModal === "AlertModal" && (
+            <AlertModal error={errorType} onClose={() => setShowModal("")} />
+          )}
           {/* 댓글 모달 임시 */}
-          {showModal === "CommentModal" && <CommentModal />}
+          {showModal === "CommentModal" && (
+            <CommentModal onClose={() => setShowModal("")} />
+          )}
         </>
       )}
       <Comment onClick={handleCommentClick} />
