@@ -2,9 +2,13 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import axiosRequest from "@/api/index";
-import { ResData, Board } from "@/@types/index";
+import { ResData, Board, BoardPassword } from "@/@types/index";
 
 import HeartBtn from "@/components/board/Button/HeartBtn/HeartBtn";
+import { ReactComponent as BackIcon } from "@/assets/img/left_line.svg";
+import OptionBtn from "@/components/board/Button/OptionBtn/OptionBtn";
+import PwCheckModal from "@/components/common/PwCheckModal/PwCheckModal";
+import BoardPost from "@/components/board/BoardPost/BoardPost";
 
 import {
   Container,
@@ -16,7 +20,8 @@ import {
   Divider,
   FooterWrap,
   Footer,
-  CreateDate
+  CreateDate,
+  BackBtn
 } from "./CardDetail.styles";
 
 export default function CardDetail() {
@@ -32,15 +37,12 @@ export default function CardDetail() {
       const response: ResData<Board> = await axiosRequest.requestAxios<
         ResData<Board>
       >("get", `/board/post/${selectedId}`);
-      // console.log("게시글", response.data);
+      // console.log("게시글get", response.data);
       setPosting(response.data);
     } catch (error) {
       console.error(error);
     }
   }
-  useEffect(() => {
-    getSelectedPosting();
-  }, []);
 
   //날짜 양식 맞추기
   const twoStringFormat = (date: number): string => {
@@ -61,22 +63,104 @@ export default function CardDetail() {
     return "";
   };
 
+  //뒤로가기
+  const handleBackBtnClick = () => {
+    window.history.back();
+  };
+
+  //모달 관리
+  const [showModal, setShowModal] = useState<string>("");
+
+  //모달 선택
+  const selectModal = (modal: string) => {
+    setShowModal(modal);
+  };
+
+  //게시글 수정 모달
+  const [openBoardEdit, setOpenBoardEdit] = useState<boolean>(false);
+
+  //게시글 수정 모달 닫히면 새로 불러오기
+  useEffect(() => {
+    getSelectedPosting();
+  }, [openBoardEdit]);
+
+  const handleClose = () => {
+    setOpenBoardEdit(false); //게시글 수정 모달 닫기
+    setShowModal(""); //비밀번호 확인모달 닫기
+  };
+
+  //수정 또는 삭제 모드 관리
+  const [activeMode, setActiveMode] = useState(false); //비밀번호가 일치했을 때 true
+  const [mode, setMode] = useState<string>(""); //수정 또는 삭제
+  const selectMode = (mode: string) => {
+    // console.log("mode", mode);
+    setMode(mode);
+  };
+  //비밀번호 일치여부 확인 -> 수정 또는 삭제모드 활성화
+  const checkCorrectPw = (active: boolean) => {
+    // console.log("active", active);
+    setActiveMode(active);
+  };
+
+  //수정 또는 삭제 기능
+  useEffect(() => {
+    if (activeMode && mode === "edit") setOpenBoardEdit(true);
+    else if (activeMode && mode === "delete") {
+      deletePosting();
+      window.history.back();
+    }
+  }, [activeMode]);
+
+  //게시글 delete요청
+  async function deletePosting() {
+    try {
+      const response: ResData<BoardPassword> = await axiosRequest.requestAxios<
+        ResData<BoardPassword>
+      >("delete", `/board/${selectedId}`);
+      // console.log("게시글삭제", response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   return (
-    <Container bgColor={posting.color}>
-      <Header>
-        <Category>{posting.category}</Category>
-      </Header>
-      <Main>
-        <Title>{posting.title}</Title>
-        <Content>{posting.content}</Content>
-      </Main>
-      <FooterWrap>
-        <Divider />
-        <Footer>
-          <HeartBtn id={selectedId} like={posting.like} />
-          <CreateDate>{changeDateFormat(posting.createdAt)}</CreateDate>
-        </Footer>
-      </FooterWrap>
-    </Container>
+    <>
+      {openBoardEdit ? (
+        <BoardPost
+          onThisClose={handleClose}
+          onThisComplete={handleClose}
+          thisMbti={posting.category}
+          existingPost={posting}
+        />
+      ) : (
+        <Container bgColor={posting.color}>
+          {showModal === "pwCheckModal" && (
+            <PwCheckModal
+              selectModal={selectModal}
+              selectedId={selectedId}
+              checkCorrectPw={checkCorrectPw}
+            />
+          )}
+
+          <Header>
+            <BackBtn onClick={handleBackBtnClick}>
+              <BackIcon />
+            </BackBtn>
+            <Category>{posting.category}</Category>
+            <OptionBtn selectModal={selectModal} selectMode={selectMode} />
+          </Header>
+          <Main>
+            <Title>{posting.title}</Title>
+            <Content>{posting.content}</Content>
+          </Main>
+          <FooterWrap>
+            <Divider />
+            <Footer>
+              <HeartBtn id={selectedId} like={posting.like} />
+              <CreateDate>{changeDateFormat(posting.createdAt)}</CreateDate>
+            </Footer>
+          </FooterWrap>
+        </Container>
+      )}
+    </>
   );
 }

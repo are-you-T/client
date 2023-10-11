@@ -1,24 +1,28 @@
 import tw, { styled } from "twin.macro";
 
 export const Container = styled.div<{ bgColor: string }>`
-  ${tw`w-[390px] h-[754px] mx-auto
+  ${tw`w-[390px]  mx-auto h-[674px]
   flex flex-col items-center
   relative`}
-  background: ${(props) => props.bgColor}
+  background: ${(props) => props.bgColor};
 `;
 export const Header = tw.div`
-  h-[76px]
-  flex flex-row justify-center items-center
+  h-[76px] w-full px-[24px]
+  flex flex-row justify-between items-center
+  `;
+export const BackBtn = tw.div`
+cursor-pointer
   `;
 export const Category = tw.div`
   text-2xl font-bold
   my-3.5
   `;
 export const Main = styled.div`
-  ${tw`w-[330px] h-3/4 rounded-3xl
+  ${tw`w-[330px] rounded-3xl h-[74%]
     bg-white opacity-100
     flex flex-col`}
   filter: drop-shadow(5px 5px 4px rgba(0, 0, 0, 0.25));
+  margin: 10px auto 80px;
 `;
 
 export const Title = tw.div`
@@ -29,9 +33,9 @@ export const Title = tw.div`
 `;
 export const Content = styled.pre`
   ${tw`
-  px-[18px] mb-[18px]
+  px-[20px] mb-[20px]  
   text-base
-  overflow-auto
+  overflow-y-auto
   flex-grow
   whitespace-pre-wrap`}
 
