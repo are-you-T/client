@@ -14,4 +14,5 @@ export interface BoardPostData {
   title: string;
   content: string;
   color: string;
+  password: string;
 }
