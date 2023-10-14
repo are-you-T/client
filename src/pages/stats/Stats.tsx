@@ -1,5 +1,6 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import ApexCharts from "react-apexcharts";
 
 import { StatsAll, ResData } from "@/@types";
@@ -21,7 +22,7 @@ interface ChartData {
 }
 
 interface ApexChartFormProps {
-  series: ChartData["data"];
+  series?: ChartData["data"];
   options: ApexCharts.ApexOptions;
   height: number;
 }
@@ -55,8 +56,19 @@ function ApexChartForm(props: ApexChartFormProps) {
 export default function Stats() {
   const navigate = useNavigate();
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState<ChartData["data"]>([{ x: "", y: 0 }]);
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["stats", "mbti"],
+    queryFn: () =>
+      axiosRequest.requestAxios<ResData<StatsAll[]>>("get", "/stats"),
+    select: ({ data }) => {
+      return data
+        .map((item) => ({ x: item.name, y: item.count }))
+        .filter((item) => item.y !== 0)
+        .sort((a, b) => b.y - a.y);
+    },
+    staleTime: 10 * 60 * 1000,
+    retry: 3
+  });
 
   const handleClickModal = useCallback(
     ({ currentTarget, target }: React.MouseEvent<HTMLDivElement>) => {
@@ -67,29 +79,10 @@ export default function Stats() {
     [setIsOpenModal]
   );
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setIsLoading(true);
-
-        const response = await axiosRequest.requestAxios<ResData<StatsAll[]>>(
-          "get",
-          "/stats"
-        );
-
-        const scaledData = response.data
-          .map((item) => ({ x: item.name, y: item.count }))
-          .filter((item) => item.y !== 0)
-          .sort((a, b) => b.y - a.y);
-
-        setData(scaledData);
-      } catch (error) {
-        alert("데이터를 받아오던 중 에러가 발생했습니다.");
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, []);
+  if (isError) {
+    alert("데이터를 가져오던 중 에러가 발생했습니다.");
+    navigate("/");
+  }
 
   return (
     <Section>
@@ -101,7 +94,7 @@ export default function Stats() {
           <ApexChartForm options={treeOptions} series={data} height={650} />
         )}
       </StyledApexChart>
-      <ButtonWrap className={data.length ? "bg-[#000]" : "bg-[#00B26E]"}>
+      <ButtonWrap className={data?.length ? "bg-[#000]" : "bg-[#00B26E]"}>
         <Button onClick={() => setIsOpenModal(true)}>MBTI별 통계</Button>
         <Link
           to="/board"

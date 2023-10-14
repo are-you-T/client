@@ -1,5 +1,6 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import Chart from "react-apexcharts";
 
 import axiosReq from "@/api";
@@ -33,6 +34,27 @@ interface MbtiStatsByType {
 
 const MBTI_STATS_PATH = ["energy", "awareness", "judgement", "life"];
 const LIST_SIZE = 10;
+
+const filterInvalidData = (data: MbtiStatsByType) => {
+  data.mbtiData.forEach((question) => {
+    const filteredData: Pick<QuestionItem, "answer" | "selection"> = {
+      answer: {},
+      selection: {}
+    };
+
+    Object.entries(question.answer).forEach(([type, val]) => {
+      if (val) {
+        filteredData.answer[type] = question.answer[type];
+        filteredData.selection[type] = question.selection[type];
+      }
+    });
+
+    question.answer = filteredData.answer;
+    question.selection = filteredData.selection;
+  });
+
+  return data;
+};
 
 function ChartItem({ data }: { data: QuestionItem }) {
   const { subject, answer, selection } = data;
@@ -70,11 +92,20 @@ function ChartItem({ data }: { data: QuestionItem }) {
 function StatsMbti() {
   const navigate = useNavigate();
   const { mbti: mbtiType } = useParams();
-  const [isLoading, setIsLoading] = useState(false);
-  const [stats, setStats] = useState<MbtiStatsByType | null>(null);
-  const [visibleStats, setVisibleStats] = useState<QuestionItem[]>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [visibleChar, setVisibleChar] = useState(mbtiType);
+  const [charIdx, setCharIdx] = useState(0);
+  const [visibleStats, setVisibleStats] = useState<QuestionItem[]>([]);
+  const { data: stats, isLoading } = useQuery({
+    queryKey: ["stats", MBTI_STATS_PATH[charIdx]],
+    queryFn: () =>
+      axiosReq.requestAxios<ResData<MbtiStatsByType>>(
+        "get",
+        `/stats/basic/${mbtiType?.toUpperCase()}/${MBTI_STATS_PATH[charIdx]}`
+      ),
+    select: ({ data }) => filterInvalidData(data),
+    enabled: !!mbtiType,
+    staleTime: 10 * 60 * 1000
+  });
 
   const handleModal = ({
     currentTarget,
@@ -100,57 +131,14 @@ function StatsMbti() {
     setVisibleStats(visibleData);
   };
 
-  const filterValidData = useCallback((data: MbtiStatsByType) => {
-    data.mbtiData.forEach((question) => {
-      const filteredData: Pick<QuestionItem, "answer" | "selection"> = {
-        answer: {},
-        selection: {}
-      };
-
-      Object.entries(question.answer).forEach(([type, val]) => {
-        if (val) {
-          filteredData.answer[type] = question.answer[type];
-          filteredData.selection[type] = question.selection[type];
-        }
-      });
-
-      question.answer = filteredData.answer;
-      question.selection = filteredData.selection;
-    });
-
-    return data;
-  }, []);
-
-  const getMbtiStats = async (mbtiCharIdx: number) => {
-    const targetPath = MBTI_STATS_PATH[mbtiCharIdx];
-
-    if (!targetPath || !mbtiType) return;
-
-    try {
-      setIsLoading(true);
-
-      const { data } = await axiosReq.requestAxios<ResData<MbtiStatsByType>>(
-        "get",
-        `/stats/basic/${mbtiType.toUpperCase()}/${targetPath}`
-      );
-
-      const filteredStats = filterValidData(data);
-
-      setStats(filteredStats);
-      setVisibleChar(mbtiType[mbtiCharIdx]);
-      setVisibleStats(filteredStats.mbtiData.slice(0, LIST_SIZE + 1));
-    } catch (error) {
-      alert("데이터를 받아오던 중 에러가 발생했습니다.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
-    getMbtiStats(0);
-  }, [mbtiType]);
+    if (stats) {
+      changeVisibleStats(1);
+    }
+  }, [stats]);
 
   if (!mbtiType) {
+    alert("잘못된 접근입니다.");
     navigate("/");
     return null;
   }
@@ -167,9 +155,9 @@ function StatsMbti() {
               <ChangeMbtiBtn setOpenMbtiModal={() => setIsOpenModal(true)} />
             </div>
             <StatsMbtiButtons
-              targetChar={visibleChar || ""}
+              targetChar={mbtiType[charIdx]}
               mbtiType={stats.mbtiType}
-              onClickType={getMbtiStats}
+              onClickType={(idx) => setCharIdx(idx)}
             />
             <ChartList className="mt-[40px]">
               {visibleStats.map((data) => (
