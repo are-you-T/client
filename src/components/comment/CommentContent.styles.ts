@@ -4,7 +4,7 @@ export const CommentModalBg = tw.div`
 w-[390px] 
 fixed 
 top-0 
-left-1/2 -translate-x-1/2
+
  h-full 
  backdrop-blur-sm 
  bg-black/[.3]
