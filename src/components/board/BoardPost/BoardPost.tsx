@@ -142,7 +142,7 @@ function CommentModal({ onClose }: { onClose: () => void }) {
       <CommentModalWrap>
         {/* 모달 내용 */}
         {/* 댓글내용 컴포넌트 */}
-        <CommentContent />
+        <CommentContent boardId="" />
         {/* 댓글등록 컴포넌트 */}
         <CommentPostContent />
       </CommentModalWrap>
@@ -196,7 +196,7 @@ export default function BoardPost({
     });
   }
 
-
+  // mbti 타입 모달 닫기
   const handleClickModal = useCallback(
     ({ currentTarget, target }: React.MouseEvent<HTMLDivElement>) => {
       if (currentTarget === target) {

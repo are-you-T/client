@@ -6,6 +6,7 @@ export interface Comment {
   content: string;
   color: string;
   like: number;
+  createdAt: string;
 }
 
 export interface CommentPostData {
