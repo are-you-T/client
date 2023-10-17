@@ -10,8 +10,10 @@ import {
   Divider,
   Footer,
   FooterCol,
-  Category,
+  Category
 } from "./BulletinCard.styles";
+
+import { ReactComponent as Comment } from "@/assets/img/comment.svg";
 
 interface BulletinCardProps {
   id: string;
@@ -31,7 +33,7 @@ export default function BulletinCard({
   category,
   color,
   like,
-  createdAt,
+  createdAt
 }: BulletinCardProps) {
   //내용 글자수 제한
 
@@ -80,6 +82,7 @@ export default function BulletinCard({
         <FooterCol onClick={handleClick}>
           <Category>{category}</Category>
           <HeartBtn id={id} like={like} />
+          <Comment onClick={() => handleCardClick(id)} />
         </FooterCol>
       </Footer>
     </Card>

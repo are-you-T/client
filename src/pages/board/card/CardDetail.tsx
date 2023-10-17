@@ -1,5 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import { useParams } from "react-router-dom";
+
+import { ReactComponent as AlertIcon } from "@/assets/img/alert_icon.svg";
+import { ReactComponent as Comment } from "@/assets/img/comment.svg";
 
 import axiosRequest from "@/api/index";
 import { ResData, Board, BoardPassword } from "@/@types/index";
@@ -23,6 +26,51 @@ import {
   CreateDate,
   BackBtn
 } from "./CardDetail.styles";
+import { ModalBg } from "@/components/common/MbtiTypesModal/MbtiTypesModal.styles";
+import {
+  CommentModalWrap,
+  ModalWrapCenter
+} from "@/components/board/BoardPost/BoardPost.styles";
+import { CommentContent } from "@/components/comment/CommentContent";
+import { CommentPostContent } from "@/components/comment/CommentPost";
+
+// 모달 배경 닫기
+function ModalClose({
+  children,
+  onClose
+}: {
+  children: ReactNode;
+  onClose: () => void;
+}) {
+  const handleModalBgClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.currentTarget === e.target) {
+      onClose();
+    }
+  };
+
+  return <ModalBg onClick={handleModalBgClick}>{children}</ModalBg>;
+}
+//댓글 모달 임시
+function CommentModal({
+  onClose,
+  selectedId
+}: {
+  onClose: () => void;
+  selectedId: string;
+}) {
+  console.log("dkdlel", selectedId);
+  return (
+    <ModalClose onClose={onClose}>
+      <CommentModalWrap>
+        {/* 모달 내용 */}
+        {/* 댓글내용 컴포넌트 */}
+        <CommentContent boardId={selectedId} />
+        {/* 댓글등록 컴포넌트 */}
+        <CommentPostContent />
+      </CommentModalWrap>
+    </ModalClose>
+  );
+}
 
 export default function CardDetail() {
   //파라미터 :selectedId 가져오기
@@ -122,6 +170,11 @@ export default function CardDetail() {
       console.error(error);
     }
   }
+
+  //댓글 모달
+  const handleCommentClick = () => {
+    setShowModal("CommentModal");
+  };
   return (
     <>
       {openBoardEdit ? (
@@ -156,8 +209,21 @@ export default function CardDetail() {
             <Divider />
             <Footer>
               <HeartBtn id={selectedId} like={posting.like} />
+              {/* 댓글버튼 */}
+              <Comment onClick={handleCommentClick} />
               <CreateDate>{changeDateFormat(posting.createdAt)}</CreateDate>
             </Footer>
+            {showModal !== "" && (
+              <>
+                {/* 댓글 모달 임시 */}
+                {showModal === "CommentModal" && (
+                  <CommentModal
+                    onClose={() => setShowModal("")}
+                    selectedId={selectedId}
+                  />
+                )}
+              </>
+            )}
           </FooterWrap>
         </Container>
       )}

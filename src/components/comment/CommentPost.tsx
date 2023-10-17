@@ -100,20 +100,20 @@ export function CommentPostContent() {
 
   //댓글 등록 api
   async function postData() {
-    //게시글 id 불러오기
-    const response = await axiosRequest.requestAxios<ResData<Comment>>(
-      "get",
-      "/board"
-    );
-    const boardId = response.data.boardId;
+    //게시글 id 불러오기 CardDetail에서 params로 게시글아이디불러오기
+    // const response = await axiosRequest.requestAxios<ResData<Comment>>(
+    //   "get",
+    //   `/board/${}`
+    // );
+    // const boardId = response.data.boardId;
     const { content, password } = newComment;
-    console.log("게시글 api", response);
+    // console.log("게시글 api", response);
     try {
       await axiosRequest.requestAxios<ResData<CommentPostData>>(
         "post",
         "/comment",
         {
-          boardId: boardId,
+          // boardId: boardId,
           depthCommentId: null,
           password: password,
           content: content,
