@@ -4,6 +4,7 @@ import {
   UserAnswer,
   MBTIData,
   UserResponseProps,
+  UpdatedUserResponseProps,
   QuestionText
 } from "./Question";
 import { Board, BoardPostData, BoardPassword, BoardPatchMsg } from "./Board";
@@ -24,6 +25,7 @@ export type {
   UserAnswer,
   MBTIData,
   UserResponseProps,
+  UpdatedUserResponseProps,
   QuestionText,
   Board,
   BoardPostData,
