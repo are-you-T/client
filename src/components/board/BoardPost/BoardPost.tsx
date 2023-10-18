@@ -1,9 +1,9 @@
 import { useState, useCallback, ReactNode } from "react";
+import { useParams } from "react-router-dom";
 import { ReactComponent as SwitchIcon } from "@/assets/img/typeSwitch_icon.svg";
 import { ReactComponent as AlertIcon } from "@/assets/img/alert_icon.svg";
 import { ReactComponent as CloseIcon } from "@/assets/img/close_icon.svg";
 import { ReactComponent as CheckIcon } from "@/assets/img/check_icon.svg";
-import { ReactComponent as Comment } from "@/assets/img/comment.svg";
 
 import MbtiTypesModal from "@/components/common/MbtiTypesModal/MbtiTypesModal";
 import { ModalBg } from "@/components/common/MbtiTypesModal/MbtiTypesModal.styles";
@@ -20,11 +20,8 @@ import {
   MbtiType,
   Button,
   BorderButton,
-  CommentModalWrap,
   PassWordWrap
 } from "./BoardPost.styles";
-import { CommentContent } from "@/components/comment/CommentContent";
-import { CommentPostContent } from "@/components/comment/CommentPost";
 
 // 모달 배경부분(ModalBg) 클릭하면 모달창이 꺼지고 모달컴포넌트 안에서 선택된 state값들을 부모(BoardPost)에게 보내줌
 
@@ -135,21 +132,6 @@ function AlertModal({
   );
 }
 
-//댓글 모달 임시
-function CommentModal({ onClose }: { onClose: () => void }) {
-  return (
-    <ModalClose onClose={onClose}>
-      <CommentModalWrap>
-        {/* 모달 내용 */}
-        {/* 댓글내용 컴포넌트 */}
-        <CommentContent boardId="" />
-        {/* 댓글등록 컴포넌트 */}
-        <CommentPostContent />
-      </CommentModalWrap>
-    </ModalClose>
-  );
-}
-
 // 게시글 작성
 export default function BoardPost({
   onThisClose,
@@ -183,6 +165,9 @@ export default function BoardPost({
   const mbtiColor_1 = "#02B26E";
   const mbtiColor_2 = "#FFA8DF";
 
+  //파라미터 :selectedId 가져오기
+  const { selectedId } = useParams() as { selectedId: string };
+
   //게시글 post요청
   async function postData() {
     const { title, content, password } = newPost;
@@ -215,6 +200,7 @@ export default function BoardPost({
   async function patchPostData() {
     const { title, content, password } = newPost;
     const { category, _id } = existingPost;
+
     try {
       const response: ResData<BoardPatchMsg> = await axiosRequest.requestAxios<
         ResData<BoardPatchMsg>
@@ -271,11 +257,6 @@ export default function BoardPost({
     setErrorType("");
     existingPost ? await patchPostData() : await postData();
     onThisComplete(mbtiType.join(""));
-  };
-
-  //댓글 모달 임시
-  const handleCommentClick = () => {
-    setShowModal("CommentModal");
   };
 
   return (
@@ -380,13 +361,8 @@ export default function BoardPost({
           {showModal === "AlertModal" && (
             <AlertModal error={errorType} onClose={() => setShowModal("")} />
           )}
-          {/* 댓글 모달 임시 */}
-          {showModal === "CommentModal" && (
-            <CommentModal onClose={() => setShowModal("")} />
-          )}
         </>
       )}
-      <Comment onClick={handleCommentClick} />
     </Container>
   );
 }

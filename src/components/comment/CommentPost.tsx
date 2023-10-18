@@ -11,7 +11,7 @@ import {
   CommentCharacterModalBg
 } from "@/components/comment/CommentPost.styles";
 import CommentCharacter from "@/components/common/CommentCharacter";
-import { ResData, Comment, CommentPostData } from "@/@types";
+import { ResData, CommentPostData } from "@/@types";
 import { ModalWrapCenter } from "../board/BoardPost/BoardPost.styles";
 import { ModalBg } from "../common/MbtiTypesModal/MbtiTypesModal.styles";
 
@@ -87,8 +87,11 @@ function AlertModal({
   );
 }
 
+interface BoardIdProps {
+  boardId: string;
+}
 // 댓글등록
-export function CommentPostContent() {
+export function CommentPostContent({ boardId }: BoardIdProps) {
   const [showModal, setShowModal] = useState<string>("");
   const [errorType, setErrorType] = useState<string>("");
   const [selectedCharacterColor, setSelectedCharacterColor] =
@@ -100,26 +103,20 @@ export function CommentPostContent() {
 
   //댓글 등록 api
   async function postData() {
-    //게시글 id 불러오기 CardDetail에서 params로 게시글아이디불러오기
-    // const response = await axiosRequest.requestAxios<ResData<Comment>>(
-    //   "get",
-    //   `/board/${}`
-    // );
-    // const boardId = response.data.boardId;
     const { content, password } = newComment;
-    // console.log("게시글 api", response);
     try {
       await axiosRequest.requestAxios<ResData<CommentPostData>>(
         "post",
         "/comment",
         {
-          // boardId: boardId,
+          boardId: boardId,
           depthCommentId: null,
           password: password,
           content: content,
           color: selectedCharacterColor
         }
       );
+      console.log("등록이", boardId);
     } catch (error) {
       console.error(error);
     }

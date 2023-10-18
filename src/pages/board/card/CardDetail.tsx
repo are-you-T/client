@@ -66,7 +66,7 @@ function CommentModal({
         {/* 댓글내용 컴포넌트 */}
         <CommentContent boardId={selectedId} />
         {/* 댓글등록 컴포넌트 */}
-        <CommentPostContent />
+        <CommentPostContent boardId={selectedId} />
       </CommentModalWrap>
     </ModalClose>
   );
