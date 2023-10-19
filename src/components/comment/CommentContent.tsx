@@ -10,6 +10,7 @@ import { ReactComponent as Setting } from "@/assets/img/comment_setting.svg";
 import CommentCharacter from "@/components/common/CommentCharacter";
 import axiosRequest from "@/api";
 import { ResData, Comment } from "@/@types";
+import HeartBtn from "../board/Button/HeartBtn/HeartBtn";
 
 interface BoardIdProps {
   boardId: string;
@@ -17,10 +18,12 @@ interface BoardIdProps {
 export function CommentContent({ boardId }: BoardIdProps) {
   const [showModal, setShowModal] = useState<string>("");
   const [comments, setComments] = useState<Comment[]>([]);
+  const [commentId, setCommentId] = useState<string>("");
 
   // 수정 버튼 클릭 시 모달 열기
-  const handleEditClick = () => {
+  const handleEditClick = (_id: string) => {
     setShowModal("CommentEditModal");
+    setCommentId(_id);
   };
 
   // 댓글 전체 조회
@@ -41,6 +44,40 @@ export function CommentContent({ boardId }: BoardIdProps) {
     getComment();
   }, []);
 
+  //날짜 양식 맞추기
+  const twoStringFormat = (date: number): string => {
+    return date < 10 ? "0" + date.toString() : date.toString();
+  };
+  const changeDateFormat = (date: Date): string => {
+    if (date) {
+      const localDate = new Date(date);
+      // console.log("연도", localDate.getFullYear());
+      // console.log("월", localDate.getMonth() + 1);
+      // console.log("일", localDate.getDate());
+      const year = localDate.getFullYear().toString();
+      const month = twoStringFormat(localDate.getMonth() + 1);
+      const day = twoStringFormat(localDate.getDate());
+
+      return `${year}.${month}.${day}`;
+    }
+    return "";
+  };
+
+  async function handleDeleteClick(_id: string) {
+    try {
+      await axiosRequest.requestAxios<ResData<Comment>>(
+        "delete",
+        `/comment/${_id}`
+      );
+      setComments((prevComments) =>
+        prevComments.filter((comment) => comment.boardId !== comment._id)
+      );
+      console.log("댓글삭제 아이디", _id);
+    } catch (error) {
+      console.error("댓글 삭제 실패", error);
+    }
+  }
+
   return (
     <>
       <CommentContentWrap>
@@ -51,25 +88,11 @@ export function CommentContent({ boardId }: BoardIdProps) {
               <div>{comment.content}</div>
               <CommentContenDetail>
                 <button>댓글달기</button>
-                <div>{comment.createdAt}</div>
+                <div>{changeDateFormat(new Date(comment.createdAt))}</div>
               </CommentContenDetail>
             </div>
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="14"
-                fill="#FC5013"
-              >
-                <path
-                  stroke="#FC5013"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.2"
-                  d="M4.5 1C2.567 1 1 2.491 1 4.33c0 1.486.613 5.01 6.642 8.573a.71.71 0 0 0 .716 0C14.388 9.34 15 5.816 15 4.331 15 2.49 13.433 1 11.5 1S8 3.019 8 3.019 6.433 1 4.5 1Z"
-                />
-              </svg>
-            </div>
+            {/* 댓글 아이디로 변경해야함 */}
+            <HeartBtn id={boardId} like={comment.like} />
 
             <div className="dropdown dropdown-end">
               <Setting tabIndex={0} className="m-1"></Setting>
@@ -78,10 +101,18 @@ export function CommentContent({ boardId }: BoardIdProps) {
                 className="dropdown-content z-[1] menu p-2 shadow rounded-box w-[120px] bg-white text-black"
               >
                 <li>
-                  <button onClick={handleEditClick}>수정</button>
+                  <button
+                    onClick={() => {
+                      handleEditClick(comment._id);
+                    }}
+                  >
+                    수정
+                  </button>
                 </li>
                 <li>
-                  <p>삭제</p>
+                  <button onClick={() => handleDeleteClick(comment._id)}>
+                    삭제
+                  </button>
                 </li>
               </ul>
             </div>
@@ -92,7 +123,7 @@ export function CommentContent({ boardId }: BoardIdProps) {
           <>
             <CommentModalBg onClick={() => setShowModal("")} />
             {showModal === "CommentEditModal" && (
-              <CommentEdit onClose={() => setShowModal("")} />
+              <CommentEdit onClose={() => setShowModal("")} _id={commentId} />
             )}
           </>
         )}

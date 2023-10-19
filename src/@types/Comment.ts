@@ -1,4 +1,5 @@
 export interface Comment {
+  _id: string;
   boardId: string;
   depthCommentId: string | null;
   depth: number;
