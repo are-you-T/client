@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import axiosRequest from "@/api/index";
@@ -28,26 +27,6 @@ import { handleShareClick } from "@/components/common/ShareLink";
 import { useQuery } from "@tanstack/react-query";
 
 export default function TestResult() {
-  const [mbti, setMbti] = useState<ResMbti>({
-    _id: "",
-    name: "",
-    count: 0,
-    summary: "",
-    content: {
-      description: "",
-      good: {
-        name: "",
-        description: ""
-      },
-      bad: {
-        name: "",
-        description: ""
-      },
-      __v: 0
-    },
-    tag: []
-  });
-
   const location = useLocation();
   const searchParms = new URLSearchParams(location.search);
   const mbtiType: string | null = searchParms.get("mbti");
@@ -58,7 +37,11 @@ export default function TestResult() {
     ? location.state.resultData
     : null;
 
-  const { data, isLoading, isError } = useQuery({
+  const {
+    data: mbti,
+    isLoading,
+    isError
+  } = useQuery({
     queryKey: ["mbti", "mbtiType"],
     queryFn: () =>
       axiosRequest.requestAxios<ResData<ResMbti>>("get", `/mbti/${mbtiType}`),
@@ -67,23 +50,6 @@ export default function TestResult() {
     retry: 3
   });
 
-  useEffect(() => {
-    if (!isLoading && !isError && data) setMbti(data);
-    // const getMbti = async () => {
-    //   try {
-    //     const response: ResData<ResMbti> = await axiosRequest.requestAxios(
-    //       "get",
-    //       `/mbti/${mbtiType}`,
-    //       {}
-    //     );
-    //     setMbti(response.data);
-    //   } catch (e) {
-    //     console.error(e);
-    //   }
-    // };
-    // getMbti();
-  }, [data]);
-
   const handleShareButtonClick = () => {
     handleShareClick();
   };
@@ -91,7 +57,7 @@ export default function TestResult() {
   return (
     <Container style={{ backgroundColor: colorObj.out }}>
       <Header>
-        <Title>{mbti.name}</Title>
+        <Title>{mbti?.name}</Title>
         <ShareButton onClick={handleShareButtonClick}>
           결과 공유하기
         </ShareButton>
@@ -101,23 +67,20 @@ export default function TestResult() {
           <Character bgcolor={colorObj.in} gcolor={colorObj.out} />
           <ContentWrapper style={{ backgroundColor: colorObj.in }}>
             <ContentTitle>
-              {mbti.summary} {mbti.name}
+              {mbti?.summary} {mbti?.name}
             </ContentTitle>
-            <Content>{mbti.content?.description}</Content>
+            <Content>{mbti?.content?.description}</Content>
             <HashTags>
-              <HashTag text={mbti.tag[0]}></HashTag>
-              <HashTag text={mbti.tag[1]}></HashTag>
-              <HashTag text={mbti.tag[2]}></HashTag>
-              <HashTag text={mbti.tag[3]}></HashTag>
+              <HashTag text={mbti?.tag[0]}></HashTag>
+              <HashTag text={mbti?.tag[1]}></HashTag>
+              <HashTag text={mbti?.tag[2]}></HashTag>
+              <HashTag text={mbti?.tag[3]}></HashTag>
             </HashTags>
           </ContentWrapper>
         </MainTop>
         <MainBottom style={{ backgroundColor: colorObj.out }}>
           {resultData && <TypePercentageBars result={resultData} />}
-          <RelationType
-            good={mbti.content?.good ?? ""}
-            bad={mbti.content?.bad ?? ""}
-          />
+          <RelationType good={mbti?.content?.good} bad={mbti?.content?.bad} />
         </MainBottom>
       </Main>
       <Buttons>
