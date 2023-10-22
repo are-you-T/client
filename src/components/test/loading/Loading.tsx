@@ -192,30 +192,9 @@ function Loading({ userResponse, visible }: UserResponseProps) {
       mbtiType: updatedUserResponse.mbtiType
     };
 
-    try {
-      mutation.mutateAsync(updatedUserResponse);
-      // const putResponse: UserResponseProps = await axiosRequest.requestAxios(
-      //   "put",
-      //   "/stats",
-      //   updatedUserResponse
-      // );
-
-      // // console.log("USERMBTI", userMBTI);
-      // const patchResponse = await axiosRequest.requestAxios(
-      //   "patch",
-      //   `/stats/${userMBTI}`
-      // );
-
-      // console.log(patchResponse, "🚀🚀🚀🚀🚀🚀patch 요청 response");
-      // console.log(putResponse, "🚀🚀🚀🚀🚀🚀put 요청 response");
-      // console.log("resultData", resultData);
-
-      // 결과페이지에 데이터 전송 ***********************************
-      const queryParams = new URLSearchParams({ mbti: resultData.mbtiType });
-      navigate("/result?" + queryParams.toString(), { state: { resultData } });
-    } catch (error) {
-      // console.error(error);
-    }
+    mutation.mutateAsync(updatedUserResponse);
+    const queryParams = new URLSearchParams({ mbti: resultData.mbtiType });
+    navigate("/result?" + queryParams.toString(), { state: { resultData } });
   };
 
   return visible ? (
