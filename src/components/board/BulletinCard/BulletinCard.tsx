@@ -10,12 +10,14 @@ import {
   Divider,
   Footer,
   FooterCol,
-  Category,
+  Category
 } from "./BulletinCard.styles";
+
+import { ReactComponent as Comment } from "@/assets/img/comment.svg";
 
 interface BulletinCardProps {
   id: string;
-  showModal: (id: string) => void;
+  handleCardClick: (id: string) => void;
   title: string;
   content: string;
   category: string;
@@ -25,13 +27,13 @@ interface BulletinCardProps {
 }
 export default function BulletinCard({
   id,
-  showModal,
+  handleCardClick,
   title,
   content,
   category,
   color,
   like,
-  createdAt,
+  createdAt
 }: BulletinCardProps) {
   //내용 글자수 제한
 
@@ -60,7 +62,7 @@ export default function BulletinCard({
     <Card
       id={id}
       style={{ backgroundColor: color }}
-      onClick={() => showModal(id)}
+      onClick={() => handleCardClick(id)}
     >
       <div>
         <Header>
@@ -80,6 +82,7 @@ export default function BulletinCard({
         <FooterCol onClick={handleClick}>
           <Category>{category}</Category>
           <HeartBtn id={id} like={like} />
+          <Comment onClick={() => handleCardClick(id)} />
         </FooterCol>
       </Footer>
     </Card>

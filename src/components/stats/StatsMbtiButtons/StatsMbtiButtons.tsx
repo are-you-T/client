@@ -1,28 +1,28 @@
-import { useState } from "react";
 import * as S from "./StatsMbtiButtons.styles";
 
 interface StatsMbtiButtonsProps {
+  targetChar: string;
   mbtiType: string;
+  onClickType: (mbtiCharIdx: number) => void;
 }
 
-function StatsMbtiButtons({ mbtiType }: StatsMbtiButtonsProps) {
+function StatsMbtiButtons({
+  targetChar,
+  mbtiType,
+  onClickType
+}: StatsMbtiButtonsProps) {
   const mbtiChars = mbtiType.split("");
-  const [activeButtonIndex, setActiveButtonIndex] = useState<number>(0);
-
-  const handleClick = (index: number) => {
-    setActiveButtonIndex(index);
-  };
 
   return (
     <S.Container>
       {mbtiChars.map((char, idx) => (
         <div key={idx}>
-          {idx === activeButtonIndex ? (
-            <S.ActiveButton onClick={() => handleClick(idx)}>
+          {char === targetChar ? (
+            <S.ActiveButton onClick={() => onClickType(idx)}>
               {char}
             </S.ActiveButton>
           ) : (
-            <S.Button onClick={() => handleClick(idx)}>{char}</S.Button>
+            <S.Button onClick={() => onClickType(idx)}>{char}</S.Button>
           )}
         </div>
       ))}

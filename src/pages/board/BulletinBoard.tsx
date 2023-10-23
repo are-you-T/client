@@ -1,33 +1,29 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import useInfiniteScroll from "@/hooks/useInfinitiScroll";
 
 import axiosRequest from "@/api/index";
 import { ResData, Board } from "@/@types/index";
 
 import BulletinCard from "@/components/board/BulletinCard/BulletinCard";
-import BulletinCardModal from "@/components/board/BulletinCardModal/BulletinCardModal";
 import PostBtn from "@/components/board/Button/PostBtn/PostBtn";
 import ChangeMbtiBtn from "@/components/board/Button/ChangeMbtiBtn/ChangeMbtiBtn";
 import BoardPost from "@/components/board/BoardPost/BoardPost";
-import MbtiTypesModal, { ModalBg } from "@/components/common/MbtiTypesModal";
+import MbtiTypesModal from "@/components/common/MbtiTypesModal/MbtiTypesModal";
 import MbtiColorChip from "@/components/board/MbtiColorChip/MbtiColorChip";
 
 import {
   Main,
   BoardDiv,
   Header,
+  HeaderBtns,
   MbtiTitle,
   Title,
-  BulletinCardWrap,
-  Footer,
+  BulletinCardWrap
 } from "./BulletinBoard.styles";
 
 export default function BulletinBoard() {
-  // 모달창 상태
-  const [openCardModal, setOpenCardModal] = useState<boolean>(false);
   const [openMbtiModal, setOpenMbtiModal] = useState<boolean>(false);
-  //선택한 카드의 id값
-  const [selectedId, setSelectedId] = useState<string>("");
 
   //전체 게시글
   const [postings, setPostings] = useState<Board[]>([]);
@@ -37,69 +33,76 @@ export default function BulletinBoard() {
   const nav = useNavigate();
   const goDetailPage = (mbti: string): void => {
     nav(`/board/${mbti}`);
-    getPostings();
   };
-  const showModal = (id: string): void => {
-    setSelectedId(id);
-    setOpenCardModal(true);
-    document.body.style.overflow = "hidden";
+  //게시글 상세페이지 이동
+  const goCardDetailPage = (selectedId: string): void => {
+    nav(`/board/cardDetail/${selectedId}`);
   };
-  const closeModal = (): void => {
-    setOpenCardModal(false);
-    getPostings();
-    document.body.style.overflow = "unset";
+  const handleCardClick = (id: string): void => {
+    goCardDetailPage(id);
   };
 
   //게시글 작성 날짜 양식-> *일 전으로 변경
   const calculateDaysDiff = (date: Date): number => {
-    //서버 저장되는 시간이 (한국표준시Z)의 형태임
-    //Date()를 거치면 원래는 UTC -> local시간으로 되는 건데
-    //한국표준시를 인자로 넣었기 때문에 한국표준시보다 +9시간 차이가 나게 된다.
-    //리팩토링 시 서버에 저장되는 시간을 UTC로 바꾸면 메서드의 용도에 맞고 이해가 쉬울 듯 하다.
-    const pastDate: Date = new Date(date); //local(한국표준시 +9시간)
+    //서버 저장되는 시간이 UTC
+    //Date(UTC) -> local시간
+    const pastDate: Date = new Date(date); //local(한국표준시)
     const currentDate: Date = new Date(); //local(한국표준시)
-    const koreaTimeDiff = 9 * 60 * 60 * 1000; //9시간
 
-    //local시간 ->UTC로 바꾸는 명령어 :한국표준시 -9시간
-    const pastLocalDate = pastDate.getTime() - koreaTimeDiff; //작성시 local(한국표준시)
-    const currentLocalDate = currentDate.getTime(); //현재 local(한국표준시)
+    const pastLocalTime = pastDate.getTime();
+    const currentLocalTime = currentDate.getTime();
 
-    const diffDate: number = currentLocalDate - pastLocalDate;
+    const diffDate: number = currentLocalTime - pastLocalTime;
 
-    console.log("서버시간", date);
-    console.log("작성날짜", pastLocalDate);
-    console.log("현재날짜", currentLocalDate);
-    console.log("날짜 차이", diffDate);
+    // console.log("서버시간", date);
+    // console.log("작성날짜", pastLocalTime);
+    // console.log("현재날짜", currentLocalTime);
+    // console.log("날짜 차이", diffDate);
 
     return Math.floor(diffDate / (1000 * 60 * 60 * 24));
   };
 
-  //게시글 get요청
+  // 무한스크롤 => count : 불러오는 데이터 갯수 , skipCount : 생략하는 데이터 갯수
+  const [count, setCount] = useState(10);
+  const [skipCount, setSkipCount] = useState(0);
+  // 무한스크롤 => 더 불러올 데이터가 없을 때 skipCount 상태의 증가를 막기 위한 state
+  const [disableLoadData, setDisableLoadDate] = useState(false);
+
+  // 게시글 get 요청
   async function getPostings() {
     try {
-      const response: ResData<Board[]> = await axiosRequest.requestAxios<
-        ResData<Board[]>
-      >("get", mbti ? `/board/${mbti}` : "/board");
-      // console.log("전체게시글", response.data);
-      setPostings(response.data);
+      const response = await axiosRequest.requestAxios<ResData<Board[]>>(
+        "get",
+        mbti
+          ? `/board/${mbti}?count=${count}&skipCount=${skipCount}`
+          : `/board/?count=${count}&skipCount=${skipCount}`
+      );
+
+      // 더 불러올 데이터가 없어서 빈배열일 때
+      if (!response.data.length) {
+        setDisableLoadDate(true);
+        return;
+      }
+      // 데이터 이전 값에 현재 값을 더함
+      setPostings((prev) => [...prev, ...response.data]);
     } catch (error) {
       console.error(error);
     }
   }
-  useEffect(() => {
-    getPostings();
-  }, []);
 
   //mbti변경모달 관련
-  const [mbtiType, setMbtiType] = useState<string[]>(["I", "N", "F", "P"]);
-  const handleThisMbti = useCallback(
-    (value: string[]) => setMbtiType(value),
-    []
+
+  const handleClickModal = useCallback(
+    ({ currentTarget, target }: React.MouseEvent<HTMLDivElement>) => {
+      if (currentTarget === target) {
+        setOpenMbtiModal(false);
+      }
+    },
+    [setOpenMbtiModal]
   );
-  const handleThisConfirm = () => {
-    const mbti = mbtiType.reduce((acc, cur) => acc + cur);
+  const handleThisConfirm = (selectedMbti: string[]) => {
     setOpenMbtiModal(false);
-    setOnDetailPage(true);
+    const mbti = selectedMbti.join("");
     goDetailPage(mbti);
   };
 
@@ -108,114 +111,132 @@ export default function BulletinBoard() {
   //파라미터 :mbti 가져오기
   const { mbti } = useParams() as { mbti: string };
 
-  //파라미터로 mbti가 전달되자마자 게시글 데이터 업데이트
+  // 파라미터로 mbti가 전달되자마자 게시글 데이터 업데이트
+  // skipCount 과 mbti 값이 변경될 때마다 데이터 호출
   useEffect(() => {
     getPostings();
-  }, [mbti]);
+  }, [mbti, skipCount]);
 
-  //유형별게시판과 전체게시판 구분
-  const [onDetailPage, setOnDetailPage] = useState<boolean>(false);
+  // 무한 스크롤 훅
+  const observerRef = useRef<HTMLDivElement | null>(null);
+
+  const loadData = () => {
+    if (disableLoadData) return;
+    setSkipCount((prev) => prev + 10);
+    // console.log(skipCount, "skipCount");
+  };
+
+  const { setTargetRef } = useInfiniteScroll(loadData, [skipCount, mbti]);
+
   useEffect(() => {
-    if (mbti) {
-      setOnDetailPage(true);
-    } else {
-      setOnDetailPage(false);
-    }});
+    if (observerRef.current) {
+      setTargetRef(observerRef);
+    }
+  }, [observerRef, setTargetRef]);
 
-    useEffect(() => {
-        getPostings();
-    }, []);
-
-    //Detail 페이지에 필요한 변수,메소드
-
-    //전체 게시글
-    const boardAll = postings.map((posting) => {
-        return (
-            <BulletinCard
-                key={posting._id}
-                id={posting._id}
-                showModal={showModal}
-                title={posting.title}
-                content={posting.content}
-                category={posting.category}
-                color={posting.color}
-                like={posting.like}
-                createdAt={calculateDaysDiff(posting.createdAt)}
-            />
-        );
+  //전체 게시글
+  // const boardAll = postings.map((posting) => {
+  //   return (
+  //     <BulletinCard
+  //       key={posting._id}
+  //       id={posting._id}
+  //       handleCardClick={handleCardClick}
+  //       title={posting.title}
+  //       content={posting.content}
+  //       category={posting.category}
+  //       color={posting.color}
+  //       like={posting.like}
+  //       createdAt={calculateDaysDiff(posting.createdAt)}
+  //     />
+  //   );
+  // });
+  //유형별 게시글
+  const boardDetail = postings
+    .filter((posting) => posting.category === mbti)
+    .map((posting) => {
+      return (
+        <BulletinCard
+          key={posting._id}
+          id={posting._id}
+          handleCardClick={handleCardClick}
+          title={posting.title}
+          content={posting.content}
+          category={posting.category}
+          color={posting.color}
+          like={posting.like}
+          createdAt={calculateDaysDiff(posting.createdAt)}
+        />
+      );
     });
-    //유형별 게시글
-    const boardDetail = postings
-        .filter((posting) => posting.category === mbti)
-        .map((posting) => {
-            return (
-                <BulletinCard
-                    key={posting._id}
-                    id={posting._id}
-                    showModal={showModal}
-                    title={posting.title}
-                    content={posting.content}
-                    category={posting.category}
-                    color={posting.color}
-                    like={posting.like}
-                    createdAt={calculateDaysDiff(posting.createdAt)}
-                />
-            );
-        });
 
-    return (
-        <>
-            {openBoardPost ? (
-                <BoardPost
-                    onThisClose={() => setOpenBoardPost(false)}
-                    onThisComplete={(mbti) => {
-                        getPostings();
-                        setOpenBoardPost(false);
-                        setOnDetailPage(true);
-                        goDetailPage(mbti);
-                    }}
-                    thisMbti={mbti ? mbti : "INFP"}
-                />
-            ) : (
-                <BoardDiv>
-                    {openCardModal && (
-                        <BulletinCardModal
-                            selectedId={selectedId}
-                            closeModal={closeModal}
-                        />
-                    )}
-                    {openMbtiModal && (
-                        <div>
-                            <ModalBg onClick={() => setOpenMbtiModal(false)} />
-                            <MbtiTypesModal
-                                selectMbti={mbtiType}
-                                onThisMbti={handleThisMbti}
-                                isButton={true}
-                                onThisConfirm={handleThisConfirm}
-                            />
-                        </div>
-                    )}
-                    <Header>
-                        {mbti ? (
-                            <MbtiTitle>
-                                <Title>{mbti}</Title>
-                                <MbtiColorChip selectedMbti={mbti} />
-                            </MbtiTitle>
-                        ) : (
-                            <Title>MBTI 담벼락</Title>
-                        )}
-                        <ChangeMbtiBtn setOpenMbtiModal={setOpenMbtiModal} />
-                    </Header>
-                    <Main>
-                        <BulletinCardWrap>
-                            {mbti ? boardDetail : boardAll}
-                        </BulletinCardWrap>
-                    </Main>
-                    <Footer>
-                        <PostBtn setOpenBoardPost={setOpenBoardPost} />
-                    </Footer>
-                </BoardDiv>
+  return (
+    <>
+      {openBoardPost ? (
+        <BoardPost
+          onThisClose={() => setOpenBoardPost(false)}
+          onThisComplete={(mbti) => {
+            getPostings();
+            setOpenBoardPost(false);
+            goDetailPage(mbti);
+          }}
+          thisMbti={mbti ? mbti : "INFP"}
+        />
+      ) : (
+        <BoardDiv>
+          <div>
+            {openMbtiModal && (
+              <MbtiTypesModal
+                isButton
+                defaultMbti={["I", "N", "F", "P"]}
+                onCloseModal={handleClickModal}
+                onSelectMbti={handleThisConfirm}
+              />
             )}
-        </>
-    );
+          </div>
+
+          <Header>
+            {mbti ? (
+              <MbtiTitle>
+                <Title>{mbti}</Title>
+                <MbtiColorChip selectedMbti={mbti} />
+              </MbtiTitle>
+            ) : (
+              <Title>MBTI 담벼락</Title>
+            )}
+            <HeaderBtns>
+              <PostBtn setOpenBoardPost={setOpenBoardPost} />
+              <ChangeMbtiBtn setOpenMbtiModal={setOpenMbtiModal} />
+            </HeaderBtns>
+          </Header>
+          <Main>
+            <BulletinCardWrap>
+              {mbti
+                ? boardDetail
+                : postings.map((posting, index) => (
+                    <BulletinCard
+                      key={posting._id + index}
+                      id={posting._id}
+                      handleCardClick={handleCardClick}
+                      title={posting.title}
+                      content={posting.content}
+                      category={posting.category}
+                      color={posting.color}
+                      like={posting.like}
+                      createdAt={calculateDaysDiff(posting.createdAt)}
+                    />
+                  ))}
+              <div
+                ref={observerRef}
+                style={{
+                  height: "20px",
+                  width: "100%",
+                  border: "none"
+                }}
+              />
+            </BulletinCardWrap>
+          </Main>
+        </BoardDiv>
+      )}
+    </>
+  );
 }

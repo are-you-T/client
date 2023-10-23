@@ -48,6 +48,12 @@ export interface UserResponseProps {
   visible: boolean;
 }
 
+export interface UpdatedUserResponseProps {
+  mbtiType: string;
+  parent: string;
+  mbtiData: MBTIData[];
+}
+
 export interface QuestionText {
   idx: number | string;
   subject: string;

@@ -1,20 +1,33 @@
-import tw, { styled } from "twin.macro";
+import { keyframes } from "styled-components";
+import tw, { styled, css } from "twin.macro";
 
-export const Card = tw.div`
-  flex flex-col
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+export const Card = styled.div`
+  ${tw`flex flex-col
   bg-white rounded-md
   w-[170px] h-[165px]
   cursor-pointer
   text-gray-800
-  relative
+  relative`}
+
+  animation: ${fadeIn} 0.5s ease-in;
 `;
+
 export const Header = tw.div`
   flex flex-row justify-between items-center
   mb-2 mx-[14px] mt-[10px]
   
 `;
 export const Title = tw.div`
-  text-[18px] font-medium
+  text-[15px] font-medium
   
 `;
 
@@ -23,7 +36,7 @@ export const Main = tw.div`
 
 export const Content = tw.div`
   overflow-hidden
-  text-[15px]
+  text-[13px]
   mx-[14px]
   
 `;

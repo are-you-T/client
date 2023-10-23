@@ -5,8 +5,9 @@ import TestCard from "@/components/test/TestCard/TestCard";
 import TestQuestion from "@/components/test/TestQuestion/TestQuestion";
 import ProgressBar from "@/components/test/ProgressBar/ProgressBar";
 import Loading from "@/components/test/loading/Loading";
-import LoadingIndicator from "@/components/common/LoadingIndicator";
+import LoadingIndicator from "@/components/common/LoadingIndicator/LoadingIndicator";
 import * as S from "./Test.styles";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Test() {
   const [viewLoading, setViewLoading] = useState<boolean>(false);
@@ -20,27 +21,105 @@ export default function Test() {
     setAnimate((curr) => !curr);
   };
 
-  // 테스트 문항 api 호출
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response: ResData<Question[]> = await axiosRequest.requestAxios<
-          ResData<Question[]>
-        >("get", "/question/basic");
-        setQuestionList(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["question", "basic"],
+    queryFn: () =>
+      axiosRequest.requestAxios<ResData<Question[]>>("get", "/question/basic"),
+    select: ({ data }) => data,
+    staleTime: 10 * 60 * 1000,
+    retry: 3
+  });
 
-    fetchData();
-    animationStart();
-  }, []);
+  useEffect(() => {
+    if (!isLoading && !isError && data) {
+      // 데이터가 로드되었을 때의 로직
+      // ----------------------
+      if (["E", "I"].includes(data[currentIndex]?.mbtiType)) {
+        const questionArray = [
+          {
+            mbtiType: "E",
+            text: data[currentIndex]?.answer.E
+          },
+          {
+            mbtiType: "I",
+            text: data[currentIndex]?.answer.I
+          }
+        ];
+
+        shuffleArray(questionArray);
+        setCurrentChoiceList(questionArray);
+      } else if (["N", "S"].includes(data[currentIndex]?.mbtiType)) {
+        const questionArray = [
+          {
+            mbtiType: "N",
+            text: data[currentIndex]?.answer.N
+          },
+          {
+            mbtiType: "S",
+            text: data[currentIndex]?.answer.S
+          }
+        ];
+
+        shuffleArray(questionArray);
+        setCurrentChoiceList(questionArray);
+      } else if (["T", "F"].includes(data[currentIndex]?.mbtiType)) {
+        const questionArray = [
+          {
+            mbtiType: "T",
+            text: data[currentIndex]?.answer.T
+          },
+          {
+            mbtiType: "F",
+            text: data[currentIndex]?.answer.F
+          }
+        ];
+
+        shuffleArray(questionArray);
+        setCurrentChoiceList(questionArray);
+      } else {
+        const questionArray = [
+          {
+            mbtiType: "J",
+            text: data[currentIndex]?.answer.J
+          },
+          {
+            mbtiType: "P",
+            text: data[currentIndex]?.answer.P
+          }
+        ];
+
+        shuffleArray(questionArray);
+        setCurrentChoiceList(questionArray);
+      }
+      // ----------------------
+
+      setQuestionList(data);
+      animationStart();
+    }
+  }, [isLoading, isError, data, currentIndex]);
+
+  // 테스트 문항 api 호출
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       const response: ResData<Question[]> = await axiosRequest.requestAxios<
+  //         ResData<Question[]>
+  //       >("get", "/question/basic");
+  //       console.log(response.data);
+  //       // setQuestionList(response.data);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+
+  //   fetchData();
+  //   animationStart();
+  // }, []);
 
   // 문항 선택지 클릭 시 발생 이벤트
   const handleClickCard = useCallback(
     (choiceIndex: number) => () => {
-      if (currentChoiceList.length > 0 && questionList.length > 0) {
+      if (currentChoiceList.length > 0 && questionList) {
         setCurrentIndex((curr) => {
           // const currentAnswer = questionList[curr];
           // delete currentAnswer.parent;
@@ -74,61 +153,82 @@ export default function Test() {
     [currentChoiceList, questionList]
   );
 
-  // 각 문항에 대한 선택지 표시
-  useEffect(() => {
-    if (questionList.length) {
-      if (currentIndex <= 3) {
-        setCurrentChoiceList([
-          {
-            mbtiType: "E",
-            text: questionList[currentIndex].answer.E
-          },
-          {
-            mbtiType: "I",
-            text: questionList[currentIndex].answer.I
-          }
-        ]);
-      } else if (currentIndex <= 7) {
-        setCurrentChoiceList([
-          {
-            mbtiType: "N",
-            text: questionList[currentIndex].answer.N
-          },
-          {
-            mbtiType: "S",
-            text: questionList[currentIndex].answer.S
-          }
-        ]);
-      } else if (currentIndex <= 11) {
-        setCurrentChoiceList([
-          {
-            mbtiType: "T",
-            text: questionList[currentIndex].answer.T
-          },
-          {
-            mbtiType: "F",
-            text: questionList[currentIndex].answer.F
-          }
-        ]);
-      } else {
-        setCurrentChoiceList([
-          {
-            mbtiType: "J",
-            text: questionList[currentIndex].answer.J
-          },
-          {
-            mbtiType: "P",
-            text: questionList[currentIndex].answer.P
-          }
-        ]);
-      }
+  // 문항 답변 위치 랜덤 배치
+  const shuffleArray = (array: object[]) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]]; // 요소를 교환합니다.
     }
-  }, [currentIndex, questionList]);
+  };
+
+  // 각 문항에 대한 선택지 표시
+  // useEffect(() => {
+  //   if (questionList.length) {
+  //     if (["E", "I"].includes(questionList[currentIndex].mbtiType)) {
+  //       const questionArray = [
+  //         {
+  //           mbtiType: "E",
+  //           text: questionList[currentIndex].answer.E
+  //         },
+  //         {
+  //           mbtiType: "I",
+  //           text: questionList[currentIndex].answer.I
+  //         }
+  //       ];
+
+  //       shuffleArray(questionArray);
+  //       setCurrentChoiceList(questionArray);
+  //     } else if (["N", "S"].includes(questionList[currentIndex].mbtiType)) {
+  //       const questionArray = [
+  //         {
+  //           mbtiType: "N",
+  //           text: questionList[currentIndex].answer.N
+  //         },
+  //         {
+  //           mbtiType: "S",
+  //           text: questionList[currentIndex].answer.S
+  //         }
+  //       ];
+
+  //       shuffleArray(questionArray);
+  //       setCurrentChoiceList(questionArray);
+  //     } else if (["T", "F"].includes(questionList[currentIndex].mbtiType)) {
+  //       const questionArray = [
+  //         {
+  //           mbtiType: "T",
+  //           text: questionList[currentIndex].answer.T
+  //         },
+  //         {
+  //           mbtiType: "F",
+  //           text: questionList[currentIndex].answer.F
+  //         }
+  //       ];
+
+  //       shuffleArray(questionArray);
+  //       setCurrentChoiceList(questionArray);
+  //     } else {
+  //       const questionArray = [
+  //         {
+  //           mbtiType: "J",
+  //           text: questionList[currentIndex].answer.J
+  //         },
+  //         {
+  //           mbtiType: "P",
+  //           text: questionList[currentIndex].answer.P
+  //         }
+  //       ];
+
+  //       shuffleArray(questionArray);
+  //       setCurrentChoiceList(questionArray);
+  //     }
+  //   }
+  // }, [currentIndex, questionList]);
 
   // 테스트 페이지 UI
-  if (questionList.length === 0 || currentChoiceList.length === 0) {
+  if (currentChoiceList.length === 0) {
     return <LoadingIndicator />;
   }
+
   return (
     <S.TestPage>
       <TestQuestion

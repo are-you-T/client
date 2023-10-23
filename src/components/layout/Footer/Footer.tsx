@@ -9,6 +9,7 @@ import {
   FooterTextArea,
   FooterWrap
 } from "./Footer.styles";
+import { handleShareClick } from "@/components/common/ShareLink";
 
 export default function Foot() {
   // const handleShareClick = async () => {
@@ -22,32 +23,36 @@ export default function Foot() {
   //         alert("초대코드 복사에 실패했습니다ㅜㅜ");
   //     }
   // };
-  const handleShareClick = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: document.title,
-          text: "링크를 공유합니다.",
-          url: window.location.href
-        });
-        console.log("링크를 공유했습니다!");
-      } catch (error) {
-        console.error("링크 공유에 실패했습니다.", error);
-      }
-    } else {
-      // Web Share API를 지원하지 않는 경우
-      // 대체 동작을 수행합니다.
-      await share(window.location.origin);
-    }
-  };
+  //Web Share API 적용코드
+  // const handleShareClick = async () => {
+  //   if (navigator.share) {
+  //     try {
+  //       await navigator.share({
+  //         title: document.title,
+  //         text: "링크를 공유합니다.",
+  //         url: window.location.href
+  //       });
+  //       console.log("링크를 공유했습니다!");
+  //     } catch (error) {
+  //       console.error("링크 공유에 실패했습니다.", error);
+  //     }
+  //   } else {
+  //     // Web Share API를 지원하지 않는 경우
+  //     // 대체 동작을 수행합니다.
+  //     await share(window.location.origin);
+  //   }
+  // };
 
-  const share = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      alert("링크가 복사되었습니다!");
-    } catch (e) {
-      alert("초대코드 복사에 실패했습니다ㅜㅜ");
-    }
+  // const share = async (text: string) => {
+  //   try {
+  //     await navigator.clipboard.writeText(text);
+  //     alert("링크가 복사되었습니다!");
+  //   } catch (e) {
+  //     alert("초대코드 복사에 실패했습니다ㅜㅜ");
+  //   }
+  // };
+  const handleShareButtonClick = () => {
+    handleShareClick();
   };
 
   return (
@@ -68,7 +73,7 @@ export default function Foot() {
           >
             <GitHubSvg />
           </FooterLink>
-          <FooterLink onClick={handleShareClick}>
+          <FooterLink onClick={handleShareButtonClick}>
             <ShareSvg />
           </FooterLink>
         </FooterLinkIcon>

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { UserResponseProps } from "@/@types/index";
+import { UserResponseProps, UpdatedUserResponseProps } from "@/@types/index";
 import { useNavigate } from "react-router-dom";
 import axiosRequest from "@/api/index";
 import LoadingImg from "@/components/test/LoadingImg";
 import * as S from "./Loading.styles";
+import { useMutation } from "@tanstack/react-query";
 
 function Loading({ userResponse, visible }: UserResponseProps) {
   // 애니메이션 *************************************************************
@@ -20,7 +21,7 @@ function Loading({ userResponse, visible }: UserResponseProps) {
     "#FF9D42",
     "#F9BAAC",
     "#AC78EE",
-    "#C7E1EF",
+    "#C7E1EF"
   ];
 
   useEffect(() => {
@@ -45,19 +46,35 @@ function Loading({ userResponse, visible }: UserResponseProps) {
   // mbti 계산 *************************************************************
   const [energy, setEnergy] = useState<{ E: number; I: number }>({
     E: 0,
-    I: 0,
+    I: 0
   });
   const [awareness, setAwareness] = useState<{ N: number; S: number }>({
     N: 0,
-    S: 0,
+    S: 0
   });
   const [judgement, setJudgement] = useState<{ T: number; F: number }>({
     T: 0,
-    F: 0,
+    F: 0
   });
   const [life, setLife] = useState<{ J: number; P: number }>({ J: 0, P: 0 });
 
   const navigate = useNavigate();
+
+  const mutation = useMutation(
+    async (updatedUserResponse: UpdatedUserResponseProps) => {
+      await axiosRequest.requestAxios("put", "/stats", updatedUserResponse);
+
+      await axiosRequest.requestAxios(
+        "patch",
+        `/stats/${updatedUserResponse.mbtiType}`
+      );
+    },
+    {
+      onError: (error) => {
+        console.error(error);
+      }
+    }
+  );
 
   useEffect(() => {
     const calculateCategoryValues = () => {
@@ -162,7 +179,7 @@ function Loading({ userResponse, visible }: UserResponseProps) {
 
     const updatedUserResponse = {
       ...userResponse,
-      mbtiType: userMBTI,
+      mbtiType: userMBTI
     };
 
     // console.log("put할 때 보내주는 데이터 ", updatedUserResponse);
@@ -172,32 +189,12 @@ function Loading({ userResponse, visible }: UserResponseProps) {
       awareness,
       judgement,
       life,
-      mbtiType: updatedUserResponse.mbtiType,
+      mbtiType: updatedUserResponse.mbtiType
     };
 
-    try {
-      const putResponse: UserResponseProps = await axiosRequest.requestAxios(
-        "put",
-        "/stats",
-        updatedUserResponse
-      );
-
-      // console.log("USERMBTI", userMBTI);
-      const patchResponse = await axiosRequest.requestAxios(
-        "patch",
-        `/stats/${userMBTI}`
-      );
-
-      // console.log(patchResponse, "🚀🚀🚀🚀🚀🚀patch 요청 response");
-      // console.log(putResponse, "🚀🚀🚀🚀🚀🚀put 요청 response");
-      // console.log("resultData", resultData);
-
-      // 결과페이지에 데이터 전송 ***********************************
-      const queryParams = new URLSearchParams({ mbti: resultData.mbtiType });
-      navigate("/result?" + queryParams.toString(), { state: { resultData } });
-    } catch (error) {
-      // console.error(error);
-    }
+    mutation.mutateAsync(updatedUserResponse);
+    const queryParams = new URLSearchParams({ mbti: resultData.mbtiType });
+    navigate("/result?" + queryParams.toString(), { state: { resultData } });
   };
 
   return visible ? (
