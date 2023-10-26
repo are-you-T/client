@@ -1,9 +1,12 @@
 import tw from "twin.macro";
 
 export const CommentModalBg = tw.div`
-w-[390px] 
+w-full 
 fixed 
-top-0 
+top-0
+left-0
+rounded-t-3xl
+z-[70]
 
  h-full 
  backdrop-blur-sm 

@@ -17,3 +17,9 @@ export interface CommentPostData {
   content: string;
   color: string;
 }
+
+export interface CommentEditProps {
+  content: string;
+  password: string;
+  color: string;
+}
