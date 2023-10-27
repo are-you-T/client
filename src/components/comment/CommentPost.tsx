@@ -92,10 +92,15 @@ interface BoardIdProps {
 }
 // 댓글등록
 export function CommentPostContent({ boardId }: BoardIdProps) {
+  //모달
   const [showModal, setShowModal] = useState<string>("");
+
+  //에러타입
   const [errorType, setErrorType] = useState<string>("");
+
+  //캐릭터
   const [selectedCharacterColor, setSelectedCharacterColor] =
-    useState("#B2ACF9");
+    useState<string>("#B2ACF9");
   const [newComment, setNewComment] = useState<{
     content: string;
     password: string;
@@ -116,7 +121,6 @@ export function CommentPostContent({ boardId }: BoardIdProps) {
           color: selectedCharacterColor
         }
       );
-      console.log("등록이", boardId);
     } catch (error) {
       console.error(error);
     }
@@ -159,6 +163,7 @@ export function CommentPostContent({ boardId }: BoardIdProps) {
     console.log("선택된 색상:", selectedCharacterColor);
     setErrorType("");
     postData();
+    setShowModal("");
   };
 
   return (
