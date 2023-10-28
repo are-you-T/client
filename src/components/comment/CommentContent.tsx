@@ -64,8 +64,8 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
         "get",
         `/comment/${boardId}`
       );
-      setComments(response.data);
-      console.log(response.data);
+      const data: Comment[] = stairComment(response.data);
+      setComments(data);
     } catch (error) {
       console.log(error);
       console.log("아이디", boardId);
@@ -74,6 +74,30 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
   useEffect(() => {
     getComment();
   }, []);
+  /**
+   * 계층형으로 코멘트 배열 반환
+   * @param commentData
+   * @returns
+   */
+  const stairComment = (commentData: Comment[]) => {
+    const comments: Comment[] = [];
+    commentData.forEach((comment) => {
+      if (comment.depthCommentId) {
+        const parentComment: Comment | undefined = commentData.find(
+          (item) => item._id === comment.depthCommentId
+        );
+        if (parentComment) {
+          if (!parentComment.replies) {
+            parentComment.replies = [];
+          }
+          parentComment.replies.push(comment);
+        }
+      } else {
+        comments.push(comment);
+      }
+    });
+    return comments;
+  };
 
   //날짜 양식 맞추기
   const twoStringFormat = (date: number): string => {
@@ -237,43 +261,89 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
     <>
       <CommentContentWrap>
         {comments.map((comment) => (
-          <CommentContenBox key={comment.boardId}>
-            <CommentCharacter bgColor={comment.color} />
-            <div>
-              <div>{comment.content}</div>
-              <CommentContenDetail>
-                <button onClick={() => handleReplyClick(comment._id)}>
-                  댓글달기
-                </button>
-                <div>{changeDateFormat(new Date(comment.createdAt))}</div>
-              </CommentContenDetail>
-            </div>
-            {/* 댓글 아이디로 변경해야함 */}
-            <CommentHeartBtn id={commentId} like={comment.like} />
+          <>
+            <CommentContenBox key={comment._id}>
+              <CommentCharacter bgColor={comment.color} />
+              <div>
+                <div>{comment.content}</div>
+                <CommentContenDetail>
+                  <button onClick={() => handleReplyClick(comment._id)}>
+                    댓글달기
+                  </button>
+                  <div>{changeDateFormat(new Date(comment.createdAt))}</div>
+                </CommentContenDetail>
+              </div>
+              {/* 댓글 아이디로 변경해야함 */}
+              <CommentHeartBtn id={comment._id} like={comment.like} />
 
-            <div className="dropdown dropdown-end">
-              <Setting tabIndex={0} className="m-1"></Setting>
-              <ul
-                tabIndex={0}
-                className="dropdown-content z-[1] menu p-2 shadow rounded-box w-[120px] bg-white text-black"
-              >
-                <li>
-                  <button
-                    onClick={() => {
-                      handleEditClick(comment._id);
-                    }}
-                  >
-                    수정
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => handleDeleteClick(comment._id)}>
-                    삭제
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </CommentContenBox>
+              <div className="dropdown dropdown-end">
+                <Setting tabIndex={0} className="m-1"></Setting>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content z-[1] menu p-2 shadow rounded-box w-[120px] bg-white text-black"
+                >
+                  <li>
+                    <button
+                      onClick={() => {
+                        handleEditClick(comment._id);
+                      }}
+                    >
+                      수정
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => handleDeleteClick(comment._id)}>
+                      삭제
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </CommentContenBox>
+            {comment.replies &&
+              comment.replies.map((replyComment) => (
+                <CommentContenBox key={replyComment._id}>
+                  <div>&nbsp;&nbsp;&nbsp;{/*대댓글영역*/}</div>
+                  <CommentCharacter bgColor={replyComment.color} />
+                  <div>
+                    <div>{replyComment.content}</div>
+                    <CommentContenDetail>
+                      <div>
+                        {changeDateFormat(new Date(replyComment.createdAt))}
+                      </div>
+                    </CommentContenDetail>
+                  </div>
+                  {/* 댓글 아이디로 변경해야함 */}
+                  <CommentHeartBtn
+                    id={replyComment._id}
+                    like={replyComment.like}
+                  />
+                  <div className="dropdown dropdown-end">
+                    <Setting tabIndex={0} className="m-1"></Setting>
+                    <ul
+                      tabIndex={0}
+                      className="dropdown-content z-[1] menu p-2 shadow rounded-box w-[120px] bg-white text-black"
+                    >
+                      <li>
+                        <button
+                          onClick={() => {
+                            handleEditClick(replyComment._id);
+                          }}
+                        >
+                          수정
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => handleDeleteClick(replyComment._id)}
+                        >
+                          삭제
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </CommentContenBox>
+              ))}
+          </>
         ))}
 
         {isReplying !== false && (
