@@ -121,6 +121,7 @@ export function CommentPostContent({ boardId }: BoardIdProps) {
           color: selectedCharacterColor
         }
       );
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }
@@ -158,9 +159,6 @@ export function CommentPostContent({ boardId }: BoardIdProps) {
       setShowModal("AlertModal");
       return;
     }
-
-    console.log("댓글 데이터:", newComment);
-    console.log("선택된 색상:", selectedCharacterColor);
     setErrorType("");
     postData();
     setShowModal("");

@@ -3,6 +3,9 @@ import tw from "twin.macro";
 export const CommentPostWrap = tw.div`
   w-full
   text-black
+  absolute
+  bottom-0
+  left-0
 `;
 
 export const CommentPostBox = tw.div`

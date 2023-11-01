@@ -5,6 +5,7 @@ export interface Board {
   content: string;
   color: string;
   like: number;
+  comment: number;
   createdAt: Date;
   updatedAt: Date;
 }
