@@ -28,11 +28,13 @@ import {
 } from "./CardDetail.styles";
 import { ModalBg } from "@/components/common/MbtiTypesModal/MbtiTypesModal.styles";
 import {
+  CommentContentWrap,
   CommentModalWrap,
   ModalWrapCenter
 } from "@/components/board/BoardPost/BoardPost.styles";
 import { CommentContent } from "@/components/comment/CommentContent";
 import { CommentPostContent } from "@/components/comment/CommentPost";
+import CommentBtn from "@/components/board/Button/CommentBtn/CommentBtn";
 
 // 모달 배경 닫기
 function ModalClose({
@@ -64,7 +66,10 @@ function CommentModal({
       <CommentModalWrap>
         {/* 모달 내용 */}
         {/* 댓글내용 컴포넌트 */}
-        <CommentContent boardId={selectedId} />
+        <CommentContentWrap>
+          <CommentContent boardId={selectedId} />
+        </CommentContentWrap>
+
         {/* 댓글등록 컴포넌트 */}
         <CommentPostContent boardId={selectedId} />
       </CommentModalWrap>
@@ -210,7 +215,7 @@ export default function CardDetail() {
             <Footer>
               <HeartBtn id={selectedId} like={posting.like} />
               {/* 댓글버튼 */}
-              <Comment onClick={handleCommentClick} />
+              <CommentBtn onClick={handleCommentClick} id={selectedId} />
               <CreateDate>{changeDateFormat(posting.createdAt)}</CreateDate>
             </Footer>
             {showModal !== "" && (

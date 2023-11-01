@@ -20,7 +20,7 @@ export interface CommentPostData {
 }
 
 export interface CommentEditProps {
-  content: string;
-  password: string;
-  color: string;
+  content: string | undefined;
+  password: string | undefined;
+  color: string | undefined;
 }

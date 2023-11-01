@@ -63,19 +63,15 @@ export function CommentEdit({
   initialComment: CommentEditProps;
 }) {
   //댓글 수정 내용
-  const [newComment, setNewComment] = useState<{
-    content: string;
-    password: string;
-    color: string;
-  }>({
+  const [newComment, setNewComment] = useState<CommentEditProps>({
     content: initialComment.content,
     password: initialComment.password,
     color: initialComment.color
   });
   //프로필 캐릭터 색상
-  const [selectedCharacterColor, setSelectedCharacterColor] = useState<string>(
-    initialComment.color
-  );
+  const [selectedCharacterColor, setSelectedCharacterColor] = useState<
+    string | undefined
+  >(initialComment.color);
   //모달
   const [showModal, setShowModal] = useState<string>("");
   const [showCommentEditModal, setShowCommentEditModal] = useState(true);
@@ -171,7 +167,7 @@ export function CommentEdit({
     }
 
     const passwordPattern = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[\W_]).{8,}$/;
-    if (!passwordPattern.test(password)) {
+    if (!passwordPattern.test(password || "")) {
       setErrorType("숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요!");
       setShowModal("AlertModal");
       return;
@@ -193,7 +189,9 @@ export function CommentEdit({
             <CommentEditBox>
               <CommentEditTop>
                 <button onClick={handleCharacterModal}>
-                  <CommentCharacter bgColor={selectedCharacterColor} />
+                  <CommentCharacter
+                    bgColor={selectedCharacterColor as string}
+                  />
                 </button>
                 <input
                   type="text"
@@ -238,7 +236,7 @@ export function CommentEdit({
                 />
                 {showModal === "CharacterModal" && (
                   <CommentCharacterSelector
-                    selectCharacterColor={selectedCharacterColor}
+                    selectCharacterColor={selectedCharacterColor as string}
                     onCharacterColorChange={handleCharacterColorChange}
                   />
                 )}

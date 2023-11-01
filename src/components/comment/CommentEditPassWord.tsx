@@ -81,7 +81,7 @@ export function CommentEditPassWord({
           pw: passwordConfirm
         }
       );
-
+      console.log(_id);
       setShowCommentPassWordModal(false);
       setShowCommentEditModal(true);
     } catch (error) {
@@ -106,33 +106,36 @@ export function CommentEditPassWord({
     <>
       {showCommentPassWordModal === true && (
         <>
-          <CommentModalBg onClick={() => setShowCommentPassWordModal(false)} />
-          <CommentPassWordModalWrap>
-            <h2 className="text-[26px]">비밀번호를 입력하세요</h2>
-            <CommentPassWordModalDetail>
-              <input
-                type="password"
-                placeholder="비밀번호 입력"
-                className="w-[60%]  h-[30px] rounded-[10px] bg-black p-[10px] text-[12px] text-white"
-                value={passwordConfirm}
-                onChange={(evt) => setPasswordConfirm(evt.target.value)}
-              />
-              <button
-                className="w-[25%] h-[30px] bg-black rounded-[10px] text-white text-[14px]"
-                onClick={handleEdit}
-              >
-                확인
-              </button>
-            </CommentPassWordModalDetail>
-          </CommentPassWordModalWrap>
+          <ModalClose onClose={onClose}>
+            <CommentPassWordModalWrap>
+              <h2 className="text-[26px]">비밀번호를 입력하세요</h2>
+              <CommentPassWordModalDetail>
+                <input
+                  type="password"
+                  placeholder="비밀번호 입력"
+                  className="w-[60%]  h-[30px] rounded-[10px] bg-black p-[10px] text-[12px] text-white"
+                  value={passwordConfirm}
+                  onChange={(evt) => setPasswordConfirm(evt.target.value)}
+                />
+                <button
+                  className="w-[25%] h-[30px] bg-black rounded-[10px] text-white text-[14px]"
+                  onClick={handleEdit}
+                >
+                  확인
+                </button>
+              </CommentPassWordModalDetail>
+            </CommentPassWordModalWrap>
+          </ModalClose>
         </>
       )}
 
       {showCommentEditModal === true && (
         <>
-          {/* <CommentModalBg onClick={() => setShowCommentEditModal(false)} /> */}
           <CommentEdit
-            onClose={() => setShowCommentEditModal(false)}
+            onClose={() => {
+              setShowCommentEditModal(false);
+              setPasswordConfirm("");
+            }}
             _id={_id}
             initialComment={{
               content: initialComment.content,
@@ -144,8 +147,6 @@ export function CommentEditPassWord({
       )}
       {showAlertModal !== false && (
         <>
-          {/* <CommentModalBg onClick={() => setShowAlertModal(false)} /> */}
-
           {showAlertModal === true && (
             <AlertModal
               error={errorType}

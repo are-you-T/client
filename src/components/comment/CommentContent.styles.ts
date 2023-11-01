@@ -21,8 +21,26 @@ export const CommentContenBox = tw.div`
  flex
  justify-between
  items-center
+ mb-[20px]
 `;
+
+export const CommentContentOption = tw.div`
+flex
+items-center
+gap-[20px]
+`;
+
+export const CommentContentText = tw.div`
+w-[50%]
+flex
+flex-col
+gap-[10px]
+`;
+
 export const CommentContenDetail = tw.div`
  flex
  justify-between
+`;
+export const RepliesCharacter = tw.div`
+ml-[40px]
 `;

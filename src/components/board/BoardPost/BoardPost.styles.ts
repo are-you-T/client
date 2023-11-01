@@ -113,6 +113,10 @@ export const CommentModalWrap = tw.div`
   flex-col
   justify-between
 `;
+export const CommentContentWrap = tw.div`
+overflow-scroll
+h-[520px]
+`;
 
 // 비밀번호
 export const PassWordWrap = tw.div`

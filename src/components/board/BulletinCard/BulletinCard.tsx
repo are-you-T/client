@@ -13,7 +13,7 @@ import {
   Category
 } from "./BulletinCard.styles";
 
-import { ReactComponent as Comment } from "@/assets/img/comment.svg";
+import CommentBtn from "../Button/CommentBtn/CommentBtn";
 
 interface BulletinCardProps {
   id: string;
@@ -62,7 +62,9 @@ export default function BulletinCard({
     <Card
       id={id}
       style={{ backgroundColor: color }}
-      onClick={() => handleCardClick(id)}
+      onClick={() => {
+        handleCardClick(id);
+      }}
     >
       <div>
         <Header>
@@ -82,7 +84,12 @@ export default function BulletinCard({
         <FooterCol onClick={handleClick}>
           <Category>{category}</Category>
           <HeartBtn id={id} like={like} />
-          <Comment onClick={() => handleCardClick(id)} />
+          <CommentBtn
+            onClick={() => {
+              handleCardClick(id);
+            }}
+            id={id}
+          />
         </FooterCol>
       </Footer>
     </Card>

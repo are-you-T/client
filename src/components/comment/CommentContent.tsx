@@ -3,7 +3,10 @@ import {
   CommentContentWrap,
   CommentContenBox,
   CommentContenDetail,
-  CommentModalBg
+  CommentModalBg,
+  RepliesCharacter,
+  CommentContentOption,
+  CommentContentText
 } from "@/components/comment/CommentContent.styles";
 import { CommentEditPassWord } from "@/components/comment/CommentEditPassWord";
 import { ReactComponent as Setting } from "@/assets/img/comment_setting.svg";
@@ -38,7 +41,6 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
 
   //대댓글
   const [isReplying, setIsReplying] = useState<boolean>(false);
-  const [replyComments, setReplyComments] = useState<Comment[]>();
 
   //대댓글 에러타입
   const [errorType, setErrorType] = useState<string>("");
@@ -55,6 +57,10 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
   const handleEditClick = (_id: string) => {
     setShowModal("CommentEditModal");
     setCommentId(_id);
+    console.log(_id);
+  };
+  const handleCloseModal = () => {
+    setShowModal("");
   };
 
   // 댓글 전체 조회
@@ -65,10 +71,11 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
         `/comment/${boardId}`
       );
       const data: Comment[] = stairComment(response.data);
+
       setComments(data);
+      console.log("댓글 전체", data);
     } catch (error) {
       console.log(error);
-      console.log("아이디", boardId);
     }
   }
   useEffect(() => {
@@ -135,8 +142,8 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
   }
   //댓글 데이터 넘겨주기
   function getInitialComment(commentId: string) {
+    console.log(comments);
     const comment = comments.find((comment) => comment._id === commentId);
-
     if (comment) {
       return {
         content: comment.content,
@@ -144,6 +151,25 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
         color: comment.color
       };
     }
+    //대댓글
+    const foundComment = comments.find(
+      (comment) =>
+        comment.replies &&
+        comment.replies.some((reply) => reply._id === commentId)
+    );
+    console.log(foundComment);
+    if (foundComment?.replies) {
+      const foundReply = foundComment.replies.find(
+        (reply) => reply._id === commentId
+      );
+      console.log(foundReply);
+      return {
+        content: foundReply?.content,
+        password: foundReply?.password,
+        color: foundReply?.color
+      };
+    }
+
     // 찾을 수 없는 경우 기본값 반환
     return {
       content: "",
@@ -156,8 +182,6 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
   const handleReplyClick = (_id: string) => {
     setCommentId(_id);
     setIsReplying(true);
-
-    console.log("eoeotrmf", commentId);
   };
 
   // 댓글 캐릭터
@@ -209,6 +233,7 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
         content: content,
         color: selectedCharacterColor
       });
+      getComment();
       console.log("댓글성공", commentId);
     } catch (error) {
       console.error(error);
@@ -256,62 +281,73 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
     });
     setShowModal("");
   };
+  //내용 글자수 제한
 
+  const toggleEllipsis = (str: string, limit: number) => {
+    const strToArr = Array.from(str);
+    if (strToArr.length > limit) {
+      return strToArr.slice(0, limit).join("") + "...";
+    } else {
+      return str;
+    }
+  };
   return (
-    <>
+    <div style={{ border: "none" }}>
       <CommentContentWrap>
         {comments.map((comment) => (
           <>
             <CommentContenBox key={comment._id}>
               <CommentCharacter bgColor={comment.color} />
-              <div>
-                <div>{comment.content}</div>
+              <CommentContentText>
+                <div>{toggleEllipsis(comment.content, 15)}</div>
                 <CommentContenDetail>
                   <button onClick={() => handleReplyClick(comment._id)}>
                     댓글달기
                   </button>
                   <div>{changeDateFormat(new Date(comment.createdAt))}</div>
                 </CommentContenDetail>
-              </div>
-              {/* 댓글 아이디로 변경해야함 */}
-              <CommentHeartBtn id={comment._id} like={comment.like} />
-
-              <div className="dropdown dropdown-end">
-                <Setting tabIndex={0} className="m-1"></Setting>
-                <ul
-                  tabIndex={0}
-                  className="dropdown-content z-[1] menu p-2 shadow rounded-box w-[120px] bg-white text-black"
-                >
-                  <li>
-                    <button
-                      onClick={() => {
-                        handleEditClick(comment._id);
-                      }}
-                    >
-                      수정
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => handleDeleteClick(comment._id)}>
-                      삭제
-                    </button>
-                  </li>
-                </ul>
-              </div>
+              </CommentContentText>
+              <CommentContentOption>
+                <CommentHeartBtn id={comment._id} like={comment.like} />
+                <div className="dropdown dropdown-end">
+                  <Setting tabIndex={0} className="m-1"></Setting>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content z-[1] menu p-2 shadow rounded-box w-[120px] bg-white text-black"
+                  >
+                    <li>
+                      <button
+                        onClick={() => {
+                          handleEditClick(comment._id);
+                          console.log(showModal);
+                        }}
+                      >
+                        수정
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => handleDeleteClick(comment._id)}>
+                        삭제
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </CommentContentOption>
             </CommentContenBox>
             {comment.replies &&
               comment.replies.map((replyComment) => (
                 <CommentContenBox key={replyComment._id}>
-                  <div>&nbsp;&nbsp;&nbsp;{/*대댓글영역*/}</div>
-                  <CommentCharacter bgColor={replyComment.color} />
-                  <div>
-                    <div>{replyComment.content}</div>
+                  <RepliesCharacter>
+                    <CommentCharacter bgColor={replyComment.color} />
+                  </RepliesCharacter>
+                  <CommentContentText>
+                    <div>{toggleEllipsis(replyComment.content, 15)}</div>
                     <CommentContenDetail>
                       <div>
                         {changeDateFormat(new Date(replyComment.createdAt))}
                       </div>
                     </CommentContenDetail>
-                  </div>
+                  </CommentContentText>
                   {/* 댓글 아이디로 변경해야함 */}
                   <CommentHeartBtn
                     id={replyComment._id}
@@ -327,6 +363,7 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
                         <button
                           onClick={() => {
                             handleEditClick(replyComment._id);
+                            console.log(replyComment._id);
                           }}
                         >
                           수정
@@ -416,7 +453,7 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
           <>
             {showModal === "CommentEditModal" && (
               <CommentEditPassWord
-                onClose={() => setShowModal("")}
+                onClose={handleCloseModal}
                 _id={commentId}
                 initialComment={getInitialComment(commentId)}
               />
@@ -424,6 +461,6 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
           </>
         )}
       </CommentContentWrap>
-    </>
+    </div>
   );
 }
