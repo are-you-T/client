@@ -12,7 +12,8 @@ export const ModalBg = tw.div`
   bg-black
   bg-black/[.3]
   backdrop-blur-sm
-  z-50
+  z-[70]
+  rounded-t-3xl
 `;
 
 export const ModalWrap = tw.div`

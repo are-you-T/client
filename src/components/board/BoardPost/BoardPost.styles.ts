@@ -35,20 +35,45 @@ export const SpanColor = styled.span<{ bg: string }>`
 `;
 
 export const CircleButton = tw(ButtonColor)`
-w-14 h-14 rounded-full
+w-14 
+h-14 
+rounded-full
 text-black
 `;
 
 export const ModalWrap = tw.div`
-bg-white rounded-t-3xl p-8 text-black fixed bottom-0 left-1/2 -translate-x-1/2 w-[390px] m-auto
+bg-white 
+rounded-t-3xl 
+p-8 
+text-black 
+fixed 
+bottom-0 
+left-1/2 
+-translate-x-1/2 
+w-[390px] 
+m-auto
 `;
 
 export const ModalWrapCenter = tw.div`
-bg-white rounded-3xl p-8 text-black fixed left-1/2 top-1/2 -translate-x-1/2 w-[370px] m-auto
+bg-white 
+rounded-3xl 
+p-8 
+text-black 
+fixed 
+left-1/2 
+top-1/2 
+-translate-x-1/2 
+w-[370px] 
+m-auto
 `;
 
 export const SelectColors = tw(SpanColor)`
-w-12 h-12 rounded-full border-black border-4 inline-block
+w-12 
+h-12 
+rounded-full 
+border-black 
+border-4 
+inline-block
 `;
 
 export const Button = tw.button`
@@ -87,6 +112,10 @@ export const CommentModalWrap = tw.div`
   flex
   flex-col
   justify-between
+`;
+export const CommentContentWrap = tw.div`
+overflow-scroll
+h-[520px]
 `;
 
 // 비밀번호

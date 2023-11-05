@@ -1,7 +1,7 @@
 import tw, { styled } from "twin.macro";
 
 export const Container = styled.div<{ bgColor: string }>`
-  ${tw`w-[390px]  mx-auto h-[674px]
+  ${tw`w-[390px]  mx-auto h-[100vh]
   flex flex-col items-center
   relative`}
   background: ${(props) => props.bgColor};
@@ -18,7 +18,7 @@ export const Category = tw.div`
   my-3.5
   `;
 export const Main = styled.div`
-  ${tw`w-[330px] rounded-3xl h-[74%]
+  ${tw`w-[330px] rounded-3xl h-[80%]
     bg-white opacity-100
     flex flex-col`}
   filter: drop-shadow(5px 5px 4px rgba(0, 0, 0, 0.25));

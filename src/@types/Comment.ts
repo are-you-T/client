@@ -3,6 +3,7 @@ export interface Comment {
   boardId: string;
   depthCommentId: string | null;
   depth: number;
+  replies: Comment[] | undefined;
   password: string;
   content: string;
   color: string;
@@ -16,4 +17,10 @@ export interface CommentPostData {
   password: string;
   content: string;
   color: string;
+}
+
+export interface CommentEditProps {
+  content: string | undefined;
+  password: string | undefined;
+  color: string | undefined;
 }
