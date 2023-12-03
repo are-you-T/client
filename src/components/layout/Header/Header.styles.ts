@@ -1,10 +1,12 @@
-import tw from "twin.macro";
+// import tw from "twin.macro";
+import tw from "tailwind-styled-components";
 import { BsList } from "react-icons/bs";
-export const ScaledBsList = tw(BsList)`
 
+export const ScaledBsList = tw(BsList)`
 text-4xl
 text-black
 `;
+
 export const Header = tw.header`
   flex
   flex-wrap
