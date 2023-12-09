@@ -291,6 +291,13 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
       return str;
     }
   };
+
+  const handleOnKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleReplySubmit(); // 작성한 댓글 post 요청하는 함수
+    }
+  };
+
   return (
     <div style={{ border: "none" }}>
       <CommentContentWrap>
@@ -401,6 +408,7 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
                         return { ...post, content: evt.target.value };
                       });
                     }}
+                    onKeyDown={handleOnKeyDown}
                   />
                 </CommentEditTop>
                 <CommentEditBottom>
@@ -416,6 +424,7 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
                           return { ...post, password: evt.target.value };
                         });
                       }}
+                      onKeyDown={handleOnKeyDown}
                     />
                     <button
                       type="submit"
