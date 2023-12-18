@@ -122,14 +122,14 @@ export default function BulletinBoard() {
   // skipCount 과 mbti 값이 변경될 때마다 데이터 호출
   useEffect(() => {
     getPostings();
-    console.log("a");
+    console.log("임시");
   }, [mbti, skipCount]);
 
   // 무한 스크롤 훅
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   const loadData = () => {
-    if (disableLoadData) return;
+    if (disableLoadData || !isLoading) return;
     setSkipCount((prev) => prev + 10);
     // console.log(skipCount, "skipCount");
   };
@@ -138,7 +138,6 @@ export default function BulletinBoard() {
 
   useEffect(() => {
     if (observerRef.current) {
-      console.log("감지");
       setTargetRef(observerRef);
     }
   }, [observerRef, setTargetRef]);
