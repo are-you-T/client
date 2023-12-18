@@ -173,10 +173,15 @@ export function CommentEdit({
       return;
     }
 
-    console.log("댓글 데이터:", newComment);
-    console.log("선택된 색상:", selectedCharacterColor);
     setErrorType("");
     editData(); //수정 데이터
+  };
+
+  const handleOnKeyDown = (e: React.KeyboardEvent) => {
+    console.log("edit");
+    if (e.key === "Enter") {
+      handleSubmit(); // 작성한 댓글 post 요청하는 함수
+    }
   };
 
   //댓글 수정 모달
@@ -203,6 +208,7 @@ export function CommentEdit({
                       return { ...post, content: evt.target.value };
                     });
                   }}
+                  onKeyDown={handleOnKeyDown}
                 />
               </CommentEditTop>
               <CommentEditBottom>
@@ -218,6 +224,7 @@ export function CommentEdit({
                         return { ...post, password: evt.target.value };
                       });
                     }}
+                    onKeyDown={handleOnKeyDown}
                   />
                   <button
                     type="submit"

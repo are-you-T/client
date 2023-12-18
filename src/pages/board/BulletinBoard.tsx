@@ -177,6 +177,7 @@ export default function BulletinBoard() {
           onThisComplete={(mbti) => {
             getPostings();
             setOpenBoardPost(false);
+            setSkipCount(0); // skipCount를 0으로 초기화시킴으로써 새로 재조회
             goDetailPage(mbti);
           }}
           thisMbti={mbti ? mbti : "INFP"}
