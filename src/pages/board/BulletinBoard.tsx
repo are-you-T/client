@@ -129,7 +129,7 @@ export default function BulletinBoard() {
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   const loadData = () => {
-    if (disableLoadData || !isLoading) return;
+    if (disableLoadData || isLoading) return;
     setSkipCount((prev) => prev + 10);
     // console.log(skipCount, "skipCount");
   };
