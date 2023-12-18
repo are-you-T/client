@@ -67,10 +67,15 @@ export default function BulletinBoard() {
   const [skipCount, setSkipCount] = useState(0);
   // 무한스크롤 => 더 불러올 데이터가 없을 때 skipCount 상태의 증가를 막기 위한 state
   const [disableLoadData, setDisableLoadDate] = useState(false);
+  // 임시 : isLoading 넣어서 true일때만 무한스크롤 호출
+  const [isLoading, setIsLoading] = useState(false);
 
   // 게시글 get 요청
   async function getPostings() {
+    if (isLoading) return;
     try {
+      setIsLoading(true);
+
       const response = await axiosRequest.requestAxios<ResData<Board[]>>(
         "get",
         mbti
@@ -87,6 +92,8 @@ export default function BulletinBoard() {
       setPostings((prev) => [...prev, ...response.data]);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -115,6 +122,7 @@ export default function BulletinBoard() {
   // skipCount 과 mbti 값이 변경될 때마다 데이터 호출
   useEffect(() => {
     getPostings();
+    console.log("a");
   }, [mbti, skipCount]);
 
   // 무한 스크롤 훅
@@ -130,6 +138,7 @@ export default function BulletinBoard() {
 
   useEffect(() => {
     if (observerRef.current) {
+      console.log("감지");
       setTargetRef(observerRef);
     }
   }, [observerRef, setTargetRef]);
@@ -229,7 +238,7 @@ export default function BulletinBoard() {
               <div
                 ref={observerRef}
                 style={{
-                  height: "20px",
+                  height: "5px",
                   width: "100%",
                   border: "none"
                 }}
