@@ -169,7 +169,7 @@
 
 ## 데모 사이트
 
-- [http://kdt-sw-5-team15.elicecoding.com/](https://client-are-you-t.vercel.app/)
+- [https://are-you-t.vercel.app/](https://are-you-t.vercel.app/)
 <div>
 
 ![로고](https://github.com/are-you-T/client/assets/87935496/80e136df-e092-4592-a06f-605e3a2a18ce)

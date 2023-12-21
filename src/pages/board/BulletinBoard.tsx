@@ -73,6 +73,8 @@ export default function BulletinBoard() {
   // 게시글 get 요청
   async function getPostings() {
     if (isLoading) return;
+
+    console.log({ isLoading });
     try {
       setIsLoading(true);
 
@@ -125,6 +127,8 @@ export default function BulletinBoard() {
     console.log("임시");
   }, [mbti, skipCount]);
 
+  console.log(skipCount);
+
   // 무한 스크롤 훅
   const observerRef = useRef<HTMLDivElement | null>(null);
 
@@ -134,7 +138,11 @@ export default function BulletinBoard() {
     // console.log(skipCount, "skipCount");
   };
 
-  const { setTargetRef } = useInfiniteScroll(loadData, [skipCount, mbti]);
+  const { setTargetRef } = useInfiniteScroll(loadData, [
+    skipCount,
+    mbti,
+    isLoading
+  ]);
 
   useEffect(() => {
     if (observerRef.current) {
