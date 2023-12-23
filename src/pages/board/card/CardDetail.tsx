@@ -60,7 +60,7 @@ function CommentModal({
   onClose: () => void;
   selectedId: string;
 }) {
-  console.log("dkdlel", selectedId);
+  // console.log("dkdlel", selectedId);
   return (
     <ModalClose onClose={onClose}>
       <CommentModalWrap>

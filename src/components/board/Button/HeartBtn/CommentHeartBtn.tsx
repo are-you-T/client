@@ -24,11 +24,11 @@ export default function CommentHeartBtn({ id, like }: HeartBtnProps) {
       const response: ResData<Comment> = await axiosRequest.requestAxios<
         ResData<Comment>
       >("patch", `/comment/post/${id}`);
-      console.log("아이디값", id);
+      // console.log("아이디값", id);
       // console.log("좋아요", response.data);
       setLikeCount(response.data.like);
     } catch (error) {
-      console.log("클릭 데이터", id);
+      // console.log("클릭 데이터", id);
       console.error(error);
     }
   }
