@@ -6,7 +6,7 @@ export async function handleShareClick() {
         text: "링크를 공유합니다.",
         url: window.location.href
       });
-      console.log("링크를 공유했습니다!");
+      // console.log("링크를 공유했습니다!");
     } catch (error) {
       console.error("링크 공유에 실패했습니다.", error);
     }

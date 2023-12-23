@@ -57,7 +57,7 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
   const handleEditClick = (_id: string) => {
     setShowModal("CommentEditModal");
     setCommentId(_id);
-    console.log(_id);
+    // console.log(_id);
   };
   const handleCloseModal = () => {
     setShowModal("");
@@ -73,7 +73,7 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
       const data: Comment[] = stairComment(response.data);
 
       setComments(data);
-      console.log("댓글 전체", data);
+      // console.log("댓글 전체", data);
     } catch (error) {
       console.log(error);
     }
@@ -142,7 +142,7 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
   }
   //댓글 데이터 넘겨주기
   function getInitialComment(commentId: string) {
-    console.log(comments);
+    // console.log(comments);
     const comment = comments.find((comment) => comment._id === commentId);
     if (comment) {
       return {
@@ -157,12 +157,12 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
         comment.replies &&
         comment.replies.some((reply) => reply._id === commentId)
     );
-    console.log(foundComment);
+    // console.log(foundComment);
     if (foundComment?.replies) {
       const foundReply = foundComment.replies.find(
         (reply) => reply._id === commentId
       );
-      console.log(foundReply);
+      // console.log(foundReply);
       return {
         content: foundReply?.content,
         password: foundReply?.password,
@@ -234,7 +234,7 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
         color: selectedCharacterColor
       });
       getComment();
-      console.log("댓글성공", commentId);
+      // console.log("댓글성공", commentId);
     } catch (error) {
       console.error(error);
     }
@@ -260,8 +260,8 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
       return;
     }
 
-    console.log("댓글 데이터:", newComment);
-    console.log("선택된 색상:", selectedCharacterColor);
+    // console.log("댓글 데이터:", newComment);
+    // console.log("선택된 색상:", selectedCharacterColor);
     setErrorType("");
     postReplyData();
     setIsReplying(false);
@@ -326,7 +326,7 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
                       <button
                         onClick={() => {
                           handleEditClick(comment._id);
-                          console.log(showModal);
+                          // console.log(showModal);
                         }}
                       >
                         수정
@@ -370,7 +370,7 @@ export function CommentContent({ boardId, _id }: BoardIdProps) {
                         <button
                           onClick={() => {
                             handleEditClick(replyComment._id);
-                            console.log(replyComment._id);
+                            // console.log(replyComment._id);
                           }}
                         >
                           수정

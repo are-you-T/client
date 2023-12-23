@@ -21,6 +21,7 @@ import {
   Title,
   BulletinCardWrap
 } from "./BulletinBoard.styles";
+import LoadingIndicator from "@/components/common/LoadingIndicator/LoadingIndicator";
 
 export default function BulletinBoard() {
   const [openMbtiModal, setOpenMbtiModal] = useState<boolean>(false);
@@ -72,9 +73,9 @@ export default function BulletinBoard() {
 
   // 게시글 get 요청
   async function getPostings() {
-    if (isLoading) return;
+    if (isLoading) return <LoadingIndicator />;
 
-    console.log({ isLoading });
+    // console.log({ isLoading });
     try {
       setIsLoading(true);
 

@@ -178,7 +178,7 @@ export function CommentEdit({
   };
 
   const handleOnKeyDown = (e: React.KeyboardEvent) => {
-    console.log("edit");
+    // console.log("edit");
     if (e.key === "Enter") {
       handleSubmit(); // 작성한 댓글 post 요청하는 함수
     }

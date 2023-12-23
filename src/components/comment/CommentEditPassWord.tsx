@@ -81,7 +81,7 @@ export function CommentEditPassWord({
           pw: passwordConfirm
         }
       );
-      console.log(_id);
+      // console.log(_id);
       setShowCommentPassWordModal(false);
       setShowCommentEditModal(true);
     } catch (error) {
@@ -100,7 +100,7 @@ export function CommentEditPassWord({
     }
     passwordConfirmData();
   };
-  console.log("비번확인페이지", initialComment);
+  // console.log("비번확인페이지", initialComment);
   //비밀번호 확인 모달
   return (
     <>
