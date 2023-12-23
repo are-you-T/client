@@ -73,7 +73,7 @@ export default function BulletinBoard() {
 
   // 게시글 get 요청
   async function getPostings() {
-    if (isLoading) return <LoadingIndicator />;
+    if (isLoading) return;
 
     // console.log({ isLoading });
     try {
@@ -125,10 +125,10 @@ export default function BulletinBoard() {
   // skipCount 과 mbti 값이 변경될 때마다 데이터 호출
   useEffect(() => {
     getPostings();
-    console.log("임시");
+    // console.log("임시");
   }, [mbti, skipCount]);
 
-  console.log(skipCount);
+  // console.log(skipCount);
 
   // 무한 스크롤 훅
   const observerRef = useRef<HTMLDivElement | null>(null);
