@@ -1,24 +1,54 @@
-# are-you-T : mbti 포털 서비스
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
 
-## 프로젝트 주제
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+<a href="https://github.com/are-you-T/client">
+    <img src="https://github.com/are-you-T/client/blob/main/public/areUt_logo192.png" alt="Logo" width="80" height="80">
+  </a>
 
-- 목적 : MBTI 기반 포털 서비스를 개발하여 사용자들이 자신의 성격 유형을 이해하고, 다른 유형의 사람들과 상호작용을 통해 이해할 수 있는 기회를 제공합니다.
-- 목표
+  <h3 align="center">너 T야?(are-you-T)</h3>
+
+  <p align="center">
+    MBTI 포털 서비스: MBTI 테스트를 바탕으로 유형끼리 공감하며 소통할 수 있는 커뮤니티
+    <br />
+    <br />
+    <a href="https://are-you-t.vercel.app">데모 사이트</a>
+    ·
+    <a href="https://github.com/are-you-T/client/issues">버그 신고하기</a>
+    ·
+    <a href="https://github.com/are-you-T/client/issues">기능 요청하기</a>
+  </p>
+</div>
+
+## 프로젝트 소개
+
+**◼️ 목적**   
+
+MBTI 기반 포털 서비스를 개발하여 사용자들이 자신의 성격 유형을 이해하고, 다른 유형의 사람들과 상호작용을 통해 이해할 수 있는 기회를 제공합니다.
+
+**◼️ 목표**
   - MBTI 포털 서비스를 개발하여 매력적인 캐릭터와 MBTI별 포인트 컬러 그리고 흥미로운 질문으로 재미있고 유익한 경험을 제공합니다
   - 다양한 MBTI 유형의 개별 특성을 분석하고, 같은 유형의 사람들뿐만 아니라 다른 유형의 사람들의 생각도 알 수 있는 게시판(담벼락)을 제공합니다
   - 사용자들의 검사 결과에 기반한 MBTI 유형별 횟수 데이터를 수집하고, 이를 독창적으로 시각화하여 다른 MBTI 사이트와 차별화된 경험을 제공합니다
 
-## 페르소나
+**◼️ 페르소나**
+ <div align="center">
+	  <img src="https://github.com/are-you-T/client/assets/87935496/3adae08a-34ed-41ea-b7e2-ed64d4e1ba99" />
+	 <p>💡차언정(24세): "나의 MBTI 유형에 대한 사람들의 생각이 궁금해!"</p>
+ </div>
 
-![페르소나 (2)](https://github.com/are-you-T/client/assets/87935496/3adae08a-34ed-41ea-b7e2-ed64d4e1ba99)
-<br />
-💡차언정(24세): "나의 MBTI 유형에 대한 사람들의 생각이 궁금해!"
 
-## 기능 구현 리스트
 
-#### MBTI 유형별 분석, 통계, 담벼락 등 MBTI 포털 사이트의 핵심 기능을 구현합니다.
+## 기능 목록
 
-<details><summary>1.공통 헤더,푸터 컴포넌트</summary>
+**MBTI 유형별 분석, 통계, 담벼락 등 MBTI 포털 사이트의 핵심 기능을 구현합니다.**
+
+<details><summary>1. 공통 헤더,푸터 컴포넌트</summary>
 
 ![헤더](https://github.com/are-you-T/client/assets/87935496/54f36f44-67a9-490a-be68-4a663a8a76f2)
 
@@ -29,7 +59,7 @@
 
 </details>
 
-<details><summary>2.사이드 바 컴포넌트</summary>
+<details><summary>2. 사이드 바 컴포넌트</summary>
 
 ![사이드바](https://github.com/are-you-T/client/assets/87935496/51f9686d-5d2f-4a6d-acd3-24f28715e231)
 
@@ -40,7 +70,7 @@
 
 </details>
 
-<details><summary>3.메인 페이지</summary>
+<details><summary>3. 메인 페이지</summary>
 
 ![메인](https://github.com/are-you-T/client/assets/87935496/67737a45-65f4-4dae-96d3-d122a2695867)
 
@@ -52,7 +82,7 @@
 
 </details>
 
-<details><summary>4.테스트 페이지</summary>
+<details><summary>4. 테스트 페이지</summary>
 
 <img width="100" alt="테스트" src="https://github.com/are-you-T/client/assets/87935496/faf49015-323c-40e1-83e0-a46ec7c4cfbd">
 
@@ -63,7 +93,7 @@
 
 </details>
 
-<details><summary>5.테스트 결과 계산 로딩 컴포넌트</summary>
+<details><summary>5. 테스트 결과 계산 로딩 컴포넌트</summary>
 
 <img width="100" alt="테스트결과계산로딩" src="https://github.com/are-you-T/client/assets/87935496/3b093f05-12e2-4c0c-bfaa-f394ea704360">
 
@@ -74,7 +104,7 @@
 
 </details>
 
-<details><summary>6.테스트 결과 페이지</summary>
+<details><summary>6. 테스트 결과 페이지</summary>
 
 ![테스트결과1](https://github.com/are-you-T/client/assets/87935496/6fbb03af-55cb-49e5-b634-a3564bd1a7f7)
 ![테스트결과2](https://github.com/are-you-T/client/assets/87935496/646604b9-7407-4e29-bbea-f9a521f74074)
@@ -90,7 +120,7 @@
 
 </details>
 
-<details><summary>7.담벼락(게시판) 글 작성 컴포넌트</summary>
+<details><summary>7. 담벼락(게시판) 글 작성 컴포넌트</summary>
 
 ![1 글작성](https://github.com/are-you-T/client/assets/87935496/5f8f6068-b123-4ba3-a865-2cf4a24299bd)
 
@@ -107,7 +137,7 @@
 
 </details>
 
-<details><summary>8.MBTI 선택 모달</summary>
+<details><summary>8. MBTI 선택 모달</summary>
 
 <img width="100" alt="2 MBTI선택" src="https://github.com/are-you-T/client/assets/87935496/ef7184a2-7a6e-4d61-8d47-b8c2b2aef757">
 
@@ -117,7 +147,7 @@
 
 </details>
 
-<details><summary>9.배경 색상 선택 모달</summary>
+<details><summary>9. 배경 색상 선택 모달</summary>
 
 <img width="100" alt="3 배경색선택" src="https://github.com/are-you-T/client/assets/87935496/fe917ea5-e59c-461e-b685-d4ac25b710c6">
 
@@ -127,7 +157,7 @@
 
 </details>
 
-<details><summary>10.유효성 검사 결과 모달</summary>
+<details><summary>10. 유효성 검사 결과 모달</summary>
 
 <img width="100" alt="유효성검사모달" src="https://github.com/are-you-T/client/assets/87935496/2e80f0a7-99cf-467d-b009-6c90f9f70b5d">
 <img width="100" alt="유효성검사모달2" src="https://github.com/are-you-T/client/assets/87935496/43f72197-5df0-4907-9a8d-7daea1f030db">
@@ -139,7 +169,7 @@
 
 </details>
 
-<details><summary>11.MBTI 전체 통계 페이지</summary>
+<details><summary>11. MBTI 전체 통계 페이지</summary>
 
 ![전체통계페이지1](https://github.com/are-you-T/client/assets/87935496/6bfca4c6-9fc9-4141-8f66-8393ea9eaa2d)
 ![노데이터](https://github.com/are-you-T/client/assets/87935496/d8dd4601-b448-4546-996c-d5f488deaba3)
@@ -152,7 +182,7 @@
 
 </details>
 
-<details><summary>12.MBTI 유형별 통계 페이지</summary>
+<details><summary>12. MBTI 유형별 통계 페이지</summary>
 
 ![유형별통계](https://github.com/are-you-T/client/assets/87935496/b182026d-f82c-423d-b915-b493ad74b410)
 ![노데이터](https://github.com/are-you-T/client/assets/87935496/b35e1d00-97e4-40f1-a6d5-ee58609f6221)
@@ -167,32 +197,21 @@
 
 <br />
 
-## 데모 사이트
+## 기술 스택
 
-- [https://are-you-t.vercel.app/](https://are-you-t.vercel.app/)
-<div>
+#### FE
+[![React.js]][React-url] [![TypeScript]][TypeScript-url] [![TailwindCSS]][TailwindCSS-url] [![DaisyUI]][DaisyUI-url] [![TSC]][TSC-url] [![ApexCharts]][ApexCharts-url]
 
-![로고](https://github.com/are-you-T/client/assets/87935496/80e136df-e092-4592-a06f-605e3a2a18ce)
+#### BE
+[![Node.js]][Node-url] [![Express.js]][Express-url] [![MongoDB]][MongoDB-url]
 
- </div>
-
-## Tech Stack
-
-| FE                        | BE         | Infra     |
-| ------------------------- | ---------- | --------- |
-| Tailwind CSS              | node.js    | Vercel    |
-| daisyUI                   | express.js | CloudType |
-| React.js                  | mongodb    |           |
-| Tailwind-styled-component |            |           |
-| TypeScript                |            |           |
-| ApexCharts.js             |            |           |
+#### INFRA
+[![Vercel]][Vercel-url] [![Cloudtype]][Cloudtype-url]
 
 
 <br />
 
-## 👪 구성원 역할
-
-<br />
+## 구성원 역할
 
 | 담당자 | 업무                            | 비고                                                                                                                                        |
 | ------ | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -201,7 +220,7 @@
 | 이슬   | 담벼락 글쓰기 컴포넌트 개발     | 사용자가 글을 작성할 수 있는 폼 모달 창 개발 </br>제목, 내용 유효성 검사 </br>MBTI 유형 상태 관리 </br>담벼락 스티커 색상 선택 모달 창 개발 |
 | 김진규 | MBTI 검사 결과 화면 개발        | 검사 결과 데이터 화면에 표시 </br>링크 공유하기 </br>유형별 통계 표시(외부 링크로 접근시에는 보이지 않음)                                   |
 | 엄태호 | MBTI 유형별 결과 통계 화면 개발 | 유형별 결과 통계 차트로 표시 </br>문항당 하나의 차트 및 응답을 표시                                                                         |
-| 이수민 | MBTI 검사 화면 개발             | 테스트 검사 데이터 스케일링 및 전달                                                                                                         |
+| 이수민 | MBTI 검사 화면 개발             | MBTI 테스트 화면 개발 </br>테스트 검사 데이터 스케일링 및 전달                                                                                                         |
 | 문수민 | 담벼락 화면 개발                | 전체 유형의 글을 화면에 표시 </br>유형별 담벼락 페이지에서는 해당 유형의 글만 화면에 표시 </br>실시간 좋아요 처리                           |
 | 백민혁 | MBTI 전체 유형 통계 화면 개발   | 검사 결과에 대한 MBTI 유형별 횟수를 통계로 표시                                                                                             |
 
@@ -211,7 +230,7 @@
 
 <details><summary>테스트 스키마</summary>
 
-```
+```js
   // 어떤 테스트인지? 사실 테스트는 1개만 만들 것이지만, 나중에 확장성을 위해 만든다.
 const TestSchema = new Schema({
   name: {
@@ -225,7 +244,7 @@ const TestSchema = new Schema({
 
 <details><summary>문항 스키마</summary>
 
-```
+```js
 // 어떤 테스트에 대한 문항인지. 사실 테스트는 1개만 만들 것이지만, 
 // 나중에 확장성을 위해 이렇게 정의한다.
 const QuestionSchema = new Schema({
@@ -281,7 +300,7 @@ const QuestionSchema = new Schema({
 
 <details><summary>게시글 스키마 (MBTI 별로 데이터 저장)</summary>
 
-```
+```js
 const BoardSchema = new Schema({
     // 사용자 uuid (일단 보류.)
     uuid: {
@@ -325,7 +344,7 @@ const BoardSchema = new Schema({
 
 <details><summary>통계 스키마 (MBTI 결과에 대해 선택 결과 저장)</summary>
 
-```
+```js
 const StatisticSchema = new Schema({
   // 특정 mbti 유형
   mbtiType: {
@@ -382,7 +401,7 @@ const StatisticSchema = new Schema({
 
 <details><summary>MBTI 스키마 (16개 MBTI에 대한 설명, 잘 맞는 MBTI 안 맞는 MBTI)</summary>
 
-```
+```js
 const MBTISchema = new Schema({
 	//
   // 16개 mbti 통계 데이터
@@ -443,39 +462,100 @@ const MBTISchema = new Schema({
 
 </details>
 
-## Collaboration Tools
+</br>
+
+## 협업 도구
 
 - Notion : 스터디 기간, 사용 기술 스택, 참고 문서, 업무 진행 사항, 회의록
 - Discord : 음성 채팅방 활용 의견 제시및 문제 해결
 - GitHub : Code Repository
 - Postman Teams : API 테스트 진행
 
-## 코드 컨벤션
+<br />
 
-- 변수 : 카멜 케이스(camelCase)
-- 변수(스키마) : 파스칼 케이스(PascalCase)
-- 함수 : 카멜 케이스(camelCase)
-- 상수 : 대문자
-- 파일 : 파스칼 케이스(PascalCase)
-- 스타일 : 케밥 케이스(kebab-case)
+## 컨벤션
 
-## 커밋 컨벤션
+### 코드
+|코드|설명|
+|--|--|
+|변수|카멜 케이스(camelCase)|
+|변수(스키마)|파스칼 케이스(PascalCase)|
+|함수|카멜 케이스(camelCase)|
+|상수|대문자|
+|파일|파스칼 케이스(PascalCase)|
+|스타일|케밥 케이스(kebab-case)|
 
-- feat : 새로운 기능 추가
-- fix : 오류 수정
-- style : 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우, css 작업
-- refactor : 코드 로직 수정 (리팩토링)
-- docs : 문서 수정
-- test : 테스트 코드 추가
-- chore : 빌드 업무 수정, 패키지 매니저 수정 (module 추가 시)
+### 커밋
+
+|커밋|설명|
+|--|--|
+|feat|새로운 기능 추가|
+|fix|오류 수정|
+|style|코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우, css 작업|
+|refactor|코드 로직 수정 (리팩토링)|
+|docs|문서 수정|
+|test|테스트 코드 추가|
+|chore|빌드 업무 수정, 패키지 매니저 수정 (module 추가 시)|
+
+
+
+<br />
 
 ## 브랜치 전략
 
-### main - develop - feature/A
+	main - develop - feature/A
+
+<br />
+
+## 기여 방법
+
+1. 프로젝트를 Fork합니다.
+2. 새로운 기능 브랜치를 만듭니다. (`git checkout -b feature/AmazingFeature`)
+3. 변경한 코드를 커밋합니다. (`git commit -m 'Add some AmazingFeature'`)
+4. 브랜치를 Push합니다. (`git push origin feature/AmazingFeature`)
+5. 새로운 Pull Request를 생성합니다.
+
+
 
 
 ---
-
-무단 사용 및 도용, 복제 및 배포를 금합니다.
 <br />
-Copyright 2023 엘리스 2차 스터디 [너T야?]팀. All rights reserved.
+
+<p>무단 사용 및 도용, 복제 및 배포를 금합니다.</p>
+<span>Copyright 2023 엘리스 2차 스터디 [너T야?]팀. All rights reserved.</span>
+
+[contributors-shield]: https://img.shields.io/github/contributors/are-you-T/client.svg?style=for-the-badge
+[contributors-url]: https://github.com/are-you-T/client/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/are-you-T/client.svg?style=for-the-badge
+[forks-url]: https://github.com/are-you-T/client/network/members
+[stars-shield]: https://img.shields.io/github/stars/are-you-T/client.svg?style=for-the-badge
+[stars-url]: https://github.com/are-you-T/client/stargazers
+[issues-shield]: https://img.shields.io/github/issues/are-you-T/client.svg?style=for-the-badge
+[issues-url]: https://github.com/are-you-T/client/issues
+[license-shield]: https://img.shields.io/github/license/are-you-T/client.svg?style=for-the-badge
+[license-url]: https://github.com/are-you-T/client/blob/main/LICENSE.txt
+
+[React.js]: https://img.shields.io/badge/React.js-61DAFB?style=for-the-badge&logo=react&logoColor=20232A
+[React-url]: https://reactjs.org/
+[TypeScript]: https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white
+[TypeScript-url]: https://www.typescriptlang.org
+[TailwindCSS]: https://img.shields.io/badge/tailwind%20css-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white
+[TailwindCSS-url]: https://tailwindcss.com
+[DaisyUI]: https://img.shields.io/badge/daisy%20ui-5A0EF8?style=for-the-badge&logo=daisyui&logoColor=white
+[DaisyUI-url]: https://daisyui.com
+[TSC]: https://img.shields.io/badge/tailwind%20styled%20component-06B6D4?style=for-the-badge
+[TSC-url]: https://github.com/MathiasGilson/tailwind-styled-component
+[ApexCharts]: https://img.shields.io/badge/apexcharts.js-008ffb?style=for-the-badge
+[ApexCharts-url]: https://apexcharts.com
+
+[Node.js]: https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white
+[Node-url]: https://nodejs.org/en
+[Express.js]: https://img.shields.io/badge/express.js-000000?style=for-the-badge&logo=express&logoColor=white
+[Express-url]: https://expressjs.com
+[MongoDB]: https://img.shields.io/badge/mongodb-47A248?style=for-the-badge&logo=mongodb&logoColor=white
+[MongoDB-url]: https://www.mongodb.com/ko-kr
+
+[Vercel]: https://img.shields.io/badge/vercel-000000?style=for-the-badge&logo=vercel&logoColor=white
+[Vercel-url]: https://vercel.com
+[Cloudtype]: https://img.shields.io/badge/Cloudtype-000000?style=for-the-badge
+[Cloudtype-url]: https://cloudtype.io
