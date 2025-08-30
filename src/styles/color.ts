@@ -182,3 +182,9 @@ export const themeColor: MantineThemeColors = {
     "#FFFFFF",
   ],
 };
+
+export const customThemeColor = {
+  bodyColor: "#B2ACF9",
+  bgColor: "#0272F1",
+  pointColor: "#EFC7D6",
+};

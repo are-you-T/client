@@ -9,7 +9,6 @@ const rootElement = createRoot(root);
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5, // 5분간 fresh
       gcTime: 1000 * 60 * 10, // 10분간 캐시 유지
       retry: 2, // 실패 시 최대 2회 재시도
       retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000),
