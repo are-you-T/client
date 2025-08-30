@@ -11,7 +11,7 @@ export const Character = ({
   bgColor = themeColor.violet[2],
 }: CharacterProps) => {
   return (
-    <Flex w="100%" justify="center" maw={820} miw="min(340px, 100%)">
+    <Flex w="100%" justify="center">
       <svg
         viewBox="0 0 420 300"
         fill="none"
@@ -20,14 +20,7 @@ export const Character = ({
         preserveAspectRatio="xMidYMid meet"
       >
         <ellipse cx="210" cy="401.5" rx="325" ry="401.5" fill={bgColor} />
-        <rect
-          x="70"
-          y="150"
-          width="280"
-          height="20"
-          rx="9.71429"
-          fill={color}
-        />
+        <rect x="70" y="150" width="280" height="20" rx="9.71429" fill={color} />
         <ellipse cx="270" cy="162" rx="53.2958" ry="51" fill={color} />
         <ellipse cx="270" cy="161.393" rx="38.7029" ry="37.0357" fill="black" />
         <ellipse cx="258" cy="148.036" rx="12.055" ry="11.5357" fill="white" />
