@@ -1,9 +1,11 @@
+import { Flex, Title } from "@mantine/core";
 
 export default function NotFound() {
   return (
-    <section className='flex flex-col items-center'>
-      <h3 className='text-2xl font-bold mb-2'>NotFound😅</h3>
-    </section>
+    <Flex direction="column" align="center">
+      <Title order={3} fw="bold" mb="lg">
+        NotFound😅
+      </Title>
+    </Flex>
   );
 }
-

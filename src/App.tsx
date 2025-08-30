@@ -1,19 +1,38 @@
-import { Outlet } from "react-router-dom";
-import Header from "@/components/layout/Header/Header";
-import Footer from "@/components/layout/Footer/Footer";
-import tw from "tailwind-styled-components";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import routePaths from "@/router";
+import { ErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "@/components/ErrorFallback";
+import { Suspense } from "react";
+import { Loader, MantineProvider } from "@mantine/core";
+import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
+import "@mantine/charts/styles.css";
+import { Notifications } from "@mantine/notifications";
+import { Layout } from "@/components/Layout";
+import { globalTheme } from "@/styles/global";
+// import { ModalStackManager } from "@/components/Modal";
 
 function App() {
-    return (
-        <Container>
-            <Header />
-            <Outlet />
-            <Footer />
-        </Container>
-    );
+  return (
+    <BrowserRouter>
+      <MantineProvider theme={globalTheme} withGlobalClasses withStaticClasses>
+        <Suspense fallback={<Loader />}>
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            {/* <ModalStackManager> */}
+            <Notifications />
+            <Layout>
+              <Routes>
+                {routePaths.map((route) => (
+                  <Route key={route.path} path={route.path} element={route.element} />
+                ))}
+              </Routes>
+            </Layout>
+            {/* </ModalStackManager> */}
+          </ErrorBoundary>
+        </Suspense>
+      </MantineProvider>
+    </BrowserRouter>
+  );
 }
 
-const Container = tw.div`
-  h-full
-`;
 export default App;
