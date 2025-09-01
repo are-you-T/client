@@ -1,4 +1,4 @@
-import { AppShell, Flex, Center } from "@mantine/core";
+import { AppShell, Flex, Center, Box } from "@mantine/core";
 import React from "react";
 
 interface LayoutProps {
@@ -10,21 +10,20 @@ const fixedBoxStyle = {
   right: "auto", // Mantine 기본 right 제거
   transform: "translateX(-50%)", // 가운데 정렬
   width: "100%",
-  maxWidth: 820,
+  maxWidth: 720,
   minWidth: 340,
 } as const;
 
 export const Layout = ({ children }: LayoutProps) => {
   return (
-    <Flex w="100%" h="100vh">
+    <Flex w="100%" h="100vh" justify="center">
       <AppShell
         header={{ height: 72 }}
         footer={{ height: 60 }}
-        maw={820}
+        maw={720}
         miw={340}
         w="100%"
         h="100%"
-        withBorder
       >
         <AppShell.Header bg="lime" style={fixedBoxStyle}>
           layout header
