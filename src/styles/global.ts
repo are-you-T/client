@@ -1,4 +1,5 @@
 import { MantineTheme } from "@mantine/core";
+import { customThemeColor } from "./color";
 
 export const globalTheme = {
   components: {
@@ -20,9 +21,9 @@ export const globalTheme = {
       }),
     },
     Drawer: {
-      styles: (theme: MantineTheme) => ({
+      styles: () => ({
         content: {
-          backgroundColor: theme.colors.violet[2], // 원하는 배경색 설정
+          backgroundColor: customThemeColor.bodyColor, // 원하는 배경색 설정
         },
       }),
     },

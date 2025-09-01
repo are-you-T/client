@@ -5,6 +5,7 @@ import React from "react";
 
 import MainLogo from "@/assets/img/mainlogo.svg";
 import useRouter from "@/hooks/useRouter";
+import { customThemeColor } from "@/styles/color";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -22,21 +23,11 @@ const fixedBoxStyle = {
 export const Layout = ({ children }: LayoutProps) => {
   return (
     <Flex w="100%" h="100vh" justify="center">
-      <AppShell
-        header={{ height: 72 }}
-        footer={{ height: 60 }}
-        maw={720}
-        miw={340}
-        w="100%"
-        h="100%"
-      >
+      <AppShell header={{ height: 72 }} maw={720} miw={340} w="100%" h="100%">
         <AppShell.Header bg="lime" style={fixedBoxStyle}>
           <LayoutHeader />
         </AppShell.Header>
-        <AppShell.Main>{children}</AppShell.Main>
-        <AppShell.Footer bg="green" style={fixedBoxStyle}>
-          layout footer
-        </AppShell.Footer>
+        <AppShell.Main display="flex">{children}</AppShell.Main>
       </AppShell>
     </Flex>
   );
@@ -52,7 +43,14 @@ const LayoutHeader = () => {
   };
 
   return (
-    <Flex w="100%" h="100%" p="xs" justify="space-between" align="center" bg="violet.2">
+    <Flex
+      w="100%"
+      h="100%"
+      p="xs"
+      justify="space-between"
+      align="center"
+      bg={customThemeColor.bodyColor}
+    >
       <Anchor
         h="100%"
         onClick={() => {

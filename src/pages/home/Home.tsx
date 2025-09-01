@@ -1,19 +1,27 @@
 import Character from "@/components/Character";
 import useRouter from "@/hooks/useRouter";
 import { customThemeColor } from "@/styles/color";
-import { Button, Flex, Text } from "@mantine/core";
+import { Button, Flex, Title } from "@mantine/core";
 
 const HomePage = () => {
   const { navigateTo } = useRouter();
   return (
-    <Flex direction="column">
-      <Flex w="100%" justify="center" direction="column" bg="cyan" pt="lg">
+    <Flex w="100%" direction="column" flex={1}>
+      <Flex w="100%" justify="center" direction="column" bg={customThemeColor.bgColor} pt="lg">
         <Character color={customThemeColor.pointColor} bgColor={customThemeColor.bodyColor} />
       </Flex>
-      <Flex direction="column" p="md" bg="violet.2" gap="xs" justify="space-between" h="100%">
-        <Text size="2.5rem" fw={700} ta="center">
+
+      <Flex
+        direction="column"
+        p="md"
+        bg={customThemeColor.bodyColor}
+        gap="lg"
+        justify="center"
+        h="100%"
+      >
+        <Title size="4rem" fw={700} ta="center">
           ARE YOU T?
-        </Text>
+        </Title>
         <Button size="xl" color="yellow.4" onClick={() => navigateTo("/test")}>
           테스트 하러가기
         </Button>
