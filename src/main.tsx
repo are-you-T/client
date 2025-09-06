@@ -1,6 +1,7 @@
 import App from "@/App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRoot } from "react-dom/client";
+import "@/styles/fonts.css"; // 폰트 CSS 추가
 
 const root = document.getElementById("root") as HTMLElement;
 
