@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "supabase:gen": "npx supabase gen types typescript --project-id 'nxxsplksxpwadnxfzncp' --schema public > src/types/supabase.ts"
   },
   "dependencies": {
     "@mantine/charts": "^8.2.7",
@@ -17,6 +18,7 @@
     "@mantine/hooks": "^8.2.7",
     "@mantine/modals": "^8.2.7",
     "@mantine/notifications": "^8.2.7",
+    "@supabase/supabase-js": "^2.57.2",
     "@tabler/icons-react": "^3.34.1",
     "@tanstack/react-query": "^5.85.5",
     "react": "^18.3.1",
@@ -38,6 +40,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.14",
     "prettier": "^3.4.1",
+    "supabase": "^2.39.2",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.15.0",
     "vite": "^7.1.3",
