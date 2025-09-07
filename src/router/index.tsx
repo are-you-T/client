@@ -1,10 +1,10 @@
 import { lazy } from "react";
 
 // ---- lazy components (모듈 단위로 코드 스플리팅) ----
-const MainPage = lazy(() => import("@/pages/Home/Home"));
+const HomePage = lazy(() => import("@/pages/Home"));
 // const TestPage = lazy(() => import("@/pages/Test/Test"));
 // const TestResultPage = lazy(() => import("@/pages/TestResult/TestResult"));
-// const MemoPage = lazy(() => import("@/pages/Memo/BulletinBoard"));
+const MemoPage = lazy(() => import("@/pages/Memo"));
 // const MemoViewPage = lazy(() => import("@/pages/Memo/View/CardDetail"));
 // const QuestionPage = lazy(() => import("@/pages/Question"));
 // const QuestionViewPage = lazy(() => import("@/pages/Question/View"));
@@ -13,8 +13,8 @@ const MainPage = lazy(() => import("@/pages/Home/Home"));
 const NotFoundPage = lazy(() => import("@/pages/NotFound"));
 
 const routePaths = [
-  { path: "/", element: <MainPage /> },
-  // { path: "/memo", element: <MemoPage /> },
+  { path: "/", element: <HomePage /> },
+  { path: "/memo", element: <MemoPage /> },
   // { path: "/memo/:mbti", elment: <MemoPage /> },
   // { path: "/memoview/:id", element: <MemoViewPage /> },
   // { path: "/question", element: <QuestionPage /> },
