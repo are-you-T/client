@@ -17,6 +17,7 @@ function App() {
   return (
     <BrowserRouter>
       <MantineProvider theme={globalTheme} withGlobalClasses withStaticClasses>
+        {/* TODO: fallback 상태에서 Loader 디자인 필요 */}
         <Suspense fallback={<Loader />}>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <ModalStackManager>
