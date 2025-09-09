@@ -1,8 +1,34 @@
-import { ActionIcon, Flex, Text, Loader, Badge } from "@mantine/core";
+import { ActionIcon, Flex, Text, Badge, Loader, Overlay } from "@mantine/core";
 import { IconPlus, IconSearch, IconX } from "@tabler/icons-react";
 import { MemoCard } from "@/components/Memo/Card";
+import { getMemoList } from "@/actions/memo.actions";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInViewport } from "@mantine/hooks";
+import { useEffect } from "react";
+import { Database } from "@/types/supabase";
+
+export type MemoCardDto = Database["public"]["Tables"]["Memo"]["Row"];
 
 const MemoPage = () => {
+  const viewport = useInViewport();
+  const { ref: inViewportRef, inViewport } = viewport;
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+    queryKey: ["memoList"],
+    queryFn: ({ pageParam = 0 }) => getMemoList({ pageParam }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+  });
+
+  // ✅ 데이터 평탄화
+  const memoList = data?.pages.flatMap((page) => page.data) ?? [];
+
+  useEffect(() => {
+    if (inViewport && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage?.();
+    }
+  }, [inViewport, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
   return (
     <Flex direction="column" w="100%" bg="dark">
       {/* 헤더 영역은 고정되도록 하고 싶긴 함 sticky? */}
@@ -46,17 +72,36 @@ const MemoPage = () => {
           </Badge>
         </Flex>
       </Flex>
+
       <Flex direction="column" w="100%" p="md" gap="md" justify="center">
-        {/* <MemoCard key={data._id} memo={data} />; */}
-        <MemoCard />
-        <MemoCard />
-        <MemoCard />
-        <MemoCard />
-        <MemoCard />
-        <MemoCard />
-        <Text ta="center" c="white">
-          페이지의 끝!
-        </Text>
+        {memoList.map((memo: MemoCardDto) => {
+          return <MemoCard key={memo.id} memo={memo} />;
+        })}
+        {/* 무한스크롤 트리거 영역 */}
+        {hasNextPage && (
+          <div data-testid="infinite-sentinel" ref={inViewportRef} style={{ height: 1 }} />
+        )}
+        {/* 로딩 중 표시용 버튼 */}
+        {isFetchingNextPage && (
+          <Flex
+            w="100%"
+            h="100%"
+            style={{ zIndex: 1000 }}
+            justify="center"
+            align="center"
+            pos="fixed"
+            top={0}
+            left={0}
+          >
+            <Loader size="xl" />
+            <Overlay color="#FFFFFF" backgroundOpacity={0.5} />
+          </Flex>
+        )}
+        {!hasNextPage && memoList && memoList.length > 0 && (
+          <Text ta="center" c="white">
+            페이지의 끝!
+          </Text>
+        )}
       </Flex>
     </Flex>
   );
