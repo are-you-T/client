@@ -1,20 +1,23 @@
 import { ActionIcon, Flex, Text, Badge, Loader, Overlay } from "@mantine/core";
 import { IconPlus, IconSearch, IconX } from "@tabler/icons-react";
 import { MemoCard } from "@/components/Memo/Card";
-import { getMemoList } from "@/actions/memo.actions";
+import { getMemoList, memoQueryKey } from "@/actions/memo.actions";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInViewport } from "@mantine/hooks";
 import { useEffect } from "react";
 import { Database } from "@/types/supabase";
+import { useModal } from "@/hooks/useModal";
+import { Note } from "@/components/Memo/Note";
 
 export type MemoCardDto = Database["public"]["Tables"]["Memo"]["Row"];
 
 const MemoPage = () => {
+  const { openModal } = useModal();
   const viewport = useInViewport();
   const { ref: inViewportRef, inViewport } = viewport;
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: ["memoList"],
+    queryKey: [memoQueryKey],
     queryFn: ({ pageParam = 0 }) => getMemoList({ pageParam }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextPage,
@@ -51,7 +54,13 @@ const MemoPage = () => {
             <ActionIcon radius="100%" size="4rem" color="cyan" onClick={() => {}}>
               <IconSearch size="2rem" />
             </ActionIcon>
-            <ActionIcon radius="100%" size="4rem" onClick={() => {}}>
+            <ActionIcon
+              radius="100%"
+              size="4rem"
+              onClick={() => {
+                openModal(<Note />, null, "메모 작성", true);
+              }}
+            >
               <IconPlus size="2rem" />
             </ActionIcon>
           </Flex>
