@@ -14,6 +14,53 @@ export type Database = {
   }
   public: {
     Tables: {
+      Comment: {
+        Row: {
+          content: string
+          created_at: string
+          deletedYn: boolean | null
+          id: string
+          likeCount: number | null
+          memoId: string
+          nickname: string
+          parentCommentId: string
+          password: string
+          updated_at: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          deletedYn?: boolean | null
+          id?: string
+          likeCount?: number | null
+          memoId: string
+          nickname: string
+          parentCommentId: string
+          password: string
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          deletedYn?: boolean | null
+          id?: string
+          likeCount?: number | null
+          memoId?: string
+          nickname?: string
+          parentCommentId?: string
+          password?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Comment_memoId_fkey"
+            columns: ["memoId"]
+            isOneToOne: false
+            referencedRelation: "Memo"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Memo: {
         Row: {
           cardColor: string
