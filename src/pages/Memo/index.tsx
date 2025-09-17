@@ -5,30 +5,18 @@ import { getMemoList, memoQueryKey } from "@/actions/memo.actions";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInViewport } from "@mantine/hooks";
 import { useEffect } from "react";
-import { Database } from "@/types/supabase";
 import { useModal } from "@/hooks/useModal";
 import { Note } from "@/components/Memo/Note";
-
-export type MemoCardDto = Database["public"]["Tables"]["Memo"]["Row"];
+import { MemoType } from "@/types";
+import useMemoController from "@/controllers/useMemoController";
 
 const MemoPage = () => {
   const { openModal } = useModal();
   const viewport = useInViewport();
   const { ref: inViewportRef, inViewport } = viewport;
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: [memoQueryKey],
-    queryFn: ({ pageParam = 0 }) => getMemoList({ pageParam }),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage) => lastPage.nextPage,
-  });
-
-  // ✅ 데이터 평탄화, id를 기준으로 중복 제거
-  const memoList = [
-    ...new Map(
-      (data?.pages.flatMap((page) => page.data) ?? []).map((item) => [item.id, item])
-    ).values(),
-  ];
+  const { memoListData } = useMemoController();
+  const { memoList, fetchNextPage, hasNextPage, isFetchingNextPage } = memoListData;
 
   useEffect(() => {
     if (inViewport && hasNextPage && !isFetchingNextPage) {
@@ -87,7 +75,7 @@ const MemoPage = () => {
       </Flex>
 
       <Flex direction="column" w="100%" p="md" gap="md" justify="center">
-        {memoList.map((memo: MemoCardDto) => {
+        {memoList.map((memo: MemoType) => {
           return <MemoCard key={memo.id} memo={memo} />;
         })}
         {/* 무한스크롤 트리거 영역 */}
