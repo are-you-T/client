@@ -4,6 +4,8 @@
 // import { Note } from "@/components/Note";
 // import { PasswordForm } from "@/components/PasswordForm";
 import { getMemoById } from "@/actions/memo.actions";
+import { CommentCard } from "@/components/Memo/CommentCard";
+import { CommentNote } from "@/components/Memo/CommentNote";
 import { Note } from "@/components/Memo/Note";
 import { PasswordForm } from "@/components/PasswordForm";
 import { useHandleError } from "@/hooks/useHandleError";
@@ -245,21 +247,22 @@ const MemoViewPage = () => {
             <Text fz="lg">[{memo?.cmtCount}]</Text>
           </Flex>
           <Button
-          // onClick={() => {
-          //   openModal(<CommentForm memoId={memo?._id as string} />, null, "댓글 작성", true).then(
-          //     (result) => {
-          //       if (result) {
-          //         memoRefetch();
-          //         commentsRefetch();
-          //       }
-          //     }
-          //   );
-          // }}
+            onClick={() => {
+              openModal(<CommentNote memoId={memo?.id as string} />, null, "댓글 작성", true).then(
+                (result) => {
+                  if (result) {
+                    // memoRefetch();
+                    // commentsRefetch();
+                  }
+                }
+              );
+            }}
           >
             작성
           </Button>
         </Flex>
         {!memo?.cmtCount && <Text>댓글이 존재하지 않습니다.</Text>}
+        <Flex>{/* <CommentCard comment={}/> */}</Flex>
         {/* {commentTreeData &&
           commentTreeData.map((comment) => {
             if (!comment.parentCommentId) {
