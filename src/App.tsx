@@ -21,7 +21,7 @@ function App() {
         <Suspense fallback={<Loader />}>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <ModalStackManager>
-              <Notifications />
+              <Notifications position="top-center" />
               <Layout>
                 <Routes>
                   {routePaths.map((route) => (
