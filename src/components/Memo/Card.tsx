@@ -2,9 +2,7 @@ import useRouter from "@/hooks/useRouter";
 import dayjs from "dayjs";
 import { Card, Flex, Badge, Text, ButtonGroup, Button } from "@mantine/core";
 import { IconHeart, IconMessage2 } from "@tabler/icons-react";
-import { incrementMemoLike, memoListQueryKey, memoQueryKey } from "@/actions/memo.actions";
 import { MemoType } from "@/types";
-import { useQueryClient } from "@tanstack/react-query";
 import useMemoController from "@/controllers/useMemoController";
 
 interface MemoCardProps {
@@ -12,7 +10,6 @@ interface MemoCardProps {
 }
 
 export const MemoCard = ({ memo }: MemoCardProps) => {
-  const queryClient = useQueryClient();
   const { likeMemo, isLiking } = useMemoController();
   const { navigateTo } = useRouter();
 

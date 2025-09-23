@@ -1,30 +1,31 @@
-// import { CommentCard } from "@/components/CommentCard";
-// import { CommentForm } from "@/components/CommentForm";
-// import { Confirm } from "@/components/Confirm";
-// import { Note } from "@/components/Note";
-// import { PasswordForm } from "@/components/PasswordForm";
-import { getMemoById } from "@/actions/memo.actions";
+import { getMemoById, memoQueryKey } from "@/actions/memo.actions";
 import { CommentCard } from "@/components/Memo/CommentCard";
 import { CommentNote } from "@/components/Memo/CommentNote";
 import { Note } from "@/components/Memo/Note";
-import { PasswordForm } from "@/components/PasswordForm";
-import { useHandleError } from "@/hooks/useHandleError";
+import useCommentController from "@/controllers/useCommentController";
+import useMemoController from "@/controllers/useMemoController";
 import { useModal } from "@/hooks/useModal";
 import useRouter from "@/hooks/useRouter";
-import { ActionIcon, Button, ButtonGroup, Card, Flex, Group, Menu, Text } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
+import { setDayjsFormatString } from "@/utils/formatDate";
 import {
-  IconArrowLeft,
-  IconCornerDownRight,
-  IconDotsVertical,
-  IconHeart,
-  IconMessage2,
-} from "@tabler/icons-react";
+  ActionIcon,
+  Button,
+  ButtonGroup,
+  Card,
+  Flex,
+  Group,
+  Menu,
+  Text,
+  Loader,
+} from "@mantine/core";
+import { IconArrowLeft, IconDotsVertical, IconHeart, IconMessage2 } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { MemoType } from "@/types";
 
 const MemoViewPage = () => {
-  const { navigateTo, goBack, params } = useRouter();
+  const { likeMemo, isLiking } = useMemoController();
+  const { goBack, params } = useRouter();
   const { id } = params as { id: string };
   useEffect(() => {
     if (!id) {
@@ -34,19 +35,15 @@ const MemoViewPage = () => {
   }, [id]);
 
   // const setError = useHandleError(); // 에러 핸들링 함수
-  const { openModal, closeModal } = useModal();
+  const { openModal } = useModal();
 
-  const { data: memo } = useQuery({
-    queryKey: ["memo", id],
+  const { data: memo, isLoading } = useQuery<MemoType | null>({
+    queryKey: [memoQueryKey, id],
     queryFn: () => getMemoById(id),
+    enabled: !!id,
   });
 
-  // const bgColor = findColorArray(memo?.cardColor);
-  // const commentTreeData = buildCommentTree(comments ?? []);
-
-  // const { mutate: likeMutate } = useCustomMutation<MemoLikeResponse>(["get-memo", "get-comments"], {
-  //   method: "patch",
-  // });
+  const { commentListData } = useCommentController(memo?.id);
 
   // const { mutate: deleteMutate } = useCustomMutation(["get-memos"], {
   //   method: "delete",
@@ -147,6 +144,27 @@ const MemoViewPage = () => {
   //   });
   // };
 
+  // 로딩 중에는 페이지 본문을 렌더하지 않음
+  if (isLoading) {
+    return (
+      <Flex align="center" justify="center" w="100%" h="60vh">
+        <Loader />
+      </Flex>
+    );
+  }
+
+  // 메모가 존재하지 않으면 페이지를 표시하지 않음 (간단한 안내와 뒤로가기만 제공)
+  if (!memo) {
+    return (
+      <Flex direction="column" w="100%" p="md" gap="md">
+        <ActionIcon variant="subtle" color="dark" onClick={() => goBack()}>
+          <IconArrowLeft />
+        </ActionIcon>
+        <Text fz="1.1rem">해당 메모를 찾을 수 없어요.</Text>
+      </Flex>
+    );
+  }
+
   return (
     <Flex direction="column" w="100%" bg={memo?.cardColor ?? "#FFFFFF"} p="md" gap="lg">
       <Flex justify="space-between" align="center">
@@ -230,12 +248,17 @@ const MemoViewPage = () => {
                 variant="subtle"
                 leftSection={<IconHeart />}
                 color="dark"
-                // onClick={() => handleClickLike(memo?._id as string)}
+                loading={isLiking(memo.id)}
+                disabled={isLiking(memo.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  likeMemo(memo.id);
+                }}
               >
                 {memo?.likeCount}
               </Button>
             </ButtonGroup>
-            <Text ta="end">2024-11-29 13:57</Text>
+            <Text ta="end">{setDayjsFormatString(memo?.created_at)}</Text>
           </Flex>
         </Flex>
       </Card>
@@ -248,21 +271,22 @@ const MemoViewPage = () => {
           </Flex>
           <Button
             onClick={() => {
-              openModal(<CommentNote memoId={memo?.id as string} />, null, "댓글 작성", true).then(
-                (result) => {
-                  if (result) {
-                    // memoRefetch();
-                    // commentsRefetch();
-                  }
-                }
-              );
+              openModal(<CommentNote memoId={memo.id} />, null, "댓글 작성", true);
             }}
           >
             작성
           </Button>
         </Flex>
-        {!memo?.cmtCount && <Text>댓글이 존재하지 않습니다.</Text>}
-        <Flex>{/* <CommentCard comment={}/> */}</Flex>
+        {memo?.cmtCount ? (
+          <Text>댓글이 존재하지 않습니다.</Text>
+        ) : (
+          <Flex direction="column">
+            {commentListData.commentList.map((comment) => {
+              return <CommentCard key={comment.id} comment={comment} />;
+            })}
+          </Flex>
+        )}
+
         {/* {commentTreeData &&
           commentTreeData.map((comment) => {
             if (!comment.parentCommentId) {
