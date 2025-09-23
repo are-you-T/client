@@ -3,6 +3,8 @@ import { Database } from "@/types/supabase";
 import { hashPassword } from "@/utils/password";
 
 export const memoQueryKey = "memo";
+export const memoListQueryKey = "memoList";
+
 // Memo List 가져오기
 export const getMemoList = async ({ pageParam = 0 }) => {
   const limit = 5;
@@ -71,4 +73,10 @@ export const createMemo = async ({
     .select();
 
   return result.data;
+};
+
+export const incrementMemoLike = async (memoId: string) => {
+  const { data, error } = await supabase.rpc("increment_memo_like", { p_memo: memoId });
+  if (error) throw error;
+  return data as number; // 새로운 likeCount
 };

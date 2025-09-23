@@ -2,13 +2,18 @@ import useRouter from "@/hooks/useRouter";
 import dayjs from "dayjs";
 import { Card, Flex, Badge, Text, ButtonGroup, Button } from "@mantine/core";
 import { IconHeart, IconMessage2 } from "@tabler/icons-react";
-import { MemoCardDto } from "@/pages/Memo";
+import { incrementMemoLike, memoListQueryKey, memoQueryKey } from "@/actions/memo.actions";
+import { MemoType } from "@/types";
+import { useQueryClient } from "@tanstack/react-query";
+import useMemoController from "@/controllers/useMemoController";
 
 interface MemoCardProps {
-  memo: MemoCardDto;
+  memo: MemoType;
 }
 
 export const MemoCard = ({ memo }: MemoCardProps) => {
+  const queryClient = useQueryClient();
+  const { likeMemo, isLiking } = useMemoController();
   const { navigateTo } = useRouter();
 
   return (
@@ -34,7 +39,18 @@ export const MemoCard = ({ memo }: MemoCardProps) => {
         </Flex>
         <Flex w="100%" justify="space-between" align="flex-end">
           <ButtonGroup>
-            <Button size="xs" variant="subtle" leftSection={<IconHeart />} color="dark">
+            <Button
+              size="xs"
+              variant="subtle"
+              leftSection={<IconHeart />}
+              color="dark"
+              loading={isLiking(memo.id)}
+              disabled={isLiking(memo.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                likeMemo(memo.id);
+              }}
+            >
               {memo.likeCount}
             </Button>
             <Button size="xs" variant="subtle" leftSection={<IconMessage2 />} color="dark">

@@ -23,7 +23,7 @@ export type Database = {
           likeCount: number | null
           memoId: string
           nickname: string
-          parentCommentId: string
+          parentCommentId: string | null
           password: string
           updated_at: string | null
         }
@@ -35,7 +35,7 @@ export type Database = {
           likeCount?: number | null
           memoId: string
           nickname: string
-          parentCommentId: string
+          parentCommentId?: string | null
           password: string
           updated_at?: string | null
         }
@@ -47,7 +47,7 @@ export type Database = {
           likeCount?: number | null
           memoId?: string
           nickname?: string
-          parentCommentId?: string
+          parentCommentId?: string | null
           password?: string
           updated_at?: string | null
         }
@@ -111,7 +111,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_comment_like: {
+        Args: { p_comment: string }
+        Returns: number
+      }
+      increment_memo_like: {
+        Args: { p_memo: string }
+        Returns: number
+      }
     }
     Enums: {
       Mbti_Type:
