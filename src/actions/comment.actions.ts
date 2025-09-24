@@ -1,4 +1,5 @@
 import { supabase } from "@/supabaseClient";
+import { CommentType } from "@/types";
 import { Database } from "@/types/supabase";
 import { hashPassword } from "@/utils/password";
 
@@ -14,9 +15,9 @@ export const getCommentListById = async (
   // ✅ 데이터 + 전체 count 조회
   const { data, error, count } = await supabase
     .from("Comment")
-    .select("*", { count: "exact" }) // head: false는 필요 없음
+    .select("*", { count: "exact" })
     .eq("memoId", memoId)
-    .eq("deleteYn", false)
+    .eq("deletedYn", false)
     .order("created_at", { ascending: false })
     .range(offset, offset + limit - 1);
 
@@ -72,5 +73,30 @@ export const createComment = async ({
     })
     .select();
 
+  if (result.status === 200) {
+  }
+
   return result.data;
+};
+
+export const softDeleteComment = async (commentId: string) => {
+  const { data, error } = await supabase
+    .from("Comment")
+    .update({ deletedYn: true })
+    .eq("id", commentId)
+    .select()
+    .single<CommentType>();
+  if (error) throw error;
+  return data;
+};
+
+export const restoreComment = async (commentId: string) => {
+  const { data, error } = await supabase
+    .from("Comment")
+    .update({ deletedYn: false })
+    .eq("id", commentId)
+    .select()
+    .single<CommentType>();
+  if (error) throw error;
+  return data;
 };

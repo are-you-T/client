@@ -277,7 +277,7 @@ const MemoViewPage = () => {
             작성
           </Button>
         </Flex>
-        {memo?.cmtCount ? (
+        {!memo?.cmtCount ? (
           <Text>댓글이 존재하지 않습니다.</Text>
         ) : (
           <Flex direction="column">
