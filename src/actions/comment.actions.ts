@@ -1,7 +1,7 @@
 import { supabase } from "@/supabaseClient";
 import { CommentType } from "@/types";
 import { Database } from "@/types/supabase";
-import { hashPassword } from "@/utils/password";
+import { compareHashPassword, hashPassword } from "@/utils/password";
 
 export const commentQueryKey = "comment";
 // Comment List 가져오기
@@ -99,4 +99,19 @@ export const restoreComment = async (commentId: string) => {
     .single<CommentType>();
   if (error) throw error;
   return data;
+};
+
+// Comment 비밀번호 검증
+export const checkGuestBookPassword = async (id: string, password: string) => {
+  // 1. 저장된 해시된 비밀번호 조회
+  const { data, error } = await supabase.from("Comment").select("password").eq("id", id).single(); // 단일 레코드 조회
+
+  if (error || !data) {
+    return false; // ID가 없거나 오류 발생 시
+  }
+
+  // 2. 해시된 비밀번호와 입력된 비밀번호 비교
+  const isMatch = await compareHashPassword({ password, hashedPassword: data.password });
+
+  return isMatch;
 };

@@ -6,6 +6,7 @@ import { ActionIcon, Button, ButtonGroup, Card, Flex, Group, Menu, Text } from "
 import { IconDotsVertical, IconHeart, IconMessage2 } from "@tabler/icons-react";
 import { Confirm } from "@/components/Common/Confirm";
 import { notifications } from "@mantine/notifications";
+import { PasswordForm } from "@/components/Common/PasswordForm";
 
 interface CommentCardProps {
   comment: Database["public"]["Tables"]["Comment"]["Row"];
@@ -14,7 +15,7 @@ interface CommentCardProps {
 export const CommentCard = ({ comment }: CommentCardProps) => {
   const { openModal, closeModal } = useModal();
   // 컨트롤러는 memoId를 인자로 받음. 기존에 comment.id를 넘겨 잘못된 키로 캐시를 조작하고 있었음.
-  const { deleteComment } = useCommentController(comment.memoId);
+  const { deleteComment, checkCommentPassword } = useCommentController(comment.memoId);
 
   return (
     <Card shadow="lg" padding="lg" radius="md" bg="#FFFFFF" w="100%">
@@ -52,24 +53,41 @@ export const CommentCard = ({ comment }: CommentCardProps) => {
                 </Menu.Item>
                 <Menu.Item
                   onClick={() => {
-                    openModal(
-                      <Confirm
-                        message="정말로 삭제하시겠어요? 😢"
-                        yesCallback={async () => {
-                          await deleteComment(comment.id);
+                    openModal(<PasswordForm />, null, "비밀번호 입력").then(async (password) => {
+                      if (password) {
+                        const result = await checkCommentPassword({
+                          id: comment.id,
+                          password: password as string,
+                        });
+                        if (result) {
+                          openModal(
+                            <Confirm
+                              message="정말로 삭제하시겠어요? 😢"
+                              yesCallback={async () => {
+                                await deleteComment(comment.id);
+                                notifications.show({
+                                  title: "댓글 삭제 완료",
+                                  message: "댓글이 삭제되었습니다.",
+                                  color: "blue",
+                                });
+                              }}
+                              noCallback={() => {}}
+                              commonCallback={() => closeModal(null)}
+                            />,
+                            null,
+                            "메모 삭제",
+                            true
+                          );
+                        } else {
                           notifications.show({
-                            title: "댓글 삭제 완료",
-                            message: "댓글이 삭제되었습니다.",
-                            color: "blue",
+                            title: "댓글 비밀번호 검증",
+                            message: "댓글의 비밀번호가 일치하지 않습니다.",
+                            color: "red",
                           });
-                        }}
-                        noCallback={() => {}}
-                        commonCallback={() => closeModal(null)}
-                      />,
-                      null,
-                      "메모 삭제",
-                      true
-                    );
+                        }
+                      }
+                    });
+
                     //   openModal(<PasswordForm />, null, "비밀번호 입력").then(async (password) => {
                     //     const result = await handleCheckPassword(comment._id, password as string);
                     //     if (result) {
