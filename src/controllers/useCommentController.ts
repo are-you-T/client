@@ -4,6 +4,7 @@ import {
   commentQueryKey,
   createComment,
   softDeleteComment,
+  checkGuestBookPassword,
 } from "@/actions/comment.actions";
 import { CommentType, MemoType } from "@/types";
 import { memoListQueryKey, memoQueryKey } from "@/actions/memo.actions";
@@ -128,6 +129,12 @@ const useCommentController = (memoId?: string) => {
     },
   });
 
+  // ✅ 댓글 비밀번호 검증
+  const { mutateAsync: checkCommentPassword, isPending: isCheckingPassword } = useMutation({
+    mutationFn: ({ id, password }: { id: string; password: string }) =>
+      checkGuestBookPassword(id, password),
+  });
+
   return {
     commentListData: {
       commentList,
@@ -139,6 +146,9 @@ const useCommentController = (memoId?: string) => {
     createComment: createCommentMutation,
     isDeletingComment,
     deleteComment: deleteCommentMutation,
+    // 비밀번호 검증
+    isCheckingPassword,
+    checkCommentPassword,
   };
 };
 
