@@ -7,6 +7,7 @@ import { IconDotsVertical, IconHeart, IconMessage2 } from "@tabler/icons-react";
 import { Confirm } from "@/components/Common/Confirm";
 import { notifications } from "@mantine/notifications";
 import { PasswordForm } from "@/components/Common/PasswordForm";
+import { CommentNote } from "./CommentNote";
 
 interface CommentCardProps {
   comment: Database["public"]["Tables"]["Comment"]["Row"];
@@ -15,7 +16,9 @@ interface CommentCardProps {
 export const CommentCard = ({ comment }: CommentCardProps) => {
   const { openModal, closeModal } = useModal();
   // 컨트롤러는 memoId를 인자로 받음. 기존에 comment.id를 넘겨 잘못된 키로 캐시를 조작하고 있었음.
-  const { deleteComment, checkCommentPassword } = useCommentController(comment.memoId);
+  const { deleteComment, passwordValidate, likeComment, isLiking } = useCommentController(
+    comment.memoId
+  );
 
   return (
     <Card shadow="lg" padding="lg" radius="md" bg="#FFFFFF" w="100%">
@@ -32,21 +35,28 @@ export const CommentCard = ({ comment }: CommentCardProps) => {
               <Menu.Dropdown>
                 <Menu.Item
                   onClick={() => {
-                    //   openModal(<PasswordForm />, null, "비밀번호 입력").then(async (password) => {
-                    //     const result = await handleCheckPassword(comment._id, password as string);
-                    //     if (result) {
-                    //       openModal(
-                    //         <CommentForm id={comment._id} memoId={comment.memoId} />,
-                    //         null,
-                    //         "댓글 수정",
-                    //         true
-                    //       ).then((result) => {
-                    //         if (result && onSubmit) {
-                    //           onSubmit(true);
-                    //         }
-                    //       });
-                    //     }
-                    //   }); // 비밀번호 검증
+                    openModal(<PasswordForm />, null, "비밀번호 입력").then(async (password) => {
+                      if (password) {
+                        const result = await passwordValidate({
+                          id: comment.id,
+                          password: password as string,
+                        });
+                        if (result) {
+                          openModal(
+                            <CommentNote memoId={comment.memoId} id={comment.id} />,
+                            null,
+                            "댓글 수정",
+                            true
+                          ).then;
+                        } else {
+                          notifications.show({
+                            title: "댓글 비밀번호 검증",
+                            message: "댓글 비밀번호가 일치하지 않습니다.",
+                            color: "red",
+                          });
+                        }
+                      }
+                    });
                   }}
                 >
                   <Text fz="1.5rem">수정</Text>
@@ -55,7 +65,7 @@ export const CommentCard = ({ comment }: CommentCardProps) => {
                   onClick={() => {
                     openModal(<PasswordForm />, null, "비밀번호 입력").then(async (password) => {
                       if (password) {
-                        const result = await checkCommentPassword({
+                        const result = await passwordValidate({
                           id: comment.id,
                           password: password as string,
                         });
@@ -87,27 +97,6 @@ export const CommentCard = ({ comment }: CommentCardProps) => {
                         }
                       }
                     });
-
-                    //   openModal(<PasswordForm />, null, "비밀번호 입력").then(async (password) => {
-                    //     const result = await handleCheckPassword(comment._id, password as string);
-                    //     if (result) {
-                    // openModal(
-                    //   <Confirm
-                    //     message="정말로 삭제하시겠어요? 😢"
-                    //     yesCallback={async () => {
-                    //       const result = await handleDelete(comment._id);
-                    //       if (result && onSubmit) {
-                    //         onSubmit(true);
-                    //       }
-                    //     }}
-                    //     commonCallback={() => closeModal(null)}
-                    //   />,
-                    //   null,
-                    //   "메모 삭제",
-                    //   true
-                    // );
-                    //     }
-                    //   }); // 비밀번호 검증
                   }}
                 >
                   <Text fz="1.5rem">삭제</Text>
@@ -126,7 +115,9 @@ export const CommentCard = ({ comment }: CommentCardProps) => {
               variant="subtle"
               leftSection={<IconHeart />}
               color="dark"
-              // onClick={() => handleClickLike(memo?._id as string)}
+              loading={isLiking(comment.id)}
+              disabled={isLiking(comment.id)}
+              onClick={() => likeComment(comment.memoId, comment.id)}
             >
               {comment.likeCount}
             </Button>

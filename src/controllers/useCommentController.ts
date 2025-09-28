@@ -1,25 +1,30 @@
-import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+// hooks/useCommentController.ts
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getCommentListById,
   commentQueryKey,
   createComment,
   softDeleteComment,
-  checkGuestBookPassword,
+  checkCommentPassword,
+  updateComment,
+  getCommentById,
+  incrementCommentLike,
 } from "@/actions/comment.actions";
 import { CommentType, MemoType } from "@/types";
 import { memoListQueryKey, memoQueryKey } from "@/actions/memo.actions";
+import { useState } from "react";
+
+type InfinitePage<T> = {
+  data: T[];
+  nextPage?: number;
+  isLastPage?: boolean;
+};
 
 const useCommentController = (memoId?: string) => {
   const queryClient = useQueryClient();
 
-  type InfinitePage<T> = {
-    data: T[];
-    nextPage?: number;
-    isLastPage?: boolean;
-  };
-
+  // 댓글 무한 목록 (메모별로 분리)
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    // 메모별로 코멘트 캐시를 분리하기 위해 memoId를 키에 포함
     queryKey: [commentQueryKey, memoId],
     queryFn: ({ pageParam = 0 }) => getCommentListById(memoId as string, { pageParam }),
     initialPageParam: 0,
@@ -27,35 +32,61 @@ const useCommentController = (memoId?: string) => {
     enabled: !!memoId,
   });
 
-  // ✅ 데이터 평탄화, id를 기준으로 중복 제거
-  const commentList = [
-    ...new Map(
-      (data?.pages.flatMap((page) => page.data) ?? []).map((item) => [item.id, item])
-    ).values(),
+  // ✅ 평탄화 (중복 제거)
+  const commentList: CommentType[] = [
+    ...new Map((data?.pages.flatMap((p) => p.data) ?? []).map((c) => [c.id, c])).values(),
   ];
+
+  // ✅ 단일 댓글 조회 (상세 키는 ["comment", id]로 분리)
+  const getComment = (id: string) =>
+    useQuery({
+      queryKey: ["comment", id],
+      queryFn: () => getCommentById(id),
+      enabled: !!id,
+    });
+
+  // 항목별 좋아요 진행 상태 관리
+  const [pendingLikeIds, setPendingLikeIds] = useState<Set<string>>(new Set());
+  const addPending = (id: string) => setPendingLikeIds((s) => new Set(s).add(id));
+  const removePending = (id: string) =>
+    setPendingLikeIds((s) => {
+      const next = new Set(s);
+      next.delete(id);
+      return next;
+    });
+  const isLiking = (id: string) => pendingLikeIds.has(id);
 
   // ✅ 댓글 작성
   const { mutate: createCommentMutation, isPending: isCreatingComment } = useMutation({
     mutationFn: createComment,
-    // 성공 시 관련 쿼리들을 즉시 재조회
     onSuccess: async () => {
       await Promise.all([
-        // 상세 메모 (댓글 수 등 동기화)
         memoId
           ? queryClient.invalidateQueries({ queryKey: [memoQueryKey, memoId] })
           : Promise.resolve(),
-        // 메모 목록 (카드의 댓글 수 등 반영)
         queryClient.invalidateQueries({ queryKey: [memoListQueryKey] }),
-        // 현재 메모의 댓글 목록 재조회
         queryClient.invalidateQueries({ queryKey: [commentQueryKey, memoId] }),
       ]);
     },
   });
 
-  // ✅ 댓글 삭제 (Soft Delete)
-  const { mutate: deleteCommentMutation, isPending: isDeletingComment } = useMutation({
+  // ✅ 댓글 수정
+  const { mutate: updateCommentMutate } = useMutation({
+    mutationFn: updateComment,
+    onSuccess: async () => {
+      await Promise.all([
+        memoId
+          ? queryClient.invalidateQueries({ queryKey: [memoQueryKey, memoId] })
+          : Promise.resolve(),
+        queryClient.invalidateQueries({ queryKey: [memoListQueryKey] }),
+        queryClient.invalidateQueries({ queryKey: [commentQueryKey, memoId] }),
+      ]);
+    },
+  });
+
+  // ✅ 댓글 삭제 (Soft Delete) — 낙관 제거 + cmtCount -1 UX 반영
+  const { mutate: deleteCommentMutate, isPending: isDeletingComment } = useMutation({
     mutationFn: softDeleteComment,
-    // 낙관적 업데이트: 목록에서 해당 댓글 제거
     onMutate: async (commentId: string) => {
       await queryClient.cancelQueries({ queryKey: [commentQueryKey, memoId] });
 
@@ -75,7 +106,7 @@ const useCommentController = (memoId?: string) => {
         });
       }
 
-      // 메모 상세의 댓글 수 -1
+      // 메모 상세/목록의 cmtCount -1 (트리거가 실제로도 줄여줌, 여기선 UX)
       if (memoId) {
         const prevDetail = queryClient.getQueryData<MemoType>([memoQueryKey, memoId]);
         if (prevDetail) {
@@ -85,7 +116,6 @@ const useCommentController = (memoId?: string) => {
           });
         }
 
-        // 메모 목록의 댓글 수 -1
         const prevList = queryClient.getQueryData<{
           pages: InfinitePage<MemoType>[];
           pageParams: unknown[];
@@ -108,7 +138,6 @@ const useCommentController = (memoId?: string) => {
 
       return { prev } as const;
     },
-    // 실패 시 롤백
     onError: (_err, _vars, ctx) => {
       if (!ctx) return;
       const { prev } = ctx as {
@@ -116,24 +145,105 @@ const useCommentController = (memoId?: string) => {
       };
       if (prev) queryClient.setQueryData([commentQueryKey, memoId], prev);
     },
-    // 성공/실패 무관하게 정확한 데이터 동기화
     onSettled: async () => {
       await Promise.all([
         memoId
           ? queryClient.invalidateQueries({ queryKey: [memoQueryKey, memoId] })
           : Promise.resolve(),
         queryClient.invalidateQueries({ queryKey: [memoListQueryKey] }),
-        // 강제 재조회로 즉시 최신화
-        queryClient.refetchQueries({ queryKey: [commentQueryKey, memoId] }),
+        queryClient.invalidateQueries({ queryKey: [commentQueryKey, memoId] }),
       ]);
     },
   });
 
   // ✅ 댓글 비밀번호 검증
-  const { mutateAsync: checkCommentPassword, isPending: isCheckingPassword } = useMutation({
+  const { mutateAsync: checkCommentPasswordMutate, isPending: isCheckingPassword } = useMutation({
     mutationFn: ({ id, password }: { id: string; password: string }) =>
-      checkGuestBookPassword(id, password),
+      checkCommentPassword(id, password),
   });
+
+  // ✅ 댓글 좋아요 증가 — 디테일/리스트 동시 낙관 반영
+  const likeCommentMutation = useMutation({
+    // ⬇️ 변수에 memoId, commentId 둘 다 받습니다
+    mutationFn: ({ commentId }: { memoId: string; commentId: string }) =>
+      incrementCommentLike(commentId),
+
+    onMutate: async ({ memoId: mid, commentId }) => {
+      addPending(commentId);
+
+      // 관련 쿼리 취소
+      await Promise.all([
+        queryClient.cancelQueries({ queryKey: ["comment", commentId] }),
+        queryClient.cancelQueries({ queryKey: [commentQueryKey, mid] }),
+      ]);
+
+      // 이전 스냅샷
+      const prevDetail = queryClient.getQueryData<CommentType>(["comment", commentId]);
+      const prevList = queryClient.getQueryData<{
+        pages: InfinitePage<CommentType>[];
+        pageParams: unknown[];
+      }>([commentQueryKey, mid]);
+
+      // 디테일 캐시 +1
+      if (prevDetail) {
+        queryClient.setQueryData<CommentType>(["comment", commentId], {
+          ...prevDetail,
+          likeCount: Math.max((prevDetail.likeCount ?? 0) + 1, 0),
+        });
+      }
+
+      // 리스트 캐시 +1
+      if (prevList) {
+        const nextPages = prevList.pages.map((page) => ({
+          ...page,
+          data: page.data.map((c) =>
+            c.id === commentId ? { ...c, likeCount: Math.max((c.likeCount ?? 0) + 1, 0) } : c
+          ),
+        }));
+        queryClient.setQueryData([commentQueryKey, mid], {
+          ...prevList,
+          pages: nextPages,
+        });
+      }
+
+      return { memoId: mid, commentId, prevDetail, prevList };
+    },
+
+    onError: (_e, _vars, ctx) => {
+      if (!ctx) return;
+      const {
+        commentId,
+        memoId: mid,
+        prevDetail,
+        prevList,
+      } = ctx as {
+        memoId: string;
+        commentId: string;
+        prevDetail?: CommentType;
+        prevList?: { pages: InfinitePage<CommentType>[]; pageParams: unknown[] };
+      };
+      if (prevDetail) queryClient.setQueryData([commentQueryKey, commentId], prevDetail);
+      if (prevList) queryClient.setQueryData([commentQueryKey, mid], prevList);
+    },
+
+    onSettled: async (_res, _err, vars) => {
+      const { memoId: mid, commentId } = (vars ?? {}) as { memoId?: string; commentId?: string };
+      if (memoId && commentId) removePending(commentId);
+
+      await Promise.all([
+        commentId
+          ? queryClient.invalidateQueries({ queryKey: [commentQueryKey, commentId] })
+          : Promise.resolve(),
+        mid
+          ? queryClient.invalidateQueries({ queryKey: [commentQueryKey, mid] })
+          : Promise.resolve(),
+      ]);
+    },
+  });
+
+  // 외부에서 호출할 핸들러
+  const likeComment = (memoId: string, commentId: string) =>
+    likeCommentMutation.mutate({ memoId, commentId });
 
   return {
     commentListData: {
@@ -142,13 +252,19 @@ const useCommentController = (memoId?: string) => {
       hasNextPage,
       isFetchingNextPage,
     },
+    getComment,
+    // 작성/수정/삭제
     isCreatingComment,
     createComment: createCommentMutation,
+    updateComment: updateCommentMutate,
     isDeletingComment,
-    deleteComment: deleteCommentMutation,
+    deleteComment: deleteCommentMutate,
+    // 좋아요
+    likeComment,
+    isLiking,
     // 비밀번호 검증
     isCheckingPassword,
-    checkCommentPassword,
+    passwordValidate: checkCommentPasswordMutate,
   };
 };
 

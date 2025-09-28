@@ -17,7 +17,7 @@ export const getCommentListById = async (
     .from("Comment")
     .select("*", { count: "exact" })
     .eq("memoId", memoId)
-    .eq("deletedYn", false)
+    .eq("deleteYn", false)
     .order("created_at", { ascending: false })
     .range(offset, offset + limit - 1);
 
@@ -79,10 +79,35 @@ export const createComment = async ({
   return result.data;
 };
 
+export const updateComment = async ({
+  id,
+  memoId,
+  parentCommentId,
+  content,
+  password,
+  nickname,
+}: CommentInsertDto) => {
+  if (!id) return;
+
+  const result = await supabase
+    .from("Comment")
+    .update({
+      memoId,
+      parentCommentId,
+      content,
+      password: await hashPassword(password),
+      nickname,
+    })
+    .eq("id", id)
+    .select();
+
+  return result.data;
+};
+
 export const softDeleteComment = async (commentId: string) => {
   const { data, error } = await supabase
     .from("Comment")
-    .update({ deletedYn: true })
+    .update({ deleteYn: true })
     .eq("id", commentId)
     .select()
     .single<CommentType>();
@@ -93,7 +118,7 @@ export const softDeleteComment = async (commentId: string) => {
 export const restoreComment = async (commentId: string) => {
   const { data, error } = await supabase
     .from("Comment")
-    .update({ deletedYn: false })
+    .update({ deleteYn: false })
     .eq("id", commentId)
     .select()
     .single<CommentType>();
@@ -102,7 +127,7 @@ export const restoreComment = async (commentId: string) => {
 };
 
 // Comment 비밀번호 검증
-export const checkGuestBookPassword = async (id: string, password: string) => {
+export const checkCommentPassword = async (id: string, password: string) => {
   // 1. 저장된 해시된 비밀번호 조회
   const { data, error } = await supabase.from("Comment").select("password").eq("id", id).single(); // 단일 레코드 조회
 
@@ -114,4 +139,11 @@ export const checkGuestBookPassword = async (id: string, password: string) => {
   const isMatch = await compareHashPassword({ password, hashedPassword: data.password });
 
   return isMatch;
+};
+
+/** 서버에서 증가시킨 뒤 최신 likeCount(number)를 반환 */
+export const incrementCommentLike = async (commentId: string) => {
+  const { data, error } = await supabase.rpc("increment_comment_like", { p_comment: commentId });
+  if (error) throw error;
+  return data as number;
 };
