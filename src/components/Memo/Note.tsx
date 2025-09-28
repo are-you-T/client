@@ -1,8 +1,10 @@
-import { createMemo, getMemoById, MemoInsertDto, memoQueryKey } from "@/actions/memo.actions";
+import { MemoInsertDto } from "@/actions/memo.actions";
+import useMemoController from "@/controllers/useMemoController";
 // MBTI 옵션은 Supabase Enum에서 파생해 사용합니다.
 import { useHandleError } from "@/hooks/useHandleError";
 import { useModal } from "@/hooks/useModal";
 import { themeColor } from "@/styles/color";
+import { MemoType } from "@/types";
 import { Constants, Database } from "@/types/supabase";
 import {
   Flex,
@@ -18,7 +20,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 type MbtiType = Database["public"]["Enums"]["Mbti_Type"];
 const MBTI_TYPES = Constants.public.Enums.Mbti_Type as readonly MbtiType[];
@@ -58,28 +60,18 @@ const initialJudgement = judgementOptions[
 const initialLife = lifeOptions[getRandomIndex(lifeOptions)] as MbtiParts["life"];
 
 interface NoteProps {
-  id?: string;
+  id?: MemoType["id"];
 }
 
 export const Note = ({ id }: NoteProps) => {
   const setError = useHandleError(); // 에러 핸들링 함수
-  const queryClient = useQueryClient();
   const { closeModal } = useModal();
 
-  const { data: memo } = useQuery({
-    queryKey: ["memo", id],
-    queryFn: () => getMemoById(id as string),
-    enabled: !!id,
-  });
+  const { createMemo, updateMemo, getMemo } = useMemoController();
+  // id가 없을 수 있는 create 모드에서도 훅 호출 규칙을 지키기 위해
+  // 빈 문자열을 넘기고, 훅 내부의 enabled로 호출을 막습니다.
+  const { data: memo } = getMemo(id ?? "");
 
-  if (id && !memo) return null;
-
-  const { mutate: createMemoMutate, isPending: isCreatingMemo } = useMutation({
-    mutationFn: createMemo,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [memoQueryKey] }); // 리스트 자동 갱신
-    },
-  });
   const [e, a, j, l] = (memo?.mbtiType ?? MBTI_TYPES[0]).split("") as [
     MbtiParts["energy"],
     MbtiParts["awareness"],
@@ -105,6 +97,37 @@ export const Note = ({ id }: NoteProps) => {
       cardColor: id && memo ? memo.cardColor : randomColor,
     },
   });
+
+  // 메모 데이터 조회 후 폼에 반영 (초기 렌더에서 memo가 없어 빈값으로 고정되는 문제 방지)
+  // id가 있고 memo가 준비되면 폼 값을 동기화합니다.
+  useEffect(() => {
+    if (!(id && memo)) return;
+    const [me, ma, mj, ml] = (memo.mbtiType ?? MBTI_TYPES[0]).split("") as [
+      MbtiParts["energy"],
+      MbtiParts["awareness"],
+      MbtiParts["judgement"],
+      MbtiParts["life"],
+    ];
+    const nextValues: NoteFormValues = {
+      title: memo.title ?? "",
+      content: memo.content ?? "",
+      password: "",
+      nickname: memo.nickname ?? "",
+      mbtiType: { energy: me, awareness: ma, judgement: mj, life: ml },
+      cardColor: memo.cardColor ?? randomColor,
+    };
+    const curr = form.values;
+    const changed =
+      curr.title !== nextValues.title ||
+      curr.content !== nextValues.content ||
+      curr.nickname !== nextValues.nickname ||
+      curr.cardColor !== nextValues.cardColor ||
+      curr.mbtiType.energy !== nextValues.mbtiType.energy ||
+      curr.mbtiType.awareness !== nextValues.mbtiType.awareness ||
+      curr.mbtiType.judgement !== nextValues.mbtiType.judgement ||
+      curr.mbtiType.life !== nextValues.mbtiType.life;
+    if (changed) form.setValues(nextValues);
+  }, [id, memo]);
 
   const validationCheck = () => {
     const { title, content, nickname, password } = form.values;
@@ -197,28 +220,55 @@ export const Note = ({ id }: NoteProps) => {
       return;
     }
 
-    createMemoMutate(
-      { ...form.values, mbtiType: composed as MbtiType },
-      {
-        onSuccess: (data) => {
-          notifications.show({
-            title: `메모지 ${!id ? "작성" : "수정"} 성공`,
-            message: `메모가 ${!id ? "작성" : "수정"}되었어요! 🌟`,
-            color: "green",
-          });
-          form.reset();
-          closeModal(data);
-        },
-        onError: (error) => {
-          notifications.show({
-            title: `메모지 ${!id ? "작성" : "수정"} 실패`,
-            message: `메모 ${!id ? "작성" : "수정"} 중 오류가 발생했어요. 😥`,
-            color: "red",
-          });
-          setError(error);
-        },
-      }
-    );
+    if (id) {
+      // 수정
+      updateMemo(
+        { id, ...form.values, mbtiType: composed as MbtiType },
+        {
+          onSuccess: (data) => {
+            notifications.show({
+              title: "메모지 수정 성공",
+              message: "메모가 수정되었어요! 🌟",
+              color: "green",
+            });
+            form.reset();
+            closeModal(data);
+          },
+          onError: (error) => {
+            notifications.show({
+              title: "메모지 수정 실패",
+              message: "메모 수정 중 오류가 발생했어요. 😥",
+              color: "red",
+            });
+            setError(error);
+          },
+        }
+      );
+    } else {
+      // 작성
+      createMemo(
+        { ...form.values, mbtiType: composed as MbtiType },
+        {
+          onSuccess: (data) => {
+            notifications.show({
+              title: "메모지 작성 성공",
+              message: "메모가 작성되었어요! 🌟",
+              color: "green",
+            });
+            form.reset();
+            closeModal(data);
+          },
+          onError: (error) => {
+            notifications.show({
+              title: "메모지 작성 실패",
+              message: "메모 작성 중 오류가 발생했어요. 😥",
+              color: "red",
+            });
+            setError(error);
+          },
+        }
+      );
+    }
   };
 
   return (

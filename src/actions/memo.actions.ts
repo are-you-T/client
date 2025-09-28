@@ -1,6 +1,7 @@
 import { supabase } from "@/supabaseClient";
+import { MemoType } from "@/types";
 import { Database } from "@/types/supabase";
-import { hashPassword } from "@/utils/password";
+import { compareHashPassword, hashPassword } from "@/utils/password";
 
 export const memoQueryKey = "memo";
 export const memoListQueryKey = "memoList";
@@ -75,8 +76,64 @@ export const createMemo = async ({
   return result.data;
 };
 
+// Memo 수정하기
+export const updateMemo = async ({
+  id,
+  title,
+  content,
+  password,
+  nickname,
+  mbtiType,
+  cardColor,
+}: MemoInsertDto) => {
+  if (!id) return;
+
+  const result = await supabase
+    .from("Memo")
+    .update({
+      title,
+      content,
+      password: await hashPassword(password),
+      nickname,
+      mbtiType,
+      cardColor,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", id)
+    .select("*")
+    .single();
+
+  return result.data;
+};
+
+export const softDeleteMemo = async (memoId: string) => {
+  const { data, error } = await supabase
+    .from("Memo")
+    .update({ deleteYn: true })
+    .eq("id", memoId)
+    .select()
+    .single<MemoType>();
+  if (error) throw error;
+  return data;
+};
+
 export const incrementMemoLike = async (memoId: string) => {
   const { data, error } = await supabase.rpc("increment_memo_like", { p_memo: memoId });
   if (error) throw error;
   return data as number; // 새로운 likeCount
+};
+
+// Memo 비밀번호 검증
+export const checkMemoPassword = async (id: string, password: string) => {
+  // 1. 저장된 해시된 비밀번호 조회
+  const { data, error } = await supabase.from("Memo").select("password").eq("id", id).single(); // 단일 레코드 조회
+
+  if (error || !data) {
+    return false; // ID가 없거나 오류 발생 시
+  }
+
+  // 2. 해시된 비밀번호와 입력된 비밀번호 비교
+  const isMatch = await compareHashPassword({ password, hashedPassword: data.password });
+
+  return isMatch;
 };

@@ -18,7 +18,7 @@ export type Database = {
         Row: {
           content: string
           created_at: string
-          deletedYn: boolean | null
+          deleteYn: boolean | null
           id: string
           likeCount: number | null
           memoId: string
@@ -30,7 +30,7 @@ export type Database = {
         Insert: {
           content: string
           created_at?: string
-          deletedYn?: boolean | null
+          deleteYn?: boolean | null
           id?: string
           likeCount?: number | null
           memoId: string
@@ -42,7 +42,7 @@ export type Database = {
         Update: {
           content?: string
           created_at?: string
-          deletedYn?: boolean | null
+          deleteYn?: boolean | null
           id?: string
           likeCount?: number | null
           memoId?: string
