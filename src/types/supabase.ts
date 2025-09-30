@@ -14,6 +14,72 @@ export type Database = {
   }
   public: {
     Tables: {
+      Answer: {
+        Row: {
+          awareness:
+            | Database["public"]["Enums"]["MBTIElementOption_Awareness"]
+            | null
+          content: string
+          created_at: string
+          dimension: Database["public"]["Enums"]["MBTIType"]
+          energy: Database["public"]["Enums"]["MBTIElementOption_Energy"] | null
+          id: string
+          judgement:
+            | Database["public"]["Enums"]["MBTIElementOption_Judgement"]
+            | null
+          life: Database["public"]["Enums"]["MBTIElementOption_Life"] | null
+          proportion: number
+          questionId: string
+          updated_at: string
+        }
+        Insert: {
+          awareness?:
+            | Database["public"]["Enums"]["MBTIElementOption_Awareness"]
+            | null
+          content: string
+          created_at?: string
+          dimension: Database["public"]["Enums"]["MBTIType"]
+          energy?:
+            | Database["public"]["Enums"]["MBTIElementOption_Energy"]
+            | null
+          id?: string
+          judgement?:
+            | Database["public"]["Enums"]["MBTIElementOption_Judgement"]
+            | null
+          life?: Database["public"]["Enums"]["MBTIElementOption_Life"] | null
+          proportion: number
+          questionId?: string
+          updated_at?: string
+        }
+        Update: {
+          awareness?:
+            | Database["public"]["Enums"]["MBTIElementOption_Awareness"]
+            | null
+          content?: string
+          created_at?: string
+          dimension?: Database["public"]["Enums"]["MBTIType"]
+          energy?:
+            | Database["public"]["Enums"]["MBTIElementOption_Energy"]
+            | null
+          id?: string
+          judgement?:
+            | Database["public"]["Enums"]["MBTIElementOption_Judgement"]
+            | null
+          life?: Database["public"]["Enums"]["MBTIElementOption_Life"] | null
+          proportion?: number
+          questionId?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Answer_questionId_fkey"
+            columns: ["questionId"]
+            isOneToOne: false
+            referencedRelation: "Question"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Comment: {
         Row: {
           content: string
@@ -106,6 +172,33 @@ export type Database = {
         }
         Relationships: []
       }
+      Question: {
+        Row: {
+          created_at: string
+          deleteYn: boolean
+          id: string
+          mbtiType: Database["public"]["Enums"]["MBTIType"]
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleteYn?: boolean
+          id?: string
+          mbtiType: Database["public"]["Enums"]["MBTIType"]
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleteYn?: boolean
+          id?: string
+          mbtiType?: Database["public"]["Enums"]["MBTIType"]
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -138,6 +231,11 @@ export type Database = {
         | "ENFP"
         | "INFJ"
         | "INFP"
+      MBTIElementOption_Awareness: "S" | "N"
+      MBTIElementOption_Energy: "E" | "I"
+      MBTIElementOption_Judgement: "T" | "F"
+      MBTIElementOption_Life: "J" | "P"
+      MBTIType: "energy" | "awareness" | "judgement" | "life"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -283,6 +381,11 @@ export const Constants = {
         "INFJ",
         "INFP",
       ],
+      MBTIElementOption_Awareness: ["S", "N"],
+      MBTIElementOption_Energy: ["E", "I"],
+      MBTIElementOption_Judgement: ["T", "F"],
+      MBTIElementOption_Life: ["J", "P"],
+      MBTIType: ["energy", "awareness", "judgement", "life"],
     },
   },
 } as const
