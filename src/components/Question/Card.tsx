@@ -18,9 +18,9 @@ export const QuestionCard = ({ question }: QuestionCardProps) => {
       radius="md"
       bg={typeColor[question.mbtiType]}
       h="100%"
-      //   onClick={() => {
-      //     navigateTo(`/question/${question._id}`);
-      //   }}
+      onClick={() => {
+        if (question.id) navigateTo(`/question/${question.id}`);
+      }}
     >
       <Flex direction="column" justify="space-between" gap="xs" h="8rem">
         <Flex direction="column" gap="xs">
