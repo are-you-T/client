@@ -1,27 +1,11 @@
-import { useHandleError } from "@/hooks/useHandleError";
-import { ActionIcon, Flex, Text, Loader, Badge, Overlay } from "@mantine/core";
+import { Flex, Text, Loader, Overlay } from "@mantine/core";
 import { useEffect } from "react";
-import { useModal } from "@/hooks/useModal";
 import { QuestionCard } from "@/components/Question/Card";
 import { useInViewport } from "@mantine/hooks";
 import useQuestionController from "@/controllers/useQuestionController";
 import { QuestionWithAnswersType } from "@/types";
 
-interface SearchCriteria {
-  field: string; // 검색 필드 이름 (e.g., "mbtiType", "subject")
-  text: string; // 검색할 값
-}
-
-const FIELD_LABELS: Record<string, string> = {
-  mbtiType: "유형",
-  subject: "내용",
-};
-
 const QuestionPage = () => {
-  const setError = useHandleError(); // 에러 핸들링 함수
-  const { openModal } = useModal();
-  // const [search, setSearch] = useState<SearchCriteria[]>([]); // 배열 형태로 검색 조건 관리
-
   const viewport = useInViewport();
   const { ref: inViewportRef, inViewport } = viewport;
 
