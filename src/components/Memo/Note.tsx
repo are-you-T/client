@@ -4,7 +4,7 @@ import useMemoController from "@/controllers/useMemoController";
 import { useHandleError } from "@/hooks/useHandleError";
 import { useModal } from "@/hooks/useModal";
 import { themeColor } from "@/styles/color";
-import { MemoType } from "@/types";
+import { MbtiType, MemoType } from "@/types";
 import { Constants, Database } from "@/types/supabase";
 import {
   Flex,
@@ -22,7 +22,6 @@ import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useEffect } from "react";
 
-type MbtiType = Database["public"]["Enums"]["Mbti_Type"];
 const MBTI_TYPES = Constants.public.Enums.Mbti_Type as readonly MbtiType[];
 
 type MbtiParts = {
