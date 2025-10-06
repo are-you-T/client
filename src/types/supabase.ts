@@ -127,6 +127,83 @@ export type Database = {
           },
         ]
       }
+      Mbti: {
+        Row: {
+          content: string
+          count: number
+          created_at: string
+          deleteYn: boolean
+          id: string
+          mbtiType: Database["public"]["Enums"]["Mbti_Type"]
+          summary: string
+          tags: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          count?: number
+          created_at?: string
+          deleteYn?: boolean
+          id?: string
+          mbtiType: Database["public"]["Enums"]["Mbti_Type"]
+          summary: string
+          tags?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          count?: number
+          created_at?: string
+          deleteYn?: boolean
+          id?: string
+          mbtiType?: Database["public"]["Enums"]["Mbti_Type"]
+          summary?: string
+          tags?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      MbtiFit: {
+        Row: {
+          created_at: string
+          deleteYn: boolean
+          description: string
+          fitType: Database["public"]["Enums"]["MBTI_Fit_Type"]
+          id: string
+          mbtiType: Database["public"]["Enums"]["Mbti_Type"]
+          targetMbtiType: Database["public"]["Enums"]["Mbti_Type"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleteYn?: boolean
+          description: string
+          fitType: Database["public"]["Enums"]["MBTI_Fit_Type"]
+          id?: string
+          mbtiType: Database["public"]["Enums"]["Mbti_Type"]
+          targetMbtiType: Database["public"]["Enums"]["Mbti_Type"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleteYn?: boolean
+          description?: string
+          fitType?: Database["public"]["Enums"]["MBTI_Fit_Type"]
+          id?: string
+          mbtiType?: Database["public"]["Enums"]["Mbti_Type"]
+          targetMbtiType?: Database["public"]["Enums"]["Mbti_Type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_fit_mbti"
+            columns: ["mbtiType"]
+            isOneToOne: false
+            referencedRelation: "Mbti"
+            referencedColumns: ["mbtiType"]
+          },
+        ]
+      }
       Memo: {
         Row: {
           cardColor: string
@@ -214,6 +291,7 @@ export type Database = {
       }
     }
     Enums: {
+      MBTI_Fit_Type: "good" | "bad"
       Mbti_Type:
         | "ESTJ"
         | "ISTJ"
@@ -363,6 +441,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      MBTI_Fit_Type: ["good", "bad"],
       Mbti_Type: [
         "ESTJ",
         "ISTJ",
