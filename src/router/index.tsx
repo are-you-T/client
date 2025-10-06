@@ -8,7 +8,7 @@ const MemoPage = lazy(() => import("@/pages/Memo"));
 const MemoViewPage = lazy(() => import("@/pages/Memo/View"));
 const QuestionPage = lazy(() => import("@/pages/Question"));
 const QuestionViewPage = lazy(() => import("@/pages/Question/View"));
-// const StatsPage = lazy(() => import("@/pages/Stats/Stats"));
+const StatsPage = lazy(() => import("@/pages/Stats"));
 // const StatsMbtiPage = lazy(() => import("@/pages/StatsMbti/StatsMbti"));
 const NotFoundPage = lazy(() => import("@/pages/NotFound"));
 
@@ -18,7 +18,7 @@ const routePaths = [
   { path: "/memo/:id", element: <MemoViewPage /> },
   { path: "/question", element: <QuestionPage /> },
   { path: "/question/:id", element: <QuestionViewPage /> },
-  // { path: "/stats", element: <StatsPage /> },
+  { path: "/stats", element: <StatsPage /> },
   // { path: "/stats/:mbti", element: <StatsMbtiPage /> },
   // { path: "/test", element: <TestPage /> },
   // { path: "/result/:mbti", element: <TestResultPage /> },

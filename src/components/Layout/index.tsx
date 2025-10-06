@@ -24,7 +24,7 @@ export const Layout = ({ children }: LayoutProps) => {
   return (
     <Flex w="100%" h="100vh" justify="center">
       <AppShell header={{ height: 72 }} maw={720} miw={340} w="100%" h="100%">
-        <AppShell.Header bg="lime" style={fixedBoxStyle}>
+        <AppShell.Header style={fixedBoxStyle}>
           <LayoutHeader />
         </AppShell.Header>
         <AppShell.Main display="flex">{children}</AppShell.Main>

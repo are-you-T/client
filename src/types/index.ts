@@ -7,3 +7,4 @@ export type AnswerType = Database["public"]["Tables"]["Answer"]["Row"];
 export type QuestionWithAnswersType = Database["public"]["Tables"]["Question"]["Row"] & {
   Answer: AnswerType[];
 };
+export type MbtiType = Database["public"]["Enums"]["Mbti_Type"];
