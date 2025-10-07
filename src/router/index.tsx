@@ -5,7 +5,7 @@ const HomePage = lazy(() => import("@/pages/Home"));
 const TestPage = lazy(() => import("@/pages/Test"));
 const TestResultPage = lazy(() => import("@/pages/TestResult"));
 const MemoPage = lazy(() => import("@/pages/Memo"));
-const MemoViewPage = lazy(() => import("@/pages/Memo/view"));
+const MemoViewPage = lazy(() => import("@/pages/Memo/View"));
 const QuestionPage = lazy(() => import("@/pages/Question"));
 const QuestionViewPage = lazy(() => import("@/pages/Question/View"));
 const StatsPage = lazy(() => import("@/pages/Stats"));
