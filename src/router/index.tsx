@@ -1,14 +1,14 @@
 import { lazy } from "react";
 
 // ---- lazy components (모듈 단위로 코드 스플리팅) ----
-const HomePage = lazy(() => import("@/pages/Home"));
-const TestPage = lazy(() => import("@/pages/Test"));
-const TestResultPage = lazy(() => import("@/pages/TestResult"));
-const MemoPage = lazy(() => import("@/pages/Memo"));
-const MemoViewPage = lazy(() => import("@/pages/Memo/View"));
-const QuestionPage = lazy(() => import("@/pages/Question"));
-const QuestionViewPage = lazy(() => import("@/pages/Question/View"));
-const StatsPage = lazy(() => import("@/pages/Stats"));
+const HomePage = lazy(() => import("@/pages/home"));
+const TestPage = lazy(() => import("@/pages/test"));
+const TestResultPage = lazy(() => import("@/pages/testResult"));
+const MemoPage = lazy(() => import("@/pages/memo"));
+const MemoViewPage = lazy(() => import("@/pages/memo/view"));
+const QuestionPage = lazy(() => import("@/pages/question"));
+const QuestionViewPage = lazy(() => import("@/pages/question/view"));
+const StatsPage = lazy(() => import("@/pages/stats"));
 const NotFoundPage = lazy(() => import("@/pages/NotFound"));
 
 const routePaths = [
