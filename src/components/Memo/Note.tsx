@@ -5,7 +5,7 @@ import { useHandleError } from "@/hooks/useHandleError";
 import { useModal } from "@/hooks/useModal";
 import { themeColor } from "@/styles/color";
 import { MbtiType, MemoType } from "@/types";
-import { Constants, Database } from "@/types/supabase";
+import { Constants } from "@/types/supabase";
 import {
   Flex,
   TextInput,

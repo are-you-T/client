@@ -3,11 +3,11 @@ import { useModal } from "@/hooks/useModal";
 import { Database } from "@/types/supabase";
 import { setDayjsFormatString } from "@/utils/formatDate";
 import { ActionIcon, Button, ButtonGroup, Card, Flex, Group, Menu, Text } from "@mantine/core";
-import { IconDotsVertical, IconHeart, IconMessage2 } from "@tabler/icons-react";
-import { Confirm } from "@/components/Common/Confirm";
+import { IconDotsVertical, IconHeart } from "@tabler/icons-react";
+import { Confirm } from "@/components/Confirm";
 import { notifications } from "@mantine/notifications";
-import { PasswordForm } from "@/components/Common/PasswordForm";
-import { CommentNote } from "./CommentNote";
+import { PasswordForm } from "@/components/PasswordForm";
+import { CommentNote } from "@/components/Memo/CommentNote";
 
 interface CommentCardProps {
   comment: Database["public"]["Tables"]["Comment"]["Row"];

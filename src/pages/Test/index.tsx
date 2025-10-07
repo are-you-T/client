@@ -1,5 +1,5 @@
 import useQuestionController from "@/controllers/useQuestionController";
-import { AnswerType, MBTIElementOption, MbtiType } from "@/types";
+import { AnswerType, MbtiType } from "@/types";
 import useRouter from "@/hooks/useRouter";
 import { calculateMbtiProportion, determineMBTI } from "@/utils/mbtiCalculate";
 import useStatController from "@/controllers/useStatController";

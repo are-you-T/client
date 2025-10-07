@@ -1,7 +1,7 @@
 import { useModal } from "@/hooks/useModal";
 import { MbtiType } from "@/types";
 import { Constants } from "@/types/supabase";
-import { Button, Flex, SegmentedControl, Text } from "@mantine/core";
+import { Button, Flex, SegmentedControl } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
 const MBTI_TYPES = Constants.public.Enums.Mbti_Type as readonly MbtiType[];

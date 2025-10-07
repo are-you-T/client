@@ -22,9 +22,9 @@ import { IconArrowLeft, IconDotsVertical, IconHeart, IconMessage2 } from "@table
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { MemoType } from "@/types";
-import { PasswordForm } from "@/components/Common/PasswordForm";
 import { notifications } from "@mantine/notifications";
-import { Confirm } from "@/components/Common/Confirm";
+import { PasswordForm } from "@/components/PasswordForm";
+import { Confirm } from "@/components/Confirm";
 
 const MemoViewPage = () => {
   const { likeMemo, isLiking, passwordValidate, deleteMemo } = useMemoController();

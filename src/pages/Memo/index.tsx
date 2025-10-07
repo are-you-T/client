@@ -1,8 +1,6 @@
 import { ActionIcon, Flex, Text, Badge, Loader, Overlay } from "@mantine/core";
 import { IconPlus, IconSearch, IconX } from "@tabler/icons-react";
 import { MemoCard } from "@/components/Memo/Card";
-import { getMemoList, memoQueryKey } from "@/actions/memo.actions";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInViewport } from "@mantine/hooks";
 import { useEffect } from "react";
 import { useModal } from "@/hooks/useModal";
