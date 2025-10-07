@@ -281,6 +281,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_random_questions_by_type: {
+        Args: {
+          p_limit?: number
+          p_type: Database["public"]["Enums"]["MBTIType"]
+        }
+        Returns: {
+          created_at: string
+          deleteYn: boolean
+          id: string
+          mbtiType: Database["public"]["Enums"]["MBTIType"]
+          subject: string
+          updated_at: string
+        }[]
+      }
       increment_comment_like: {
         Args: { p_comment: string }
         Returns: number
