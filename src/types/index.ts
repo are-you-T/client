@@ -8,3 +8,9 @@ export type QuestionWithAnswersType = Database["public"]["Tables"]["Question"]["
   Answer: AnswerType[];
 };
 export type MbtiType = Database["public"]["Enums"]["Mbti_Type"];
+
+export type MBTIElementOption =
+  | Database["public"]["Enums"]["MBTIElementOption_Energy"]
+  | Database["public"]["Enums"]["MBTIElementOption_Awareness"]
+  | Database["public"]["Enums"]["MBTIElementOption_Judgement"]
+  | Database["public"]["Enums"]["MBTIElementOption_Life"];

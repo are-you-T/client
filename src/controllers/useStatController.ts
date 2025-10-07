@@ -3,11 +3,13 @@ import {
   getMbtiTypeStat,
   statDataQueryKey,
   statQueryKey,
+  incrementMbtiCount,
 } from "@/actions/stat.actions";
 import { MbtiType } from "@/types";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const useStatController = () => {
+  const queryClient = useQueryClient();
   // MBTI 16개 유형 통계 조회
   const getStats = () => {
     return useQuery({
@@ -25,9 +27,19 @@ const useStatController = () => {
     });
   };
 
+  // ✅ MBTI count 증가 뮤테이션
+  const incrementStatCount = () =>
+    useMutation({
+      mutationFn: (mbtiType: MbtiType) => incrementMbtiCount(mbtiType),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: [statQueryKey] });
+      },
+    });
+
   return {
     getStats,
     getMbtiStat,
+    incrementStatCount,
   };
 };
 

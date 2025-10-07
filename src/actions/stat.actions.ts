@@ -65,3 +65,28 @@ export const getMbtiTestResult = async () => {
 
   return data;
 };
+
+// Increment MBTI type's count by 1
+export const incrementMbtiCount = async (mbtiType: MbtiType) => {
+  // Fetch current row
+  const { data, error } = await supabase
+    .from("Mbti")
+    .select("id, count")
+    .eq("deleteYn", false)
+    .eq("mbtiType", mbtiType)
+    .maybeSingle();
+
+  if (error) throw error;
+  if (!data) throw new Error("MBTI type not found");
+
+  const nextCount = (data.count ?? 0) + 1;
+
+  const { error: updateError } = await supabase
+    .from("Mbti")
+    .update({ count: nextCount })
+    .eq("id", data.id);
+
+  if (updateError) throw updateError;
+
+  return { id: data.id, mbtiType, count: nextCount };
+};
