@@ -25,8 +25,7 @@ const TestPage = () => {
   const { incrementStatCount } = useStatController();
   const { mutate: incrementCount } = incrementStatCount();
   // 데이터가 undefined/null이어도 항상 배열을 보장
-  const { data: questions, isLoading, isError, error } = mbtiTestQuestionList();
-  console.log(questions);
+  const { data: questions, isLoading } = mbtiTestQuestionList();
 
   // 로딩 중이고 캐시/데이터가 비어있을 때 간단한 플레이스홀더
   if (!questions || isLoading) {

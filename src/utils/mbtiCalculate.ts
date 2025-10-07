@@ -1,18 +1,21 @@
-import { AnswerType, MbtiType } from "@/types";
+import { AnswerType, MBTIElementOption, MbtiType } from "@/types";
 
-type EnergyKey = "E" | "I";
-type AwarenessKey = "S" | "N";
-type JudgementKey = "T" | "F";
-type LifeKey = "J" | "P";
-
+export type MBTIProportion = { type: MBTIElementOption; rate: number };
 export type MBTIProportions = {
-  energy: Record<EnergyKey, number>;
-  awareness: Record<AwarenessKey, number>;
-  judgement: Record<JudgementKey, number>;
-  life: Record<LifeKey, number>;
+  energy: MBTIProportion[];
+  awareness: MBTIProportion[];
+  judgement: MBTIProportion[];
+  life: MBTIProportion[];
 };
 
-const createEmptyProportions = (): MBTIProportions => ({
+type Totals = {
+  energy: { E: number; I: number };
+  awareness: { S: number; N: number };
+  judgement: { T: number; F: number };
+  life: { J: number; P: number };
+};
+
+const createEmptyTotals = (): Totals => ({
   energy: { E: 0, I: 0 },
   awareness: { S: 0, N: 0 },
   judgement: { T: 0, F: 0 },
@@ -34,30 +37,26 @@ export const calculateMbtiProportion = (
     Pick<AnswerType, "dimension" | "proportion" | "energy" | "awareness" | "judgement" | "life">
   >
 ): MBTIProportions => {
-  const totals = createEmptyProportions();
+  const totals = createEmptyTotals();
 
   answers.forEach((ans) => {
     switch (ans.dimension) {
-      case "energy": {
+      case "energy":
         if (ans.energy === "E") totals.energy.E += ans.proportion;
         else if (ans.energy === "I") totals.energy.I += ans.proportion;
         break;
-      }
-      case "awareness": {
+      case "awareness":
         if (ans.awareness === "S") totals.awareness.S += ans.proportion;
         else if (ans.awareness === "N") totals.awareness.N += ans.proportion;
         break;
-      }
-      case "judgement": {
+      case "judgement":
         if (ans.judgement === "T") totals.judgement.T += ans.proportion;
         else if (ans.judgement === "F") totals.judgement.F += ans.proportion;
         break;
-      }
-      case "life": {
+      case "life":
         if (ans.life === "J") totals.life.J += ans.proportion;
         else if (ans.life === "P") totals.life.P += ans.proportion;
         break;
-      }
       default:
         break;
     }
@@ -68,28 +67,44 @@ export const calculateMbtiProportion = (
   const [tPct, fPct] = toPercentPair(totals.judgement.T, totals.judgement.F);
   const [jPct, pPct] = toPercentPair(totals.life.J, totals.life.P);
 
+  const sortDesc = (a: MBTIProportion, b: MBTIProportion) => b.rate - a.rate;
+
+  const energy: MBTIProportion[] = [
+    { type: "E", rate: ePct },
+    { type: "I", rate: iPct },
+  ];
+  const awareness: MBTIProportion[] = [
+    { type: "S", rate: sPct },
+    { type: "N", rate: nPct },
+  ];
+  const judgement: MBTIProportion[] = [
+    { type: "T", rate: tPct },
+    { type: "F", rate: fPct },
+  ];
+  const life: MBTIProportion[] = [
+    { type: "J", rate: jPct },
+    { type: "P", rate: pPct },
+  ];
+
   return {
-    energy: { E: ePct, I: iPct },
-    awareness: { S: sPct, N: nPct },
-    judgement: { T: tPct, F: fPct },
-    life: { J: jPct, P: pPct },
+    energy: energy.sort(sortDesc),
+    awareness: awareness.sort(sortDesc),
+    judgement: judgement.sort(sortDesc),
+    life: life.sort(sortDesc),
   };
 };
 
 export const determineMBTI = (proportions: MBTIProportions): MbtiType => {
-  const energy = proportions.energy.E >= proportions.energy.I ? "E" : "I";
-  const awareness = proportions.awareness.S >= proportions.awareness.N ? "S" : "N";
-  const judgement = proportions.judgement.T >= proportions.judgement.F ? "T" : "F";
-  const life = proportions.life.J >= proportions.life.P ? "J" : "P";
-  return `${energy}${awareness}${judgement}${life}` as MbtiType;
-};
-
-export const calculateMbti = (
-  answers: Array<
-    Pick<AnswerType, "dimension" | "proportion" | "energy" | "awareness" | "judgement" | "life">
-  >
-) => {
-  const proportions = calculateMbtiProportion(answers);
-  const type = determineMBTI(proportions);
-  return { proportions, type } as const;
+  const e =
+    proportions.energy[0].rate === proportions.energy[1].rate ? "E" : proportions.energy[0].type;
+  const s =
+    proportions.awareness[0].rate === proportions.awareness[1].rate
+      ? "S"
+      : proportions.awareness[0].type;
+  const t =
+    proportions.judgement[0].rate === proportions.judgement[1].rate
+      ? "T"
+      : proportions.judgement[0].type;
+  const j = proportions.life[0].rate === proportions.life[1].rate ? "J" : proportions.life[0].type;
+  return `${e}${s}${t}${j}` as MbtiType;
 };

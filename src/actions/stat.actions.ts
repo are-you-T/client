@@ -36,6 +36,8 @@ export const getMbtiTypeStat = async (mbtiType: MbtiType) => {
     )
     .eq("deleteYn", false)
     .eq("mbtiType", mbtiType)
+    // Show good first, then bad
+    .order("fitType", { ascending: true, foreignTable: "MbtiFit" })
     .maybeSingle();
 
   if (error) {
@@ -59,7 +61,9 @@ export const getMbtiTestResult = async () => {
       { count: "exact" }
     )
     .eq("deleteYn", false)
-    .order("count", { ascending: false }); // 부모(Question) 정렬
+    .order("count", { ascending: false }) // 부모(Question) 정렬
+    // Nested order: good first in MbtiFit
+    .order("fitType", { ascending: false, foreignTable: "MbtiFit" });
 
   if (error) throw error;
 
