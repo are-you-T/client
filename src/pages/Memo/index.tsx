@@ -1,5 +1,5 @@
 import { ActionIcon, Flex, Text, Badge, Loader, Overlay } from "@mantine/core";
-import { IconPlus, IconSearch, IconX } from "@tabler/icons-react";
+import { IconPlus, IconRepeat, IconX } from "@tabler/icons-react";
 import { MemoCard } from "@/components/Memo/Card";
 import { useInViewport } from "@mantine/hooks";
 import { useEffect } from "react";
@@ -7,6 +7,9 @@ import { useModal } from "@/hooks/useModal";
 import { Note } from "@/components/Memo/Note";
 import { MemoType } from "@/types";
 import useMemoController from "@/controllers/useMemoController";
+import { MBTISelect } from "@/components/MBTISelect";
+import { useMemoSearchStore } from "@/stores/useMemoSearchStore";
+import { MBTI_TYPE_COLORS } from "@/constants/MBTIColors";
 
 const MemoPage = () => {
   const { openModal } = useModal();
@@ -15,6 +18,8 @@ const MemoPage = () => {
 
   const { memoListData } = useMemoController();
   const { memoList, fetchNextPage, hasNextPage, isFetchingNextPage } = memoListData;
+
+  const { selectedMbti, addMbti, removeMbti } = useMemoSearchStore();
 
   useEffect(() => {
     if (inViewport && hasNextPage && !isFetchingNextPage) {
@@ -41,8 +46,18 @@ const MemoPage = () => {
             MemoBTI
           </Text>
           <Flex gap="sm">
-            <ActionIcon radius="100%" size="4rem" color="cyan" onClick={() => {}}>
-              <IconSearch size="2rem" />
+            <ActionIcon
+              radius="100%"
+              size="4rem"
+              color="cyan"
+              onClick={async () => {
+                const result = await openModal(<MBTISelect />, null, "MBTI 선택", true);
+                if (typeof result === "string") {
+                  addMbti(result);
+                }
+              }}
+            >
+              <IconRepeat size="2rem" />
             </ActionIcon>
             <ActionIcon
               radius="100%"
@@ -57,18 +72,26 @@ const MemoPage = () => {
         </Flex>
 
         <Flex gap="sm" wrap="wrap">
-          <Badge
-            color="cyan"
-            size="lg"
-            variant="filled"
-            rightSection={
-              <ActionIcon variant="subtle" size="sm" color="white" onClick={() => {}}>
-                <IconX />
-              </ActionIcon>
-            }
-          >
-            {/* {`${FIELD_LABELS[item.field]}: ${item.text}`} */}
-          </Badge>
+          {selectedMbti.map((type) => (
+            <Badge
+              key={type}
+              color={MBTI_TYPE_COLORS[type] || "cyan"}
+              size="lg"
+              variant="filled"
+              rightSection={
+                <ActionIcon
+                  variant="subtle"
+                  size="sm"
+                  color="white"
+                  onClick={() => removeMbti(type)}
+                >
+                  <IconX />
+                </ActionIcon>
+              }
+            >
+              {type}
+            </Badge>
+          ))}
         </Flex>
       </Flex>
 

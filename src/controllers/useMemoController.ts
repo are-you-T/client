@@ -12,6 +12,7 @@ import {
 } from "@/actions/memo.actions";
 import { MemoType } from "@/types";
 import { useMemo, useState } from "react";
+import { useMemoSearchStore } from "@/stores/useMemoSearchStore";
 
 type InfinitePage<T> = {
   data: T[];
@@ -23,9 +24,11 @@ const useMemoController = () => {
   const queryClient = useQueryClient();
 
   // 무한 목록 조회
+  const selectedMbti = useMemoSearchStore((s) => s.selectedMbti);
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: [memoListQueryKey],
-    queryFn: ({ pageParam = 0 }) => getMemoList({ pageParam }),
+    queryKey: [memoListQueryKey, selectedMbti],
+    queryFn: ({ pageParam = 0 }) => getMemoList({ pageParam, mbtiTypes: selectedMbti }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextPage,
   });

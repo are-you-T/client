@@ -1,5 +1,5 @@
 import { supabase } from "@/supabaseClient";
-import { MemoType } from "@/types";
+import { MemoType, MbtiType } from "@/types";
 import { Database } from "@/types/supabase";
 import { compareHashPassword, hashPassword } from "@/utils/password";
 
@@ -7,15 +7,27 @@ export const memoQueryKey = "memo";
 export const memoListQueryKey = "memoList";
 
 // Memo List 가져오기
-export const getMemoList = async ({ pageParam = 0 }) => {
+export const getMemoList = async ({
+  pageParam = 0,
+  mbtiTypes,
+}: {
+  pageParam?: number;
+  mbtiTypes?: MbtiType[];
+}) => {
   const limit = 5;
   const offset = pageParam * limit;
 
   // ✅ 데이터 + 전체 count 조회
-  const { data, error, count } = await supabase
+  let query = supabase
     .from("Memo")
     .select("*", { count: "exact" }) // head: false는 필요 없음
-    .eq("deleteYn", false)
+    .eq("deleteYn", false);
+
+  if (mbtiTypes && mbtiTypes.length > 0) {
+    query = query.in("mbtiType", mbtiTypes as ReadonlyArray<MbtiType>);
+  }
+
+  const { data, error, count } = await query
     .order("created_at", { ascending: false })
     .range(offset, offset + limit - 1);
 
