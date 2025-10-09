@@ -25,10 +25,17 @@ const useMemoController = () => {
 
   // 무한 목록 조회
   const selectedMbti = useMemoSearchStore((s) => s.selectedMbti);
+  const memoQuery = useMemoSearchStore((s) => s.memoQuery);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: [memoListQueryKey, selectedMbti],
-    queryFn: ({ pageParam = 0 }) => getMemoList({ pageParam, mbtiTypes: selectedMbti }),
+    queryKey: [memoListQueryKey, selectedMbti, memoQuery.titles, memoQuery.contents],
+    queryFn: ({ pageParam = 0 }) =>
+      getMemoList({
+        pageParam,
+        mbtiTypes: selectedMbti,
+        titles: memoQuery.titles,
+        contents: memoQuery.contents,
+      }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextPage,
   });

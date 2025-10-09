@@ -10,9 +10,13 @@ export const memoListQueryKey = "memoList";
 export const getMemoList = async ({
   pageParam = 0,
   mbtiTypes,
+  titles,
+  contents,
 }: {
   pageParam?: number;
   mbtiTypes?: MbtiType[];
+  titles?: string[];
+  contents?: string[];
 }) => {
   const limit = 5;
   const offset = pageParam * limit;
@@ -25,6 +29,24 @@ export const getMemoList = async ({
 
   if (mbtiTypes && mbtiTypes.length > 0) {
     query = query.in("mbtiType", mbtiTypes as ReadonlyArray<MbtiType>);
+  }
+  if (titles && titles.length > 0) {
+    const parts = titles
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0)
+      .map((s) => `title.ilike.%${s.replace(/[%]/g, "")}%`);
+    if (parts.length > 0) {
+      query = query.or(parts.join(","));
+    }
+  }
+  if (contents && contents.length > 0) {
+    const parts = contents
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0)
+      .map((s) => `content.ilike.%${s.replace(/[%]/g, "")}%`);
+    if (parts.length > 0) {
+      query = query.or(parts.join(","));
+    }
   }
 
   const { data, error, count } = await query
