@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { QuestionWithAnswersType } from "@/types";
 import { useMemo } from "react";
+import { useQuestionSearchStore } from "@/stores/useQuestionSearchStore";
 import {
   getMBTITestQuestions,
   getQuestionByIdWithAnswers,
@@ -12,9 +13,13 @@ import {
 
 const useQuestionController = () => {
   // 무한 목록 조회
+  const subjects = useQuestionSearchStore((s) => s.subjects);
+  const mbtiTypes = useQuestionSearchStore((s) => s.mbtiTypes);
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: [questionListQueryKey],
-    queryFn: ({ pageParam = 0 }) => getQuestionListWithAnswers({ pageParam }),
+    queryKey: [questionListQueryKey, subjects, mbtiTypes],
+    queryFn: ({ pageParam = 0 }) =>
+      getQuestionListWithAnswers({ pageParam, subjects, mbtiTypes }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextPage,
   });

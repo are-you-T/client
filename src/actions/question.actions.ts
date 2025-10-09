@@ -1,16 +1,24 @@
 import { supabase } from "@/supabaseClient";
-import { QuestionWithAnswersType } from "@/types";
+import { MbtiDimensionType, QuestionWithAnswersType } from "@/types";
 
 export const questionQueryKey = "question";
 export const questionListQueryKey = "questionList";
 export const questionMBTITestQueryKey = "questionMBTITest";
 
 // question List 가져오기
-export const getQuestionListWithAnswers = async ({ pageParam = 0 }) => {
+export const getQuestionListWithAnswers = async ({
+  pageParam = 0,
+  subjects,
+  mbtiTypes,
+}: {
+  pageParam?: number;
+  subjects?: string[];
+  mbtiTypes?: MbtiDimensionType[];
+}) => {
   const limit = 5;
   const offset = pageParam * limit;
 
-  const { data, error, count } = await supabase
+  let query = supabase
     .from("Question")
     .select(
       `
@@ -23,7 +31,20 @@ export const getQuestionListWithAnswers = async ({ pageParam = 0 }) => {
     `,
       { count: "exact" }
     )
-    .eq("deleteYn", false) // ⚠️ 실제 컬럼명이 deleteyn 이면 소문자로 바꿔주세요
+    .eq("deleteYn", false);
+
+  if (subjects && subjects.length > 0) {
+    const cleaned = subjects.map((s) => s.trim()).filter((s) => s.length > 0);
+    for (const s of cleaned) {
+      // 체이닝된 ilike는 AND 결합됩니다.
+      query = query.ilike("subject", `%${s.replace(/[%]/g, "")}%`);
+    }
+  }
+  if (mbtiTypes && mbtiTypes.length > 0) {
+    query = query.in("mbtiType", mbtiTypes as ReadonlyArray<MbtiDimensionType>);
+  }
+
+  const { data, error, count } = await query
     .order("created_at", { ascending: false }) // 부모(Question) 정렬
     .order("created_at", {
       // 자식(Answer) 정렬

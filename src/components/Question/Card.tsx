@@ -1,4 +1,5 @@
 import { mbtiTypeColor, typeColor } from "@/constants/MBTIColors";
+import { MBTI_TYPES_VALUE } from "@/constants/MBTIOptions";
 import useRouter from "@/hooks/useRouter";
 import { QuestionWithAnswersType } from "@/types";
 import { Card, Flex, Badge, Progress, Text } from "@mantine/core";
@@ -24,7 +25,7 @@ export const QuestionCard = ({ question }: QuestionCardProps) => {
     >
       <Flex direction="column" justify="space-between" gap="xs" h="8rem">
         <Flex direction="column" gap="xs">
-          <Badge color="dark">{question.mbtiType}</Badge>
+          <Badge color="dark">{MBTI_TYPES_VALUE[question.mbtiType]?.label ?? question.mbtiType}</Badge>
           <Text size="md" lineClamp={2}>
             {question.subject}
           </Text>
